@@ -34,7 +34,31 @@ const Home = (): ReactElement => {
             </div>
           </div> */}
       </div>
-      <div className="text-center col-span-4 bg-gray-400">Stats</div>
+      <div className="text-center col-span-4 bg-gray-400">
+        Stats
+        <div className="text-left grid grid-cols-12 gap-3 text-xs mx-1">
+          <div className="col-span-3">
+            <p>HP</p>
+            <p>ATK</p>
+            <p>DEF</p>
+          </div>
+          <div className="col-span-3 text-right">
+            <p>10</p>
+            <p>3</p>
+            <p>2</p>
+          </div>
+          <div className="col-span-3">
+            <p>BLK</p>
+            <p>CRIT</p>
+            <p>SPD</p>
+          </div>
+          <div className="col-span-3 text-right">
+            <p>5</p>
+            <p>2</p>
+            <p>10</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
