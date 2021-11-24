@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { PlayerContext } from '../contexts/playerContext';
-import { getIgnisBalance } from '../utils/ardorInterface';
+import { getAccountProperties, getIgnisBalance } from '../utils/ardorInterface';
 import { isValidPassphrase } from '../utils/helpers';
 import Error from './ui/Error';
 import Input from './ui/Input';
@@ -30,13 +30,27 @@ const Login = (): ReactElement => {
     // }
 
     const response = await getIgnisBalance(passphrase);
+    const propertiesResponse = await getAccountProperties(passphrase);
+    let team = 'none';
+    if (
+      propertiesResponse?.data.properties &&
+      propertiesResponse?.data.properties[0] &&
+      propertiesResponse?.data.properties[0].value
+    ) {
+      let prop_array = propertiesResponse?.data.properties;
+      prop_array.forEach(function (item, index) {
+        if (item.property.toLowerCase() == 'team') {
+          team = item.value;
+        }
+      });
+    }
     console.log(response?.data);
     context.updatePlayerAccount({
       address: passphrase,
       lvl: 1,
       exp: 7,
       gil: Math.floor(response?.data.balanceNQT / 1000000),
-      team: 'Lisk',
+      team: team,
     });
     navigate('/');
     // context.login(passphrase);

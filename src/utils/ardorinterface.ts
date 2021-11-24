@@ -23,6 +23,22 @@ export const getAccount = async (account: string) => {
   }
 };
 
+export const getAccountProperties = async (account: string) => {
+  try {
+    const response = await axios.get(nodeUrl, {
+      params: {
+        requestType: 'getAccountProperties',
+        recipient: account,
+        setter: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
+      },
+    });
+    return response;
+  } catch (error) {
+    // handle error
+    console.log(error);
+  }
+};
+
 export const getIgnisBalance = async (account: string) => {
   try {
     const response = await axios.get(nodeUrl, {

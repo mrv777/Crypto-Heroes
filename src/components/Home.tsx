@@ -140,7 +140,7 @@ const Home = (): ReactElement => {
               {context.playerAccount?.exp}/{context.playerAccount!.lvl * 2 + 10}
             </p>
             <p>{context.playerAccount?.gil}</p>
-            <p>{context.playerAccount?.team}</p>
+            <p className="capitalize">{context.playerAccount?.team}</p>
           </div>
         </div>
         <div className="text-left grid grid-cols-2 gap-0 text-xs mb-4">
