@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { PlayerContext } from '../contexts/playerContext';
 import { isValidPassphrase } from '../utils/helpers';
 import Error from './ui/Error';
+import Input from './ui/Input';
 
 const Login = (): ReactElement => {
   const [passphrase, setPassphrase] = useState('n k l o i u i o o o o o');
@@ -15,7 +16,8 @@ const Login = (): ReactElement => {
   const context = useContext(PlayerContext);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassphrase(e.target.value.trim());
+    // setPassphrase(e.target.value.trim());
+    setPassphrase(e.target.value);
   };
 
   const handleSignIn = async () => {
@@ -49,15 +51,15 @@ const Login = (): ReactElement => {
       <div className="m-auto text-center">
         <h1 className="mb-12">Welcome back, hero</h1>
 
-        <div className="w-96 m-auto">
-          {/* <Input
+        <div className="m-auto">
+          <Input
             value={passphrase}
-            type="password"
+            type="text"
             onChange={handleInputChange}
             label="Enter passphrase"
             placeholder="Enter passphrase"
             isValid={isValidPassphrase(passphrase)}
-          /> */}
+          />
           {error && <Error message={error} />}
 
           <button

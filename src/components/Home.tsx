@@ -1,8 +1,12 @@
 import React from 'react';
-import { ReactElement } from 'react';
+import { ReactElement, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
+import { PlayerContext } from '../contexts/playerContext';
+
 const Home = (): ReactElement => {
+  const context = useContext(PlayerContext);
+
   const renderAction = (text: string, linkText: string, linkPath: string) => (
     <div className="mb-6">
       <div>{text}</div>
@@ -16,7 +20,7 @@ const Home = (): ReactElement => {
   return (
     <div className="mt-5 grid grid-cols-12 gap-1">
       <div className="text-center col-span-8 bg-gray-600 border-2 border-white border-solid rounded">
-        Player
+        Player {context.playerAccount}
         {/* <div className="text-xxs mt-4 mb-4">
             <span className="opacity-50">v0.0.1 - created by MrV</span> <br />
           </div>
