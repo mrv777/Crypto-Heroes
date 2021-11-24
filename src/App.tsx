@@ -47,10 +47,8 @@ function App() {
     };
   }, []);
 
-  const login = async (passphrase: string) => {
-    const response = await getIgnisBalance(passphrase);
-    console.log(response.data);
-    setPlayerAccount({ address: passphrase, lvl: 1, gil: response?.data.balanceNQT });
+  const updatePlayerAccount = (accountProps: AccountProps | null) => {
+    setPlayerAccount(accountProps);
   };
 
   const signOut = () => {
@@ -62,7 +60,7 @@ function App() {
       {orientation != 'portrait' ? (
         <PlayerContext.Provider
           value={{
-            login,
+            updatePlayerAccount,
             playerAccount,
             signOut,
           }}>

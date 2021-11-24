@@ -1,5 +1,5 @@
 export type PlayerContextType = {
-  login: () => void;
+  updatePlayerAccount: (accountProps: AccountProps | null) => void;
   playerAccount: AccountProps | null;
   signOut: () => void;
 };

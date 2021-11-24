@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { PlayerContext } from '../contexts/playerContext';
+import { getIgnisBalance } from '../utils/ardorInterface';
 import { isValidPassphrase } from '../utils/helpers';
 import Error from './ui/Error';
 import Input from './ui/Input';
@@ -28,8 +29,16 @@ const Login = (): ReactElement => {
     //   return;
     // }
 
-    context.login(passphrase);
+    const response = await getIgnisBalance(passphrase);
+    console.log(response?.data);
+    context.updatePlayerAccount({
+      address: passphrase,
+      lvl: 1,
+      gil: response?.data.balanceNQT,
+    });
     navigate('/');
+    // context.login(passphrase);
+    // navigate('/');
 
     //   const { address } = cryptography.getAddressAndPublicKeyFromPassphrase(passphrase);
     //   const account = await getAccount(cryptography.bufferToHex(address));

@@ -47,9 +47,9 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
         Leaderboards
       </MenuButton>
       <div className="flex-1"></div>
-      <MenuButton disabled={disableNavBar} onClick={() => handleClick('/profile')}>
+      {/* <MenuButton disabled={disableNavBar} onClick={() => handleClick('/profile')}>
         Profile
-      </MenuButton>
+      </MenuButton> */}
       <MenuButton disabled={disableNavBar} onClick={() => handleClick('/help')}>
         Help
       </MenuButton>
