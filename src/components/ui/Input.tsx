@@ -27,7 +27,6 @@ const Input = ({
 
   return (
     <input
-      autoFocus
       value={value}
       id={label}
       className={`border-2 custom-rounded-sm w-full py-2 px-3 text-black mb-3 leading-tight focus:outline-none focus:shadow-outline ${getContextualMarkup()}`}

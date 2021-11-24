@@ -9,7 +9,7 @@ import Error from './ui/Error';
 import Input from './ui/Input';
 
 const Login = (): ReactElement => {
-  const [passphrase, setPassphrase] = useState('n k l o i u i o o o o o');
+  const [passphrase, setPassphrase] = useState('ARDOR-N2A2-TTZS-4S9B-HFLU4');
   const [error, setError] = useState('');
 
   let navigate = useNavigate();
@@ -23,12 +23,12 @@ const Login = (): ReactElement => {
   const handleSignIn = async () => {
     setError('');
 
-    if (!isValid) {
-      setError('Please enter a valid passphrase of 12 words');
-      return;
-    }
+    // if (!isValid) {
+    //   setError('Please enter a valid passphrase of 12 words');
+    //   return;
+    // }
 
-    context.login();
+    context.login(passphrase);
     navigate('/');
 
     //   const { address } = cryptography.getAddressAndPublicKeyFromPassphrase(passphrase);
@@ -63,7 +63,7 @@ const Login = (): ReactElement => {
           {error && <Error message={error} />}
 
           <button
-            className="btn btn-primary mb-12 mt-8 rounded-none"
+            className="btn btn-primary mb-6 mt-8 rounded-none"
             onClick={handleSignIn}>
             Sign In
           </button>

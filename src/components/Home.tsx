@@ -20,7 +20,7 @@ const Home = (): ReactElement => {
   return (
     <div className="mt-5 grid grid-cols-12 gap-1">
       <div className="text-center col-span-8 bg-gray-600 border-2 border-white border-solid rounded">
-        Player {context.playerAccount}
+        Player {context.playerAccount?.address}
         {/* <div className="text-xxs mt-4 mb-4">
             <span className="opacity-50">v0.0.1 - created by MrV</span> <br />
           </div>
@@ -39,6 +39,16 @@ const Home = (): ReactElement => {
           </div> */}
       </div>
       <div className="text-center col-span-4 bg-gray-600 border-2 border-white border-solid rounded">
+        <div className="text-left grid grid-cols-12 gap-3 text-xs mx-1">
+          <div className="col-span-3">
+            <p>LVL</p>
+            <p>GIL</p>
+          </div>
+          <div className="col-span-9 text-right">
+            <p>{context.playerAccount?.lvl}</p>
+            <p>{context.playerAccount?.gil}</p>
+          </div>
+        </div>
         Stats
         <div className="text-left grid grid-cols-12 gap-3 text-xs mx-1">
           <div className="col-span-3">

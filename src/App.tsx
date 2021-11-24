@@ -6,10 +6,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import Header from './components/ui/Header';
 import { PlayerContext } from './contexts/playerContext';
 import GameRoutes from './GameRoutes';
+import { AccountProps } from './types';
+import { getIgnisBalance } from './utils/ardorInterface';
 import WelcomeRoutes from './WelcomeRoutes';
 
 function App() {
-  const [playerAccount, setPlayerAccount] = useState<String | null>(null);
+  const [playerAccount, setPlayerAccount] = useState<AccountProps | null>(null);
   const [orientation, setOrientation] = useState<String>(
     (window.innerWidth ||
       document.documentElement.clientWidth ||
@@ -45,8 +47,10 @@ function App() {
     };
   }, []);
 
-  const login = () => {
-    setPlayerAccount('test');
+  const login = async (passphrase: string) => {
+    const response = await getIgnisBalance(passphrase);
+    console.log(response.data);
+    setPlayerAccount({ address: passphrase, lvl: 1, gil: response?.data.balanceNQT });
   };
 
   const signOut = () => {

@@ -1,5 +1,11 @@
 export type PlayerContextType = {
   login: () => void;
-  playerAccount: String | null;
+  playerAccount: AccountProps | null;
   signOut: () => void;
+};
+
+export type AccountProps = {
+  address: string;
+  lvl: number;
+  gil: number;
 };
