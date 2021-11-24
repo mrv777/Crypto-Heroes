@@ -1,7 +1,9 @@
 import React from 'react';
 import { ReactElement, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { SpriteAnimator } from 'react-sprite-animator';
 
+import sprite from '../assets/sprite.png';
 import { PlayerContext } from '../contexts/playerContext';
 
 const Home = (): ReactElement => {
@@ -102,14 +104,27 @@ const Home = (): ReactElement => {
           </div> */}
       </div>
       <div className="text-center col-span-4 bg-gray-600 border-2 border-white border-solid rounded">
+        <div className="w-full flex flex-col items-center justify-center m-auto">
+          <SpriteAnimator
+            sprite={sprite}
+            width={16}
+            height={26}
+            scale={0.25}
+            fps={4}
+            frameCount={4}
+            direction={'horizontal'}
+          />
+        </div>
         <div className="text-left grid grid-cols-12 gap-3 text-xs mx-1">
           <div className="col-span-3">
             <p>LVL</p>
             <p>GIL</p>
+            <p>TEAM</p>
           </div>
           <div className="col-span-9 text-right">
             <p>{context.playerAccount?.lvl}</p>
             <p>{context.playerAccount?.gil}</p>
+            <p>{context.playerAccount?.team}</p>
           </div>
         </div>
       </div>

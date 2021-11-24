@@ -8,4 +8,5 @@ export type AccountProps = {
   address: string;
   lvl: number;
   gil: number;
+  team: string;
 };

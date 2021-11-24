@@ -35,6 +35,7 @@ const Login = (): ReactElement => {
       address: passphrase,
       lvl: 1,
       gil: Math.floor(response?.data.balanceNQT / 1000000),
+      team: 'Lisk',
     });
     navigate('/');
     // context.login(passphrase);
