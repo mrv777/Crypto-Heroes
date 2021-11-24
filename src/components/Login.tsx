@@ -34,7 +34,7 @@ const Login = (): ReactElement => {
     context.updatePlayerAccount({
       address: passphrase,
       lvl: 1,
-      gil: response?.data.balanceNQT,
+      gil: Math.floor(response?.data.balanceNQT / 1000000),
     });
     navigate('/');
     // context.login(passphrase);

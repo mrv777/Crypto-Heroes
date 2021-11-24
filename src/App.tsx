@@ -1,13 +1,12 @@
 import './App.css';
 
 // import _ from 'lodash';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Header from './components/ui/Header';
 import { PlayerContext } from './contexts/playerContext';
 import GameRoutes from './GameRoutes';
 import { AccountProps } from './types';
-import { getIgnisBalance } from './utils/ardorInterface';
 import WelcomeRoutes from './WelcomeRoutes';
 
 function App() {
