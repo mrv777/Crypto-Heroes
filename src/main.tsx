@@ -1,10 +1,14 @@
 import './index.css';
 
+import { Buffer } from 'buffer';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import App from './App';
+
+// Buffer hack for bip39-web to work
+window.Buffer = Buffer;
 
 ReactDOM.render(
   <React.StrictMode>
