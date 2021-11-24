@@ -3,6 +3,7 @@ import { ReactElement, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { SpriteAnimator } from 'react-sprite-animator';
 
+import coin from '../assets/Coin-Sheet.png';
 import sprite from '../assets/sprite.png';
 import { PlayerContext } from '../contexts/playerContext';
 
@@ -116,19 +117,38 @@ const Home = (): ReactElement => {
           />
         </div>
         <div className="text-left grid grid-cols-12 gap-3 text-xs mx-1">
-          <div className="col-span-3">
+          <div className="col-span-4">
             <p>LVL</p>
             <p>EXP</p>
-            <p>GIL</p>
+            <p className="flex">
+              GIL
+              <SpriteAnimator
+                sprite={coin}
+                width={8}
+                height={8}
+                scale={0.6}
+                fps={4}
+                frameCount={4}
+                direction={'horizontal'}
+              />
+            </p>
             <p>TEAM</p>
           </div>
-          <div className="col-span-9 text-right">
+          <div className="col-span-8 text-right">
             <p>{context.playerAccount?.lvl}</p>
             <p>
-              {context.playerAccount?.exp}/{context.playerAccount?.lvl * 2 + 10}
+              {context.playerAccount?.exp}/{context.playerAccount!.lvl * 2 + 10}
             </p>
             <p>{context.playerAccount?.gil}</p>
             <p>{context.playerAccount?.team}</p>
+          </div>
+        </div>
+        <div className="text-left grid grid-cols-2 gap-0 text-xs mb-4">
+          <div>
+            <button disabled={context.playerAccount!.gil < 5000}>Train</button>
+          </div>
+          <div>
+            <button disabled={context.playerAccount!.gil < 50000}>Fight</button>
           </div>
         </div>
       </div>
