@@ -34,6 +34,7 @@ const Login = (): ReactElement => {
     context.updatePlayerAccount({
       address: passphrase,
       lvl: 1,
+      exp: 7,
       gil: Math.floor(response?.data.balanceNQT / 1000000),
       team: 'Lisk',
     });

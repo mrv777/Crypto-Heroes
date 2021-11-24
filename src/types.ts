@@ -7,6 +7,7 @@ export type PlayerContextType = {
 export type AccountProps = {
   address: string;
   lvl: number;
+  exp: number;
   gil: number;
   team: string;
 };

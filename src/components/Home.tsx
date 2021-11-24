@@ -36,7 +36,7 @@ const Home = (): ReactElement => {
     <div className="mt-5 grid grid-cols-12 gap-1">
       <div className="text-center col-span-8 bg-gray-600 border-2 border-white border-solid rounded pb-5">
         <p className="tracking-tighter">{context.playerAccount?.address}</p>
-        <p>Stats</p>
+        <p className="underline">Stats</p>
         <div className="text-left grid grid-cols-12 gap-3 text-xs mx-2">
           <div className="col-span-2">
             <p>HP</p>
@@ -63,7 +63,7 @@ const Home = (): ReactElement => {
             <p>10</p>
           </div>
         </div>
-        <p>Power-Ups</p>
+        <p className="underline">Power-Ups</p>
         <div className="grid grid-cols-5 gap-2 mx-2">
           <div>
             {<PowerUp />}
@@ -118,11 +118,15 @@ const Home = (): ReactElement => {
         <div className="text-left grid grid-cols-12 gap-3 text-xs mx-1">
           <div className="col-span-3">
             <p>LVL</p>
+            <p>EXP</p>
             <p>GIL</p>
             <p>TEAM</p>
           </div>
           <div className="col-span-9 text-right">
             <p>{context.playerAccount?.lvl}</p>
+            <p>
+              {context.playerAccount?.exp}/{context.playerAccount?.lvl * 2 + 10}
+            </p>
             <p>{context.playerAccount?.gil}</p>
             <p>{context.playerAccount?.team}</p>
           </div>
