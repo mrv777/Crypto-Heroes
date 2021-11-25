@@ -11,7 +11,6 @@
     "type-check": "tsc"
   },
   "dependencies": {
-    "ardorjs": "^0.1.8",
     "axios": "^0.24.0",
     "bip39-web": "^1.0.0",
     "buffer": "^6.0.3",

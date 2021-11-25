@@ -10,7 +10,7 @@ import Error from './ui/Error';
 import Input from './ui/Input';
 
 const Login = (): ReactElement => {
-  const [passphrase, setPassphrase] = useState('ARDOR-N2A2-TTZS-4S9B-HFLU4');
+  const [passphrase, setPassphrase] = useState('testl');
   const [error, setError] = useState('');
 
   let navigate = useNavigate();
@@ -28,9 +28,10 @@ const Login = (): ReactElement => {
     //   setError('Please enter a valid passphrase of 12 words');
     //   return;
     // }
-
-    const response = await getIgnisBalance(passphrase);
-    const propertiesResponse = await getAccountProperties(passphrase);
+    const account = 'ARDOR-N2A2-TTZS-4S9B-HFLU4';
+    // const account = ardorjs.secretPhraseToAccountId(passphrase);
+    const response = await getIgnisBalance(account);
+    const propertiesResponse = await getAccountProperties(account);
     let team = 'none';
     if (
       propertiesResponse?.data.properties &&
@@ -38,7 +39,7 @@ const Login = (): ReactElement => {
       propertiesResponse?.data.properties[0].value
     ) {
       let prop_array = propertiesResponse?.data.properties;
-      prop_array.forEach(function (item, index) {
+      prop_array.forEach(function (item) {
         if (item.property.toLowerCase() == 'team') {
           team = item.value;
         }
@@ -46,7 +47,7 @@ const Login = (): ReactElement => {
     }
     console.log(response?.data);
     context.updatePlayerAccount({
-      address: passphrase,
+      address: account,
       lvl: 1,
       exp: 7,
       gil: Math.floor(response?.data.balanceNQT / 1000000),
@@ -94,7 +95,7 @@ const Login = (): ReactElement => {
           </button>
 
           <p>
-            Don't have a passphrase? <Link to="/register">Register here</Link>.
+            Do not have a passphrase? <Link to="/register">Register here</Link>.
           </p>
         </div>
       </div>

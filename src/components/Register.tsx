@@ -1,10 +1,27 @@
 import * as bip39 from 'bip39-web';
 import React from 'react';
-import { ReactElement, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { ReactElement, useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+
+import { PlayerContext } from '../contexts/playerContext';
 
 const Register = (): ReactElement => {
   const [passphrase, setPassphrase] = useState('');
+
+  let navigate = useNavigate();
+  const context = useContext(PlayerContext);
+
+  const handleSignIn = async () => {
+    context.updatePlayerAccount({
+      address: passphrase,
+      lvl: 0,
+      exp: 0,
+      gil: 0,
+      team: 'none',
+    });
+    navigate('/');
+  };
+
   useEffect(() => {
     bip39.generateMnemonicAsync().then((res) => setPassphrase(res));
   }, []);
@@ -21,8 +38,8 @@ const Register = (): ReactElement => {
         ))}
       </div>
 
-      <button>
-        <Link to="/">Take me home</Link>
+      <button className="btn btn-primary mb-6 mt-8 rounded-none" onClick={handleSignIn}>
+        To Battle!
       </button>
     </div>
   );
