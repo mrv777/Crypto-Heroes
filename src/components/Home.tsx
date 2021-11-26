@@ -12,8 +12,10 @@ const Home = (): ReactElement => {
 
   const PowerUp = () => {
     return (
-      <div className="flex h-full m-auto justify-center align-middle border-2 border-white bg-gray-500 rounded">
-        <div className="text-xs text-gray-400 m-auto">No Item</div>
+      <div className="w-full h-0 pt-full relative">
+        <div className="absolute top-0 left-0 h-full w-full justify-center align-middle border-2 border-white bg-gray-500 rounded">
+          <div className="text-xs text-gray-400 m-auto">No Item</div>
+        </div>
       </div>
     );
   };
@@ -143,7 +145,7 @@ const Home = (): ReactElement => {
             <p className="capitalize">{context.playerAccount?.team}</p>
           </div>
         </div>
-        <div className="text-left grid grid-cols-2 gap-0 text-xs mb-4">
+        <div className="text-center grid grid-cols-2 gap-0 text-xs mb-4">
           <div>
             <button disabled={context.playerAccount!.gil < 5000}>Train</button>
           </div>

@@ -9,7 +9,12 @@ module.exports = {
       square: 'square',
       roman: 'upper-roman',
     },
-    extend: {},
+    extend: {
+      padding: {
+        '1/2': '50%',
+        full: '100%',
+      },
+    },
   },
   variants: {
     extend: {
