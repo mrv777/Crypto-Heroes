@@ -10,4 +10,5 @@ export type AccountProps = {
   exp: number;
   gil: number;
   team: string;
+  score: number;
 };

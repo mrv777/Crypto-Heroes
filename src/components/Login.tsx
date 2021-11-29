@@ -1,3 +1,4 @@
+import ardorjs from 'ardorjs';
 import React from 'react';
 import { ReactElement, useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -28,11 +29,11 @@ const Login = (): ReactElement => {
     //   setError('Please enter a valid passphrase of 12 words');
     //   return;
     // }
-    const account = 'ARDOR-N2A2-TTZS-4S9B-HFLU4';
-    // const account = ardorjs.secretPhraseToAccountId(passphrase);
+    const account = ardorjs.secretPhraseToAccountId(passphrase);
     const response = await getIgnisBalance(account);
     const propertiesResponse = await getAccountProperties(account);
     let team = 'none';
+    let score = 0;
     if (
       propertiesResponse?.data.properties &&
       propertiesResponse?.data.properties[0] &&
@@ -42,6 +43,8 @@ const Login = (): ReactElement => {
       prop_array.forEach(function (item) {
         if (item.property.toLowerCase() == 'team') {
           team = item.value;
+        } else if (item.property.toLowerCase() == 'score') {
+          score = item.value;
         }
       });
     }
@@ -52,6 +55,7 @@ const Login = (): ReactElement => {
       exp: 7,
       gil: Math.floor(response?.data.balanceNQT / 1000000),
       team: team,
+      score: score,
     });
     navigate('/');
     // context.login(passphrase);

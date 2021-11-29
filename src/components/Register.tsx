@@ -1,3 +1,4 @@
+import ardorjs from 'ardorjs';
 import * as bip39 from 'bip39-web';
 import React from 'react';
 import { ReactElement, useContext, useEffect, useState } from 'react';
@@ -12,12 +13,14 @@ const Register = (): ReactElement => {
   const context = useContext(PlayerContext);
 
   const handleSignIn = async () => {
+    const account = ardorjs.secretPhraseToAccountId(passphrase);
     context.updatePlayerAccount({
-      address: passphrase,
+      address: account,
       lvl: 0,
       exp: 0,
       gil: 0,
       team: 'none',
+      score: 0,
     });
     navigate('/');
   };

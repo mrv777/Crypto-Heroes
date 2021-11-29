@@ -36,7 +36,7 @@ const Home = (): ReactElement => {
   // );
 
   return (
-    <div className="mt-5 grid grid-cols-12 gap-1">
+    <div className="mt-3 grid grid-cols-12 gap-1">
       <div className="text-center col-span-8 bg-gray-600 border-2 border-white border-solid rounded pb-5">
         <p className="tracking-tighter">{context.playerAccount?.address}</p>
         <p className="underline">Stats</p>
@@ -135,6 +135,7 @@ const Home = (): ReactElement => {
               />
             </p>
             <p>TEAM</p>
+            <p>SCORE</p>
           </div>
           <div className="col-span-8 text-right">
             <p>{context.playerAccount?.lvl}</p>
@@ -143,6 +144,7 @@ const Home = (): ReactElement => {
             </p>
             <p>{context.playerAccount?.gil}</p>
             <p className="capitalize">{context.playerAccount?.team}</p>
+            <p>{context.playerAccount?.score}</p>
           </div>
         </div>
         <div className="text-center grid grid-cols-2 gap-0 text-xs mb-4">
