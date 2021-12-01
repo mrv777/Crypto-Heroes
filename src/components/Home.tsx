@@ -6,15 +6,16 @@ import { SpriteAnimator } from 'react-sprite-animator';
 import coin from '../assets/Coin-Sheet.png';
 import sprite from '../assets/sprite.png';
 import { PlayerContext } from '../contexts/playerContext';
+import Tooltip from './ui/Tooltip';
 
 const Home = (): ReactElement => {
   const context = useContext(PlayerContext);
 
-  const PowerUp = () => {
+  const PowerUp = (item: string) => {
     return (
       <div className="w-full h-0 pt-full relative">
         <div className="absolute top-0 left-0 h-full w-full justify-center align-middle border-2 border-white bg-gray-500 opacity-30 rounded">
-          {/* <div className="text-xs text-gray-400 m-auto">None</div> */}
+          <div className={`ArmoryIcons h-full w-full ${item}Icon`}></div>
         </div>
       </div>
     );
@@ -28,11 +29,13 @@ const Home = (): ReactElement => {
   );
 
   return (
-    <div className="mt-3 grid grid-cols-12 gap-1">
-      <div className="text-center col-span-8 p-4 xl:p-10 SpriteUI containerUI">
-        <p className="tracking-tighter text-sm">{context.playerAccount?.address}</p>
-        <div className="text-left grid grid-cols-12 gap-3 text-xs mx-2">
-          <div className="col-span-6">
+    <div className="grid grid-cols-12 gap-1">
+      <div className="col-span-8 p-4 xl:p-10 SpriteUI containerUI">
+        <div className="text-left h-full grid grid-cols-12 gap-3 mx-2">
+          <p className="tracking-tighter col-span-12 text-center">
+            {context.playerAccount?.address}
+          </p>
+          <div className="col-span-6 flex flex-col">
             <div className="w-full flex flex-col items-center justify-center m-auto">
               <SpriteAnimator
                 sprite={sprite}
@@ -44,7 +47,7 @@ const Home = (): ReactElement => {
                 direction={'horizontal'}
               />
             </div>
-            <div className="text-left grid grid-cols-12 gap-3 text-xs mx-2">
+            <div className="text-left grid grid-cols-12 gap-3 mx-2">
               <div className="col-span-6 text-left">
                 <p>
                   LVL
@@ -75,18 +78,27 @@ const Home = (): ReactElement => {
           </div>
           <div className="col-span-6 mt-5">
             <div className="text-right grid grid-cols-3 gap-3 text-xs mx-2">
-              <div className="col-start-2 col-span-1">{<PowerUp />}</div>
-              <div className="col-start-1 col-span-1">{<PowerUp />}</div>
-              <div className="col-start-2 col-span-1">{<PowerUp />}</div>
-              <div className="col-start-3 col-span-1">{<PowerUp />}</div>
-              <div className="col-start-1 col-span-2 flex items-center">Tarasca</div>
-              <div className="col-start-3 col-span-1">{<PowerUp />}</div>
+              <div className="col-start-2 col-span-1">{PowerUp('helmet')}</div>
+              <div className="col-start-1 col-span-1">{PowerUp('weapon')}</div>
+              <div className="col-start-2 col-span-1">{PowerUp('armor')}</div>
+              <div className="col-start-3 col-span-1">{PowerUp('shield')}</div>
+              <p className="col-start-1 col-span-2 grid items-center">No Companion</p>
+              <div className="col-start-3 col-span-1">
+                <Tooltip
+                  tooltip={
+                    <div className="text-left">
+                      <p>Mythical beings</p>
+                    </div>
+                  }>
+                  {PowerUp('companion')}
+                </Tooltip>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <div className="text-center col-span-4 p-3 xl:p-9 SpriteUI containerUI">
-        <div className="text-left grid grid-cols-12 gap-3 text-xs mx-1">
+        <div className="text-left h-full grid grid-cols-12 gap-3 text-xs mx-1">
           <div className="col-span-4">
             <p>HP</p>
             <p>BLK</p>
@@ -109,13 +121,13 @@ const Home = (): ReactElement => {
             <p className="capitalize">{context.playerAccount?.team}</p>
             <p>{context.playerAccount?.score}</p>
           </div>
-        </div>
-        <div className="text-center grid grid-cols-2 gap-0 text-xs">
-          <div>
-            <button disabled={context.playerAccount!.gil < 5000}>Train</button>
-          </div>
-          <div>
-            <button disabled={context.playerAccount!.gil < 50000}>Fight</button>
+          <div className="text-center col-span-12 grid grid-cols-2 gap-0 text-xs">
+            <div>
+              <button disabled={context.playerAccount!.gil < 5000}>Train</button>
+            </div>
+            <div>
+              <button disabled={context.playerAccount!.gil < 50000}>Fight</button>
+            </div>
           </div>
         </div>
       </div>

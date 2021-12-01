@@ -38,7 +38,7 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
   };
 
   return (
-    <div className="h-12 flex px-3">
+    <div className="h-12 lg:h-16 flex px-3 max-w-screen-xl m-auto">
       <MenuButton
         disabled={disableNavBar}
         classNames="SpriteIcons homeIcon"

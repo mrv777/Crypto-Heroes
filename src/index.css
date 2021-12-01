@@ -18,6 +18,9 @@ code {
 }
 @layer base {
   button {
-    @apply my-auto p-2 ml-1 mr-1 lg:ml-2 lg:mr-2 shadow uppercase tracking-widest align-middle text-xs lg:text-sm text-gray-700 hover:text-gray-900 rounded border-2 border-black border-solid bg-white;
+    @apply my-auto p-2 ml-1 mr-1 lg:ml-2 lg:mr-2 shadow uppercase tracking-widest align-middle text-xs lg:text-sm text-gray-700 hover:text-gray-900 rounded border-2 border-white border-solid bg-yellow-100;
+  }
+  p {
+    @apply text-xs lg:text-base;
   }
 }

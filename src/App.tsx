@@ -66,7 +66,7 @@ function App() {
           {playerAccount ? (
             <>
               <Header disableNavBar={false} />
-              <div className="content-container">
+              <div className="content-container max-w-screen-xl m-auto">
                 <div className="content-height overflow-y-auto overflow-x-hidden px-3">
                   <GameRoutes />
                 </div>

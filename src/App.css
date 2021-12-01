@@ -72,38 +72,75 @@ p {
 .headerUI {
   background-size: 140%;
 }
+.buttonUI {
+  background-position: 0px 100%;
+  background-size: 140% 240%;
+}
 
 .SpriteIcons {
   background-image: url(./assets/UI_Iron_A_Border.png);
   background-repeat: no-repeat;
 }
 .homeIcon {
-  background-position: -544px 81.3%;
+  background-position: 100% 81.3%;
   height: 32px;
   width: 32px;
   border: 0;
 }
 .shopIcon {
-  background-position: -96px 50%;
+  background-position: 17.65% 50%;
   height: 32px;
   width: 32px;
   border: 0;
 }
 .scoreIcon {
-  background-position: -160px 93.7%;
+  background-position: 29.4% 93.7%;
   height: 32px;
   width: 32px;
   border: 0;
 }
 .helpIcon {
-  background-position: -480px 18.7%;
+  background-position: 88.25% 18.7%;
   height: 32px;
   width: 32px;
   border: 0;
 }
 .logoutIcon {
-  background-position: -448px 62.5%;
+  background-position: 82.4% 62.5%;
   height: 32px;
   width: 32px;
+  border: 0;
+}
+@media (min-width: 1024px) {
+  .SpriteIcons {
+    height: 48px;
+    width: 48px;
+    background-size: 1800%;
+  }
+}
+
+.ArmoryIcons {
+  background-image: url(./assets/armory.png);
+  background-repeat: no-repeat;
+  background-size: 1000%;
+}
+.helmetIcon {
+  background-position: 11.5% 100%;
+  border: 0;
+}
+.weaponIcon {
+  background-position: 55.5% -0px;
+  border: 0;
+}
+.shieldIcon {
+  background-position: 89% -0px;
+  border: 0;
+}
+.armorIcon {
+  background-position: 0px 100%;
+  border: 0;
+}
+.companionIcon {
+  background-position: 66.8% 100%;
   border: 0;
 }
