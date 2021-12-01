@@ -7,17 +7,26 @@ import { getAccountProperties } from '../utils/ardorInterface';
 const Leaderboards = (): ReactElement => {
   const [leaders, setLeaders] = useState<any>([{ recipient: 0, value: 0 }]);
 
-  useEffect(async () => {
-    console.log(leaders);
-    const leaderAPI = await getAccountProperties(undefined, 'score');
+  // const handleSignIn = async () => {
+  //   const account = ardorjs.secretPhraseToAccountId(passphrase);
+  //   context.updatePlayerAccount({
+  //     address: account,
+  //     lvl: 0,
+  //     exp: 0,
+  //     gil: 0,
+  //     team: 'none',
+  //     score: 0,
+  //   });
+  //   navigate('/');
+  // };
 
-    setLeaders(leaderAPI!.data.properties);
-    console.log(leaders);
+  useEffect(() => {
+    async function fetchLeaders() {
+      const leaderAPI = await getAccountProperties(undefined, 'score');
+      setLeaders(leaderAPI!.data.properties);
+    }
 
-    // getAccountProperties(undefined, 'score').then((res) => {
-    //   setLeaders(res);
-    //   console.log(leaders);
-    // });
+    fetchLeaders();
   }, []);
 
   return (
