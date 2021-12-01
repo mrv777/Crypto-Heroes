@@ -67,7 +67,7 @@ function App() {
             <>
               <Header disableNavBar={false} />
               <div className="content-container">
-                <div className="content-height overflow-y-auto overflow-x-hidden px-4">
+                <div className="content-height overflow-y-auto overflow-x-hidden px-3">
                   <GameRoutes />
                 </div>
               </div>

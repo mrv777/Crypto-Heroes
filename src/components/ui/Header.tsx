@@ -8,12 +8,14 @@ export const MenuButton = ({
   onClick,
   children,
   disabled,
+  classNames,
 }: {
   onClick: () => void;
-  children: string | ReactElement | ReactElement[];
+  children?: string | ReactElement | ReactElement[];
   disabled?: boolean;
+  classNames?: string;
 }) => (
-  <button onClick={onClick} disabled={disabled} className={`buttons`}>
+  <button onClick={onClick} disabled={disabled} className={`${classNames}`}>
     {children}
   </button>
 );
@@ -36,26 +38,31 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
   };
 
   return (
-    <div className="h-16 bg-gray-700 flex px-3">
-      <MenuButton disabled={disableNavBar} onClick={() => handleClick('/')}>
-        Home
-      </MenuButton>
-      <MenuButton disabled={disableNavBar} onClick={() => handleClick('/shop')}>
-        Shop
-      </MenuButton>{' '}
-      <MenuButton disabled={disableNavBar} onClick={() => handleClick('/leaderboards')}>
-        Leaders
-      </MenuButton>
+    <div className="h-12 flex px-3">
+      <MenuButton
+        disabled={disableNavBar}
+        classNames="SpriteIcons homeIcon"
+        onClick={() => handleClick('/')}></MenuButton>
+      <MenuButton
+        disabled={disableNavBar}
+        classNames="SpriteIcons shopIcon"
+        onClick={() => handleClick('/shop')}></MenuButton>{' '}
+      <MenuButton
+        disabled={disableNavBar}
+        classNames="SpriteIcons scoreIcon"
+        onClick={() => handleClick('/leaderboards')}></MenuButton>
       <div className="flex-1"></div>
       {/* <MenuButton disabled={disableNavBar} onClick={() => handleClick('/profile')}>
         Profile
       </MenuButton> */}
-      <MenuButton disabled={disableNavBar} onClick={() => handleClick('/help')}>
-        Help
-      </MenuButton>
-      <MenuButton disabled={disableNavBar} onClick={() => handleLogOut()}>
-        Logout
-      </MenuButton>
+      <MenuButton
+        disabled={disableNavBar}
+        classNames="SpriteIcons helpIcon"
+        onClick={() => handleClick('/help')}></MenuButton>
+      <MenuButton
+        disabled={disableNavBar}
+        classNames="SpriteIcons logoutIcon"
+        onClick={() => handleLogOut()}></MenuButton>
     </div>
   );
 };
