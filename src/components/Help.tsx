@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Help = (): ReactElement => {
   return (
-    <div className="fixed h-full w-full flex flex-col items-center justify-center">
+    <div className="h-full w-full flex flex-col items-center justify-center">
       <p className="text-2xl">Help me</p>
       <p>Sorry, there is no one around</p>
       <button>

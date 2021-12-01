@@ -14,8 +14,8 @@ const Home = (): ReactElement => {
   const PowerUp = (item: string) => {
     return (
       <div className="w-full h-0 pt-full relative">
-        <div className="absolute top-0 left-0 h-full w-full justify-center align-middle border-2 border-white bg-gray-500 opacity-30 rounded">
-          <div className={`ArmoryIcons h-full w-full ${item}Icon`}></div>
+        <div className="absolute top-0 left-0 h-full w-full justify-center align-middle border-2 border-white bg-gray-500 opacity-20 rounded">
+          <div className={`opacity-30 ArmoryIcons h-full w-full ${item}Icon`}></div>
         </div>
       </div>
     );
@@ -31,7 +31,7 @@ const Home = (): ReactElement => {
   return (
     <div className="grid grid-cols-12 gap-1">
       <div className="col-span-8 p-4 xl:p-10 SpriteUI containerUI">
-        <div className="text-left h-full grid grid-cols-12 gap-3 mx-2">
+        <div className="text-left h-full grid grid-cols-12 gap-1 mr-2">
           <p className="tracking-tighter col-span-12 text-center">
             {context.playerAccount?.address}
           </p>
@@ -77,7 +77,7 @@ const Home = (): ReactElement => {
             </div>
           </div>
           <div className="col-span-6 mt-5">
-            <div className="text-right grid grid-cols-3 gap-3 text-xs mx-2">
+            <div className="text-right grid grid-cols-3 gap-1 text-xs mx-2">
               <div className="col-start-2 col-span-1">{PowerUp('helmet')}</div>
               <div className="col-start-1 col-span-1">{PowerUp('weapon')}</div>
               <div className="col-start-2 col-span-1">{PowerUp('armor')}</div>
@@ -98,7 +98,7 @@ const Home = (): ReactElement => {
         </div>
       </div>
       <div className="text-center col-span-4 p-3 xl:p-9 SpriteUI containerUI">
-        <div className="text-left h-full grid grid-cols-12 gap-3 text-xs mx-1">
+        <div className="text-left h-full grid grid-cols-12 gap-3 text-xs mr-1">
           <div className="col-span-4">
             <p>HP</p>
             <p>BLK</p>

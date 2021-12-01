@@ -19,6 +19,11 @@ p {
   margin: 8px 0px;
 }
 
+button {
+  background-color: rgb(110, 110, 99);
+  border-color: rgb(149, 149, 149);
+}
+
 .header {
   font-size: 3rem;
 }
@@ -123,6 +128,7 @@ p {
   background-image: url(./assets/armory.png);
   background-repeat: no-repeat;
   background-size: 1000%;
+  image-rendering: pixelated;
 }
 .helmetIcon {
   background-position: 11.5% 100%;
@@ -133,7 +139,7 @@ p {
   border: 0;
 }
 .shieldIcon {
-  background-position: 89% -0px;
+  background-position: 88.6% -0px;
   border: 0;
 }
 .armorIcon {

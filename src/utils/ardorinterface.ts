@@ -23,12 +23,13 @@ export const getAccount = async (account: string) => {
   }
 };
 
-export const getAccountProperties = async (account: string) => {
+export const getAccountProperties = async (account?: string, property?: string) => {
   try {
     const response = await axios.get(nodeUrl, {
       params: {
         requestType: 'getAccountProperties',
         recipient: account,
+        property: property,
         setter: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
       },
     });
