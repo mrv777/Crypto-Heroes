@@ -1,3 +1,5 @@
+import ardorjs from 'ardorjs';
+import qs from 'qs';
 import React from 'react';
 import { ReactElement, useContext } from 'react';
 import { Link } from 'react-router-dom';
@@ -6,6 +8,7 @@ import { SpriteAnimator } from 'react-sprite-animator';
 import coin from '../assets/Coin-Sheet.png';
 import sprite from '../assets/sprite.png';
 import { PlayerContext } from '../contexts/playerContext';
+import { broadcast, train } from '../utils/ardorInterface';
 import Tooltip from './ui/Tooltip';
 
 const Home = (): ReactElement => {
@@ -19,6 +22,21 @@ const Home = (): ReactElement => {
         </div>
       </div>
     );
+  };
+
+  const handleTraining = async () => {
+    const playerPassphrase = 'test1'; //Need to load this
+    const trainUnsigned = await train(ardorjs.secretPhraseToPublicKey(playerPassphrase));
+    console.log(trainUnsigned);
+    const trainSigned = ardorjs.signTransactionBytes(
+      trainUnsigned!.unsignedTransactionBytes,
+      playerPassphrase,
+    );
+    const broadcastTx = await broadcast(
+      trainSigned,
+      qs.stringify(trainUnsigned!.transactionJSON.attachment),
+    );
+    console.log(broadcastTx);
   };
 
   //Use for level up text somewhere
@@ -123,7 +141,11 @@ const Home = (): ReactElement => {
           </div>
           <div className="text-center col-span-12 grid grid-cols-2 gap-0 text-xs">
             <div>
-              <button disabled={context.playerAccount!.gil < 5000}>Train</button>
+              <button
+                disabled={context.playerAccount!.gil < 5000}
+                onClick={handleTraining}>
+                Train
+              </button>
             </div>
             <div>
               <button disabled={context.playerAccount!.gil < 50000}>Fight</button>

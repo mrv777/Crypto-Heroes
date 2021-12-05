@@ -74,7 +74,7 @@ const Login = (): ReactElement => {
     //   history.push('/my-profile');
   };
 
-  const isValid = isValidPassphrase(passphrase);
+  //const isValid = isValidPassphrase(passphrase);
 
   return (
     <div className="fixed h-full w-full flex flex-col items-center justify-center">
