@@ -24,7 +24,7 @@ function App() {
 
   // Code to detect landscape viewing
   useEffect(() => {
-    const resizeListener = () => {
+    const resizeListener = debounce(() => {
       setOrientation(
         (window.innerWidth ||
           document.documentElement.clientWidth ||
@@ -35,7 +35,7 @@ function App() {
           ? 'portrait'
           : 'landscape',
       );
-    };
+    }, 100); // 100ms
     // set resize listener
     window.addEventListener('resize', resizeListener);
 
@@ -45,6 +45,18 @@ function App() {
       window.removeEventListener('resize', resizeListener);
     };
   }, []);
+
+  const debounce = (func, delay) => {
+    let timer;
+    return () => {
+      let self = debounce;
+      let args = arguments;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(self, args);
+      }, delay);
+    };
+  };
 
   const updatePlayerAccount = (accountProps: AccountProps | null) => {
     setPlayerAccount(accountProps);
