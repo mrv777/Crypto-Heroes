@@ -57,6 +57,36 @@ export const getIgnisBalance = async (account: string) => {
   }
 };
 
+export const getAssetsByIssuer = async (account: string) => {
+  try {
+    const response = await axios.get(nodeUrl, {
+      params: {
+        requestType: 'getAssetsByIssuer',
+        account: account,
+      },
+    });
+    return response;
+  } catch (error) {
+    // handle error
+    console.log(error);
+  }
+};
+
+export const getAccountAssets = async (account: string) => {
+  try {
+    const response = await axios.get(nodeUrl, {
+      params: {
+        requestType: 'getAccountAssets',
+        account: account,
+      },
+    });
+    return response;
+  } catch (error) {
+    // handle error
+    console.log(error);
+  }
+};
+
 export const train = async (publicKey: string) => {
   try {
     const response = await axios.post(
