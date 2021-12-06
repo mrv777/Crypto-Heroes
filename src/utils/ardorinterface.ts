@@ -109,6 +109,31 @@ export const train = async (publicKey: string) => {
   }
 };
 
+export const battle = async (publicKey: string, opponent: string) => {
+  try {
+    const response = await axios.post(
+      nodeUrl + 'requestType=sendMoney',
+      qs.stringify({
+        chain: 'ignis',
+        recipient: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
+        message:
+          '{"contract": "EarnExp","params": {"expMsg": "battle", "battleMsg": "' +
+          opponent +
+          '"}}',
+        feeNQT: 2000000,
+        amountNQT: 70000000,
+        messageIsPrunable: true,
+        publicKey: publicKey,
+      }),
+      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+    );
+    return response.data;
+  } catch (error) {
+    // handle error
+    console.log(error);
+  }
+};
+
 export const broadcast = async (signedTx: string, prunableAttachmentJSON?: string) => {
   try {
     const response = await axios.post(

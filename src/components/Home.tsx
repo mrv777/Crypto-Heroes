@@ -8,7 +8,7 @@ import { SpriteAnimator } from 'react-sprite-animator';
 import coin from '../assets/Coin-Sheet.png';
 import sprite from '../assets/sprite.png';
 import { PlayerContext } from '../contexts/playerContext';
-import { broadcast, train } from '../utils/ardorInterface';
+import { battle, broadcast, train } from '../utils/ardorInterface';
 import Tooltip from './ui/Tooltip';
 
 const Home = (): ReactElement => {
@@ -33,7 +33,7 @@ const Home = (): ReactElement => {
   const handleTraining = async () => {
     const playerPassphrase = context.playerAccount?.passphrase;
     const trainUnsigned = await train(ardorjs.secretPhraseToPublicKey(playerPassphrase));
-    console.log(trainUnsigned);
+
     const trainSigned = ardorjs.signTransactionBytes(
       trainUnsigned!.unsignedTransactionBytes,
       playerPassphrase,
@@ -42,7 +42,22 @@ const Home = (): ReactElement => {
       trainSigned,
       JSON.stringify(trainUnsigned!.transactionJSON.attachment),
     );
-    console.log(broadcastTx);
+  };
+  const handleBattle = async (opponent: string) => {
+    const playerPassphrase = context.playerAccount?.passphrase;
+    const battleUnsigned = await battle(
+      ardorjs.secretPhraseToPublicKey(playerPassphrase),
+      opponent,
+    );
+
+    const trainSigned = ardorjs.signTransactionBytes(
+      battleUnsigned!.unsignedTransactionBytes,
+      playerPassphrase,
+    );
+    const broadcastTx = await broadcast(
+      trainSigned,
+      JSON.stringify(battleUnsigned!.transactionJSON.attachment),
+    );
   };
 
   //Use for level up text somewhere
