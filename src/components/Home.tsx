@@ -6,16 +6,19 @@ import { Link } from 'react-router-dom';
 import { SpriteAnimator } from 'react-sprite-animator';
 
 import coin from '../assets/Coin-Sheet.png';
-// import sprite from '../assets/sprite.png';
-import sprite1 from '../assets/sprite_1.png';
-// import sprite2 from '../assets/sprite_2.png';
-// import sprite3 from '../assets/sprite_3.png';
+import sprite from '../assets/sprite.png';
 import { PlayerContext } from '../contexts/playerContext';
 import { broadcast, train } from '../utils/ardorInterface';
 import Tooltip from './ui/Tooltip';
 
 const Home = (): ReactElement => {
   const context = useContext(PlayerContext);
+  let frameStart = 0;
+  if (context.playerAccount?.address[6].match(/[a-m]/i)) {
+    frameStart = 4;
+  } else if (context.playerAccount?.address[6].match(/[n-z]/i)) {
+    frameStart = 8;
+  }
 
   const PowerUp = (item: string) => {
     return (
@@ -59,12 +62,13 @@ const Home = (): ReactElement => {
           <div className="col-span-6 flex flex-col">
             <div className="w-full flex flex-col items-center justify-center m-auto">
               <SpriteAnimator
-                sprite={sprite1}
+                sprite={sprite}
                 width={48}
                 height={36}
                 scale={0.3}
                 fps={4}
-                frameCount={4}
+                frameCount={frameStart + 4}
+                startFrame={frameStart}
                 direction={'horizontal'}
               />
             </div>
