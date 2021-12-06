@@ -14,6 +14,7 @@ const Login = (): ReactElement => {
   const [passphrase, setPassphrase] = useState('testl');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [savePass, setSavePass] = useState(true);
 
   let navigate = useNavigate();
   const context = useContext(PlayerContext);
@@ -29,6 +30,11 @@ const Login = (): ReactElement => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // setPassphrase(e.target.value.trim());
     setPassphrase(e.target.value);
+  };
+
+  const handleCheckChange = () => {
+    // setPassphrase(e.target.value.trim());
+    setSavePass(!savePass);
   };
 
   const handleSignIn = async () => {
@@ -74,7 +80,9 @@ const Login = (): ReactElement => {
       score: score,
     });
 
-    setToLocalStorage('Pass', passphrase);
+    if (savePass) {
+      setToLocalStorage('Pass', passphrase);
+    }
     setLoading(false);
     navigate('/');
     // context.login(passphrase);
@@ -109,15 +117,17 @@ const Login = (): ReactElement => {
             placeholder="Enter passphrase"
             isValid={isValidPassphrase(passphrase)}
           />
-          {/* <label>
-            Save Passphrase?
-            <input
-              value={passphrase}
-              type="checkbox"
-              onChange={handleInputChange}
-              placeholder="Enter passphrase"
-            />
-          </label> */}
+          <p>
+            <label>
+              <input
+                checked={savePass}
+                type="checkbox"
+                onChange={handleCheckChange}
+                className="mr-4"
+              />
+              Save Passphrase?
+            </label>
+          </p>
           {error && <Error message={error} />}
 
           <button
@@ -128,7 +138,10 @@ const Login = (): ReactElement => {
           </button>
 
           <p>
-            Do not have a passphrase? <Link to="/register">Register here</Link>.
+            Do not have a passphrase?{' '}
+            <Link to="/register" className="underline">
+              Register here
+            </Link>
           </p>
         </div>
       </div>
