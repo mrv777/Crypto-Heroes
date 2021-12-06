@@ -31,7 +31,7 @@ const Home = (): ReactElement => {
   };
 
   const handleTraining = async () => {
-    const playerPassphrase = 'test1'; //Need to load this
+    const playerPassphrase = context.playerAccount?.passphrase;
     const trainUnsigned = await train(ardorjs.secretPhraseToPublicKey(playerPassphrase));
     console.log(trainUnsigned);
     const trainSigned = ardorjs.signTransactionBytes(
@@ -40,7 +40,7 @@ const Home = (): ReactElement => {
     );
     const broadcastTx = await broadcast(
       trainSigned,
-      qs.stringify(trainUnsigned!.transactionJSON.attachment),
+      JSON.stringify(trainUnsigned!.transactionJSON.attachment),
     );
     console.log(broadcastTx);
   };

@@ -95,7 +95,7 @@ export const train = async (publicKey: string) => {
         chain: 'ignis',
         recipient: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
         message: '{"contract": "EarnExp","params": {"expMsg": "abc"}}',
-        feeNQT: 20000,
+        feeNQT: 2000000,
         amountNQT: 7000000,
         messageIsPrunable: true,
         publicKey: publicKey,

@@ -25,7 +25,7 @@ const Login = (): ReactElement => {
     if (savedPass) {
       setPassphrase(savedPass);
     }
-  });
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // setPassphrase(e.target.value.trim());
@@ -73,6 +73,7 @@ const Login = (): ReactElement => {
 
     context.updatePlayerAccount({
       address: account,
+      passphrase: passphrase,
       lvl: 1,
       exp: 7,
       gil: Math.floor(response?.data.balanceNQT / 1000000),

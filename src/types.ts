@@ -6,6 +6,7 @@ export type PlayerContextType = {
 
 export type AccountProps = {
   address: string;
+  passphrase: string;
   lvl: number;
   exp: number;
   gil: number;

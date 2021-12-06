@@ -17,6 +17,7 @@ const Register = (): ReactElement => {
     const account = ardorjs.secretPhraseToAccountId(passphrase);
     context.updatePlayerAccount({
       address: account,
+      passphrase: passphrase,
       lvl: 0,
       exp: 0,
       gil: 0,
