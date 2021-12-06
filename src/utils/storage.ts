@@ -7,7 +7,7 @@ export const setToLocalStorage = (data: string | Object | boolean, key: string) 
   encryptStorage.setItem(processed, key);
 };
 
-export const getFromLocalStorage = <T>(key: string): T | null => {
+export const getFromLocalStorage = (key: string): string | null => {
   const data = encryptStorage.getItem(key);
 
   let parsed;
