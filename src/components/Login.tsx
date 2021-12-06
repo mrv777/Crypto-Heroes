@@ -1,21 +1,30 @@
 import ardorjs from 'ardorjs';
-import React from 'react';
-import { ReactElement, useContext, useState } from 'react';
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { PlayerContext } from '../contexts/playerContext';
 import { getAccountProperties, getIgnisBalance } from '../utils/ardorInterface';
 import { isValidPassphrase } from '../utils/helpers';
+import { getFromLocalStorage, setToLocalStorage } from '../utils/storage';
 import Error from './ui/Error';
 import Input from './ui/Input';
 
 const Login = (): ReactElement => {
   const [passphrase, setPassphrase] = useState('testl');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   let navigate = useNavigate();
   const context = useContext(PlayerContext);
+
+  useEffect(() => {
+    const savedPass = getFromLocalStorage('Pass');
+    console.log(savedPass);
+    if (savedPass) {
+      setPassphrase(savedPass);
+    }
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // setPassphrase(e.target.value.trim());
@@ -23,6 +32,7 @@ const Login = (): ReactElement => {
   };
 
   const handleSignIn = async () => {
+    setLoading(true);
     setError('');
 
     // if (!isValid) {
@@ -32,6 +42,12 @@ const Login = (): ReactElement => {
     const account = ardorjs.secretPhraseToAccountId(passphrase);
     const response = await getIgnisBalance(account);
     const propertiesResponse = await getAccountProperties(account);
+    if (!response || !propertiesResponse) {
+      setError('Error connecting');
+      setLoading(false);
+      return;
+    }
+
     let team = 'none';
     let score = 0;
     if (
@@ -48,7 +64,7 @@ const Login = (): ReactElement => {
         }
       });
     }
-    console.log(response?.data);
+
     context.updatePlayerAccount({
       address: account,
       lvl: 1,
@@ -57,6 +73,9 @@ const Login = (): ReactElement => {
       team: team,
       score: score,
     });
+
+    setToLocalStorage('Pass', passphrase);
+    setLoading(false);
     navigate('/');
     // context.login(passphrase);
     // navigate('/');
@@ -90,11 +109,21 @@ const Login = (): ReactElement => {
             placeholder="Enter passphrase"
             isValid={isValidPassphrase(passphrase)}
           />
+          {/* <label>
+            Save Passphrase?
+            <input
+              value={passphrase}
+              type="checkbox"
+              onChange={handleInputChange}
+              placeholder="Enter passphrase"
+            />
+          </label> */}
           {error && <Error message={error} />}
 
           <button
             className="btn btn-primary mb-6 mt-8 rounded-none"
-            onClick={handleSignIn}>
+            onClick={handleSignIn}
+            disabled={loading}>
             Sign In
           </button>
 

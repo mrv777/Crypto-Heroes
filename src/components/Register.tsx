@@ -5,6 +5,7 @@ import { ReactElement, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { PlayerContext } from '../contexts/playerContext';
+import { setToLocalStorage } from '../utils/storage';
 
 const Register = (): ReactElement => {
   const [passphrase, setPassphrase] = useState('');
@@ -22,6 +23,7 @@ const Register = (): ReactElement => {
       team: 'none',
       score: 0,
     });
+    setToLocalStorage('Pass', passphrase);
     navigate('/');
   };
 

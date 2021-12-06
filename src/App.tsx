@@ -7,6 +7,7 @@ import Header from './components/ui/Header';
 import { PlayerContext } from './contexts/playerContext';
 import GameRoutes from './GameRoutes';
 import { AccountProps } from './types';
+import { removeItemFromStorage } from './utils/storage';
 import WelcomeRoutes from './WelcomeRoutes';
 
 function App() {
@@ -63,6 +64,7 @@ function App() {
   };
 
   const signOut = () => {
+    removeItemFromStorage('Pass');
     setPlayerAccount(null);
   };
 
