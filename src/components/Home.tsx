@@ -1,18 +1,19 @@
 import ardorjs from 'ardorjs';
-import qs from 'qs';
 import React from 'react';
 import { ReactElement, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { SpriteAnimator } from 'react-sprite-animator';
 
 import coin from '../assets/Coin-Sheet.png';
 import sprite from '../assets/sprite.png';
 import { PlayerContext } from '../contexts/playerContext';
-import { battle, broadcast, train } from '../utils/ardorInterface';
+import { broadcast, train } from '../utils/ardorInterface';
 import Tooltip from './ui/Tooltip';
 
 const Home = (): ReactElement => {
   const context = useContext(PlayerContext);
+  let navigate = useNavigate();
+
   let frameStart = 0;
   if (context.playerAccount?.address[6].match(/[a-m]/i)) {
     frameStart = 4;
@@ -43,21 +44,8 @@ const Home = (): ReactElement => {
       JSON.stringify(trainUnsigned!.transactionJSON.attachment),
     );
   };
-  const handleBattle = async (opponent: string) => {
-    const playerPassphrase = context.playerAccount?.passphrase;
-    const battleUnsigned = await battle(
-      ardorjs.secretPhraseToPublicKey(playerPassphrase),
-      opponent,
-    );
-
-    const trainSigned = ardorjs.signTransactionBytes(
-      battleUnsigned!.unsignedTransactionBytes,
-      playerPassphrase,
-    );
-    const broadcastTx = await broadcast(
-      trainSigned,
-      JSON.stringify(battleUnsigned!.transactionJSON.attachment),
-    );
+  const handleBattle = async () => {
+    navigate('/battle');
   };
 
   //Use for level up text somewhere
@@ -170,7 +158,11 @@ const Home = (): ReactElement => {
               </button>
             </div>
             <div>
-              <button disabled={context.playerAccount!.gil < 50000}>Fight</button>
+              <button
+                disabled={context.playerAccount!.gil < 50000}
+                onClick={handleBattle}>
+                Fight
+              </button>
             </div>
           </div>
         </div>

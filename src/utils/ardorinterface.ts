@@ -108,7 +108,6 @@ export const train = async (publicKey: string) => {
     console.log(error);
   }
 };
-
 export const battle = async (publicKey: string, opponent: string) => {
   try {
     const response = await axios.post(
