@@ -16,7 +16,7 @@ const Register = (): ReactElement => {
   const handleSignIn = async () => {
     const account = ardorjs.secretPhraseToAccountId(passphrase);
     context.updatePlayerAccount({
-      address: account,
+      address: account.slice(6),
       passphrase: passphrase,
       lvl: 0,
       exp: 0,
@@ -24,6 +24,7 @@ const Register = (): ReactElement => {
       team: 'none',
       score: 0,
     });
+    context.updatePlayerStatus('idle'); //Make sure the player is set to idle as they are brand new
     setToLocalStorage('Pass', passphrase);
     navigate('/');
   };

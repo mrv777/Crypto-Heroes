@@ -42,7 +42,7 @@ const Leaderboards = (): ReactElement => {
             .sort((a, b) => (a.value < b.value ? 1 : -1))
             .map((leader, index) => (
               <div className="grid grid-cols-4 col-span-4" key={leader.recipient}>
-                <div className="col-start-1 col-end-4">{leader.recipientRS}</div>
+                <div className="col-start-1 col-end-4">{leader.recipientRS.slice(6)}</div>
                 <div className="col-start-4 col-end-4 text-right">{leader.value}</div>
               </div>
             ))

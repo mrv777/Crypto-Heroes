@@ -72,7 +72,7 @@ const Login = (): ReactElement => {
     }
 
     context.updatePlayerAccount({
-      address: account,
+      address: account.slice(6),
       passphrase: passphrase,
       lvl: 1,
       exp: 7,
@@ -84,6 +84,9 @@ const Login = (): ReactElement => {
     if (savePass) {
       setToLocalStorage('Pass', passphrase);
     }
+
+    context.updatePlayerStatus('idle'); //Should actually check the blockchain to see if the player has an unconfirmed transaction
+
     setLoading(false);
     navigate('/');
     // context.login(passphrase);

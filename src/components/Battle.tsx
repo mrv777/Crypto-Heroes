@@ -60,7 +60,9 @@ const Battle = (): ReactElement => {
                 className="grid grid-cols-4 col-span-4"
                 key={opponent.recipient}
                 onClick={() => handleBattle(opponent.recipientRS)}>
-                <div className="col-start-1 col-end-4">{opponent.recipientRS}</div>
+                <div className="col-start-1 col-end-4 text-left">
+                  {opponent.recipientRS.slice(6)}
+                </div>
                 <div className="col-start-4 col-end-4 text-right">{opponent.value}</div>
               </button>
             ))
