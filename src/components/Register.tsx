@@ -23,6 +23,7 @@ const Register = (): ReactElement => {
       gil: 0,
       team: 'none',
       score: 0,
+      status: 'idle',
     });
     setToLocalStorage('Pass', passphrase);
     navigate('/');
