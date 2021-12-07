@@ -51,7 +51,7 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
         disabled={disableNavBar}
         classNames="SpriteIcons scoreIcon"
         onClick={() => handleClick('/leaderboards')}></MenuButton>
-      <div className="flex-1 self-center">{context.playerAccount?.status}</div>
+      <div className="flex-1 self-center">{context.playerStatus}</div>
       {/* <MenuButton disabled={disableNavBar} onClick={() => handleClick('/profile')}>
         Profile
       </MenuButton> */}

@@ -1,6 +1,8 @@
 export type PlayerContextType = {
   updatePlayerAccount: (accountProps: AccountProps | null) => void;
   playerAccount: AccountProps | null;
+  updatePlayerStatus: (status: string | null) => void;
+  playerStatus: string | null;
   signOut: () => void;
 };
 
@@ -12,5 +14,4 @@ export type AccountProps = {
   gil: number;
   team: string;
   score: number;
-  status: string;
 };

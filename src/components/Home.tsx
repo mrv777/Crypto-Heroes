@@ -12,6 +12,7 @@ import Tooltip from './ui/Tooltip';
 
 const Home = (): ReactElement => {
   const context = useContext(PlayerContext);
+  console.log(context);
   let navigate = useNavigate();
 
   let frameStart = 0;
@@ -43,6 +44,12 @@ const Home = (): ReactElement => {
       trainSigned,
       JSON.stringify(trainUnsigned!.transactionJSON.attachment),
     );
+
+    if (broadcastTx && broadcastTx?.data.fullHash) {
+      context.updatePlayerStatus('Training...');
+    } else {
+      context.updatePlayerStatus('Error Training');
+    }
   };
   const handleBattle = async () => {
     navigate('/battle');

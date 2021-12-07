@@ -6,5 +6,7 @@ import { PlayerContextType } from '../types';
 export const PlayerContext = createContext<PlayerContextType>({
   updatePlayerAccount: () => null,
   playerAccount: null,
+  updatePlayerStatus: () => null,
+  playerStatus: null,
   signOut: () => null,
 });

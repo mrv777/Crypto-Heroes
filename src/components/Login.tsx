@@ -79,7 +79,6 @@ const Login = (): ReactElement => {
       gil: Math.floor(response?.data.balanceNQT / 1000000),
       team: team,
       score: score,
-      status: 'idle',
     });
 
     if (savePass) {

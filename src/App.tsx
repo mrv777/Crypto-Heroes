@@ -12,6 +12,7 @@ import WelcomeRoutes from './WelcomeRoutes';
 
 function App() {
   const [playerAccount, setPlayerAccount] = useState<AccountProps | null>(null);
+  const [playerStatus, setPlayerStatus] = useState<string | null>('idle');
   const [orientation, setOrientation] = useState<String>(
     (window.innerWidth ||
       document.documentElement.clientWidth ||
@@ -63,6 +64,10 @@ function App() {
     setPlayerAccount(accountProps);
   };
 
+  const updatePlayerStatus = (status: string | null) => {
+    setPlayerStatus(status);
+  };
+
   const signOut = () => {
     removeItemFromStorage('Pass');
     setPlayerAccount(null);
@@ -75,6 +80,8 @@ function App() {
           value={{
             updatePlayerAccount,
             playerAccount,
+            updatePlayerStatus,
+            playerStatus,
             signOut,
           }}>
           {playerAccount ? (
