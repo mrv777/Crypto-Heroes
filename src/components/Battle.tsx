@@ -1,6 +1,7 @@
 import ardorjs from 'ardorjs';
 import React, { useContext, useEffect, useState } from 'react';
 import { ReactElement } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { PlayerContext } from '../contexts/playerContext';
 import { battle, broadcast, getAccountProperties } from '../utils/ardorInterface';
@@ -8,6 +9,7 @@ import { battle, broadcast, getAccountProperties } from '../utils/ardorInterface
 const Battle = (): ReactElement => {
   const [opponents, setOpponents] = useState<any>(null);
   const context = useContext(PlayerContext);
+  let navigate = useNavigate();
 
   useEffect(() => {
     async function fetchLeaders() {
@@ -33,6 +35,13 @@ const Battle = (): ReactElement => {
       trainSigned,
       JSON.stringify(battleUnsigned!.transactionJSON.attachment),
     );
+
+    if (broadcastTx && broadcastTx?.data.fullHash) {
+      context.updatePlayerStatus('Battling...');
+      navigate('/');
+    } else {
+      context.updatePlayerStatus('Error Battling');
+    }
   };
 
   return (
@@ -47,13 +56,13 @@ const Battle = (): ReactElement => {
           opponents
             .filter((opponent) => opponent.value != context.playerAccount?.team)
             .map((opponent, index) => (
-              <div
+              <button
                 className="grid grid-cols-4 col-span-4"
                 key={opponent.recipient}
-                onClick={handleBattle}>
+                onClick={() => handleBattle(opponent.recipientRS)}>
                 <div className="col-start-1 col-end-4">{opponent.recipientRS}</div>
                 <div className="col-start-4 col-end-4 text-right">{opponent.value}</div>
-              </div>
+              </button>
             ))
         )}
       </div>

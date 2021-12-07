@@ -126,7 +126,7 @@ const Login = (): ReactElement => {
                 onChange={handleCheckChange}
                 className="mr-4"
               />
-              Save Passphrase?
+              Remember me?
             </label>
           </p>
           {error && <Error message={error} />}

@@ -159,14 +159,18 @@ const Home = (): ReactElement => {
           <div className="text-center col-span-12 grid grid-cols-2 gap-0 text-xs">
             <div>
               <button
-                disabled={context.playerAccount!.gil < 5000}
+                disabled={
+                  context.playerAccount!.gil < 100000 || context.playerStatus != 'idle'
+                }
                 onClick={handleTraining}>
                 Train
               </button>
             </div>
             <div>
               <button
-                disabled={context.playerAccount!.gil < 50000}
+                disabled={
+                  context.playerAccount!.gil < 730000 || context.playerStatus != 'idle'
+                }
                 onClick={handleBattle}>
                 Fight
               </button>

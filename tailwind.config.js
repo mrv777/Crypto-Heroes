@@ -19,6 +19,7 @@ module.exports = {
   variants: {
     extend: {
       listStyleType: ['hover', 'focus'],
+      opacity: ['disabled'],
     },
   },
   plugins: [],

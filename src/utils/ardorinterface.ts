@@ -95,7 +95,7 @@ export const train = async (publicKey: string) => {
         chain: 'ignis',
         recipient: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
         message: '{"contract": "EarnExp","params": {"expMsg": "abc"}}',
-        feeNQT: 2000000,
+        feeNQT: 3000000,
         amountNQT: 7000000,
         messageIsPrunable: true,
         publicKey: publicKey,
@@ -119,7 +119,7 @@ export const battle = async (publicKey: string, opponent: string) => {
           '{"contract": "EarnExp","params": {"expMsg": "battle", "battleMsg": "' +
           opponent +
           '"}}',
-        feeNQT: 2000000,
+        feeNQT: 3000000,
         amountNQT: 70000000,
         messageIsPrunable: true,
         publicKey: publicKey,
