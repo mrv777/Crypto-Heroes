@@ -37,7 +37,7 @@ const Battle = (): ReactElement => {
     );
 
     if (broadcastTx && broadcastTx?.data.fullHash) {
-      context.updatePlayerStatus('Battling...');
+      context.updatePlayerStatus('Starting Battle...');
       navigate('/');
     } else {
       context.updatePlayerStatus('Error Battling');
