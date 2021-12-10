@@ -154,7 +154,7 @@ export const battle = async (publicKey: string, opponent: string) => {
           opponent +
           '"}}',
         feeNQT: 3000000,
-        amountNQT: 70000000,
+        amountNQT: 97000000,
         messageIsPrunable: true,
         publicKey: publicKey,
       }),

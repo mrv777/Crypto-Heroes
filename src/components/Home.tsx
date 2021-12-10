@@ -194,7 +194,7 @@ const Home = (): ReactElement => {
             <div>
               <button
                 disabled={
-                  context.playerAccount!.gil < 100000 || context.playerStatus != 'idle'
+                  context.playerAccount!.gil < 10 || context.playerStatus != 'idle'
                 }
                 onClick={handleTraining}>
                 Train
@@ -203,7 +203,7 @@ const Home = (): ReactElement => {
             <div>
               <button
                 disabled={
-                  context.playerAccount!.gil < 730000 || context.playerStatus != 'idle'
+                  context.playerAccount!.gil < 100 || context.playerStatus != 'idle'
                 }
                 onClick={handleBattle}>
                 Fight
