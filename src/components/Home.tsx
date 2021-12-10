@@ -1,6 +1,6 @@
 import ardorjs from 'ardorjs';
-import React from 'react';
-import { ReactElement, useContext } from 'react';
+import React, { ReactElement, useContext, useEffect } from 'react';
+import Modal from 'react-modal';
 import { Link, useNavigate } from 'react-router-dom';
 import { SpriteAnimator } from 'react-sprite-animator';
 
@@ -11,15 +11,49 @@ import { broadcast, train } from '../utils/ardorInterface';
 import Tooltip from './ui/Tooltip';
 
 const Home = (): ReactElement => {
+  const [modalIsOpen, setIsOpen] = React.useState(false);
   const context = useContext(PlayerContext);
   console.log(context);
   let navigate = useNavigate();
 
+  const customStyles = {
+    overlay: {
+      backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    },
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      background: 'black',
+      border: '3px solid white',
+      textAlign: 'center',
+    },
+  };
+
+  //** Test code for different character based on account address */
   let frameStart = 0;
   if (context.playerAccount?.address[6].match(/[a-m]/i)) {
     frameStart = 4;
   } else if (context.playerAccount?.address[6].match(/[n-z]/i)) {
     frameStart = 8;
+  }
+  /************ */
+
+  useEffect(() => {
+    //Check that player has enough balance to play
+    console.log('Check GIL balance');
+    if (context.playerAccount!.gil < 100000) {
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  }, []);
+
+  function closeModal() {
+    setIsOpen(false);
   }
 
   const PowerUp = (item: string) => {
@@ -178,6 +212,15 @@ const Home = (): ReactElement => {
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={modalIsOpen}
+        style={customStyles}
+        onRequestClose={closeModal}
+        contentLabel="Out of GIL">
+        <p>Not enough GIL to play. Please deposit some.</p>
+        <p>ARDOR-{context.playerAccount?.address}</p>
+        <button onClick={closeModal}>close</button>
+      </Modal>
     </div>
   );
 };
