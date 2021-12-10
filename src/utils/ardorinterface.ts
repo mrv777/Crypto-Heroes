@@ -41,6 +41,24 @@ export const getAccountProperties = async (account?: string, property?: string) 
   }
 };
 
+export const getBlockchainTransactions = async (account: string) => {
+  try {
+    const response = await axios.get(nodeUrl, {
+      params: {
+        chain: 'ignis',
+        requestType: 'getBlockchainTransactions',
+        account: account,
+        firstIndex: '0',
+        lastIndex: '0',
+      },
+    });
+    return response;
+  } catch (error) {
+    // handle error
+    console.log(error);
+  }
+};
+
 export const getIgnisBalance = async (account: string) => {
   try {
     const response = await axios.get(nodeUrl, {
@@ -159,6 +177,23 @@ export const broadcast = async (signedTx: string, prunableAttachmentJSON?: strin
       }),
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
     );
+    return response;
+  } catch (error) {
+    // handle error
+    console.log(error);
+  }
+};
+
+export const getLastBlock = async () => {
+  try {
+    const response = await axios.get(nodeUrl, {
+      params: {
+        requestType: 'getBlocks',
+        firstIndex: '0',
+        lastIndex: '0',
+        includeTransactions: 'true',
+      },
+    });
     return response;
   } catch (error) {
     // handle error

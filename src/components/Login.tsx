@@ -37,7 +37,6 @@ const Login = (): ReactElement => {
   };
 
   const handleKeypress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log(e);
     if (e.key === 'Enter') {
       handleSignIn();
     }
@@ -67,6 +66,7 @@ const Login = (): ReactElement => {
 
     let team = 'none';
     let score = 0;
+    let lvl = 0;
     if (
       propertiesResponse?.data.properties &&
       propertiesResponse?.data.properties[0] &&
@@ -78,6 +78,8 @@ const Login = (): ReactElement => {
           team = item.value;
         } else if (item.property.toLowerCase() == 'score') {
           score = item.value;
+        } else if (item.property.toLowerCase() == 'level') {
+          lvl = item.value;
         }
       });
     }
@@ -85,7 +87,7 @@ const Login = (): ReactElement => {
     context.updatePlayerAccount({
       address: account.slice(6),
       passphrase: passphrase,
-      lvl: 1,
+      lvl: lvl,
       exp: 7,
       gil: Math.floor(response?.data.balanceNQT / 1000000),
       team: team,
