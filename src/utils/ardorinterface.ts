@@ -57,6 +57,22 @@ export const getIgnisBalance = async (account: string) => {
   }
 };
 
+export const getUnconfirmedTxs = async (account: string) => {
+  try {
+    const response = await axios.get(nodeUrl, {
+      params: {
+        requestType: 'getUnconfirmedTransactions',
+        chain: 'ignis',
+        account: account,
+      },
+    });
+    return response;
+  } catch (error) {
+    // handle error
+    console.log(error);
+  }
+};
+
 export const getAssetsByIssuer = async (account: string) => {
   try {
     const response = await axios.get(nodeUrl, {

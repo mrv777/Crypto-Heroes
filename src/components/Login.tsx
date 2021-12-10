@@ -4,7 +4,11 @@ import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { PlayerContext } from '../contexts/playerContext';
-import { getAccountProperties, getIgnisBalance } from '../utils/ardorInterface';
+import {
+  getAccountProperties,
+  getIgnisBalance,
+  getUnconfirmedTxs,
+} from '../utils/ardorInterface';
 import { isValidPassphrase } from '../utils/helpers';
 import { getFromLocalStorage, setToLocalStorage } from '../utils/storage';
 import Error from './ui/Error';
@@ -93,23 +97,26 @@ const Login = (): ReactElement => {
     }
 
     context.updatePlayerStatus('idle'); //Should actually check the blockchain to see if the player has an unconfirmed transaction
+    const responseUtx = await getUnconfirmedTxs(account);
+    if (
+      responseUtx?.data.unconfirmedTransactions &&
+      responseUtx?.data.unconfirmedTransactions.length > 0
+    ) {
+      //Check if any unconfirmed txs are a hero action
+      responseUtx?.data.unconfirmedTransactions.forEach(function (tx) {
+        if (tx.recipientRS == 'ARDOR-64L4-C4H9-Z9PU-9YKDT') {
+          //Tx is to contract account so check why
+          if (tx.attachment.message.includes('abc')) {
+            context.updatePlayerStatus('Training...');
+          } else if (tx.attachment.message.includes('battle')) {
+            context.updatePlayerStatus('Battling...');
+          }
+        }
+      });
+    }
 
     setLoading(false);
     navigate('/');
-    // context.login(passphrase);
-    // navigate('/');
-
-    //   const { address } = cryptography.getAddressAndPublicKeyFromPassphrase(passphrase);
-    //   const account = await getAccount(cryptography.bufferToHex(address));
-
-    //   if (!account || !isAlive(account.rpg)) {
-    //     setError('Invalid account (already dead?)');
-    //     return;
-    //   }
-
-    //   const credentials = getCredentials(passphrase);
-    //   context.updatePlayerCredentials(credentials);
-    //   history.push('/my-profile');
   };
 
   //const isValid = isValidPassphrase(passphrase);
