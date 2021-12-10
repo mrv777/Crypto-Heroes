@@ -32,6 +32,13 @@ const Login = (): ReactElement => {
     setPassphrase(e.target.value);
   };
 
+  const handleKeypress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    console.log(e);
+    if (e.key === 'Enter') {
+      handleSignIn();
+    }
+  };
+
   const handleCheckChange = () => {
     // setPassphrase(e.target.value.trim());
     setSavePass(!savePass);
@@ -117,6 +124,7 @@ const Login = (): ReactElement => {
             value={passphrase}
             type="text"
             onChange={handleInputChange}
+            onKeyPress={handleKeypress}
             label="Enter passphrase"
             placeholder="Enter passphrase"
             isValid={isValidPassphrase(passphrase)}

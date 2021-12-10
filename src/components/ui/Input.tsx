@@ -5,6 +5,7 @@ type Props = {
   value: string;
   type?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onKeyPress?: React.KeyboardEventHandler<HTMLInputElement>;
   label: string;
   placeholder?: string;
   isValid?: boolean;
@@ -16,6 +17,7 @@ const Input = ({
   value,
   type = 'text',
   onChange,
+  onKeyPress,
   label,
   placeholder,
   isValid,
@@ -32,6 +34,7 @@ const Input = ({
       className={`border-2 custom-rounded-sm w-full py-2 px-3 text-black mb-3 leading-tight focus:outline-none focus:shadow-outline ${getContextualMarkup()}`}
       type={type}
       onChange={onChange}
+      onKeyPress={onKeyPress}
       placeholder={placeholder}
       disabled={disabled}
       autoComplete={autocomplete}

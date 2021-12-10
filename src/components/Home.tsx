@@ -156,7 +156,7 @@ const Home = (): ReactElement => {
                 <Tooltip
                   tooltip={
                     <div className="text-left">
-                      <p>Mythical beings</p>
+                      <p>Mythical beings card</p>
                     </div>
                   }>
                   {PowerUp('companion')}
