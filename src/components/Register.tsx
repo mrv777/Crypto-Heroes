@@ -45,9 +45,17 @@ const Register = (): ReactElement => {
         ))}
       </div>
 
-      <button className="btn btn-primary mb-6 mt-8 rounded-none" onClick={handleSignIn}>
-        To Battle!
-      </button>
+      <span className="inline-grid grid-cols-2 gap-x-4">
+        <button
+          className="btn btn-primary mb-0 mt-8 rounded-none"
+          onClick={() => navigator.clipboard.writeText(passphrase)}>
+          Copy Passphrase
+        </button>
+
+        <button className="btn btn-primary mb-0 mt-8 rounded-none" onClick={handleSignIn}>
+          To Battle!
+        </button>
+      </span>
     </div>
   );
 };
