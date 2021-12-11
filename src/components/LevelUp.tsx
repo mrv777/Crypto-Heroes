@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 import { PlayerContext } from '../contexts/playerContext';
 import { broadcast, lvlUp } from '../utils/ardorInterface';
 
-const LevelUp = (): React.ReactElement => {
+const LevelUp = (props): React.ReactElement => {
   const context = useContext(PlayerContext);
 
   const handleLvlUp = async (opponent: string) => {
@@ -13,6 +13,10 @@ const LevelUp = (): React.ReactElement => {
       ardorjs.secretPhraseToPublicKey(playerPassphrase),
       opponent,
     );
+
+    const closeFunction = () => {
+      props.closeFunction();
+    };
 
     const trainSigned = ardorjs.signTransactionBytes(
       battleUnsigned!.unsignedTransactionBytes,
@@ -23,6 +27,7 @@ const LevelUp = (): React.ReactElement => {
       JSON.stringify(battleUnsigned!.transactionJSON.attachment),
     );
 
+    closeFunction();
     if (broadcastTx && broadcastTx?.data.fullHash) {
       context.updatePlayerStatus('Leveling up...');
     } else {

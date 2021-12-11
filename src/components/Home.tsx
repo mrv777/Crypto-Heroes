@@ -125,7 +125,7 @@ const Home = (): ReactElement => {
               <div className="col-span-4 text-left">
                 <p>
                   LVL
-                  {context.playerAccount!.exp < 1000 ? (
+                  {context.playerAccount!.exp > 1000 ? (
                     <span
                       onClick={() => setLvlIsOpen(true)}
                       onKeyDown={() => setLvlIsOpen(true)}
@@ -253,7 +253,7 @@ const Home = (): ReactElement => {
         style={customStyles}
         onRequestClose={closeLvlModal}
         contentLabel="Level up hero">
-        <LevelUp />
+        <LevelUp closeFunction={() => closeLvlModal()} />
         <button onClick={closeLvlModal}>close</button>
       </Modal>
     </div>

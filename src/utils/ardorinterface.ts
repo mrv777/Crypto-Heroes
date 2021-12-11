@@ -75,6 +75,7 @@ export const getIgnisBalance = async (account: string) => {
   }
 };
 
+//Exp is a MS currency to prevent transfers while allowing redemption
 export const getExp = async (account: string) => {
   try {
     const response = await axios.get(nodeUrl, {
