@@ -5,6 +5,7 @@ import { PlayerContext } from '../../contexts/playerContext';
 import {
   getAccountProperties,
   getBlockchainTransactions,
+  getExp,
   getIgnisBalance,
   getUnconfirmedTxs,
 } from '../../utils/ardorInterface';
@@ -49,9 +50,10 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
         const account = 'ARDOR-' + context.playerAccount?.address;
         const response = await getIgnisBalance(account);
         const propertiesResponse = await getAccountProperties(account);
+        const expResponse = await getExp(account);
 
         let team = context.playerAccount!.team;
-        let [score, lvl, atk, def, blk, crit, spd] = [0, 0, 0, 0, 0, 0, 0];
+        let [exp, score, lvl, atk, def, blk, crit, spd] = [0, 0, 0, 0, 0, 0, 0, 0];
         if (
           propertiesResponse?.data.properties &&
           propertiesResponse?.data.properties[0] &&
@@ -78,13 +80,17 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
             }
           });
         }
+        if (expResponse) {
+          exp = expResponse.data.unitsQNT;
+        }
+
         let hp = lvl * 10 + 10;
 
         context.updatePlayerAccount({
           address: account.slice(6),
           passphrase: context.playerAccount!.passphrase,
           lvl: lvl,
-          exp: 7,
+          exp: exp,
           gil: Math.floor(response?.data.balanceNQT / 1000000),
           team: team,
           score: score,

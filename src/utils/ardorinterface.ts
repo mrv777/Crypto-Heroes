@@ -75,6 +75,22 @@ export const getIgnisBalance = async (account: string) => {
   }
 };
 
+export const getExp = async (account: string) => {
+  try {
+    const response = await axios.get(nodeUrl, {
+      params: {
+        requestType: 'getAccountCurrencies',
+        currency: '13943488548174745464',
+        account: account,
+      },
+    });
+    return response;
+  } catch (error) {
+    // handle error
+    console.log(error);
+  }
+};
+
 export const getUnconfirmedTxs = async (account: string) => {
   try {
     const response = await axios.get(nodeUrl, {
@@ -155,6 +171,31 @@ export const battle = async (publicKey: string, opponent: string) => {
           '"}}',
         feeNQT: 3000000,
         amountNQT: 97000000,
+        messageIsPrunable: true,
+        publicKey: publicKey,
+      }),
+      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+    );
+    return response.data;
+  } catch (error) {
+    // handle error
+    console.log(error);
+  }
+};
+export const lvlUp = async (publicKey: string, statChoice: string) => {
+  try {
+    const response = await axios.post(
+      nodeUrl + 'requestType=transferCurrency',
+      qs.stringify({
+        chain: 'ignis',
+        currency: '13943488548174745464',
+        recipient: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
+        message:
+          '{"contract": "EarnExp","params": {"expMsg": "levelUp","statUp":"' +
+          statChoice +
+          '"}',
+        feeNQT: 3000000,
+        unitsQNT: 1000,
         messageIsPrunable: true,
         publicKey: publicKey,
       }),

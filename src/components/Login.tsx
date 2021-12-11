@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { PlayerContext } from '../contexts/playerContext';
 import {
   getAccountProperties,
+  getExp,
   getIgnisBalance,
   getUnconfirmedTxs,
 } from '../utils/ardorInterface';
@@ -58,6 +59,7 @@ const Login = (): ReactElement => {
     const account = ardorjs.secretPhraseToAccountId(passphrase);
     const response = await getIgnisBalance(account);
     const propertiesResponse = await getAccountProperties(account);
+    const expResponse = await getExp(account);
     if (!response || !propertiesResponse) {
       setError('Error connecting');
       setLoading(false);
@@ -65,7 +67,7 @@ const Login = (): ReactElement => {
     }
 
     let team = 'none';
-    let [score, lvl, atk, def, blk, crit, spd] = [0, 0, 0, 0, 0, 0, 0];
+    let [exp, score, lvl, atk, def, blk, crit, spd] = [0, 0, 0, 0, 0, 0, 0, 0];
     if (
       propertiesResponse?.data.properties &&
       propertiesResponse?.data.properties[0] &&
@@ -92,13 +94,17 @@ const Login = (): ReactElement => {
         }
       });
     }
+    if (expResponse) {
+      exp = expResponse.data.unitsQNT;
+    }
+
     let hp = lvl * 10 + 10;
 
     context.updatePlayerAccount({
       address: account.slice(6),
       passphrase: passphrase,
       lvl: lvl,
-      exp: 7,
+      exp: exp,
       gil: Math.floor(response?.data.balanceNQT / 1000000),
       team: team,
       score: score,

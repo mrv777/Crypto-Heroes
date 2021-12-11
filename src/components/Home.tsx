@@ -122,7 +122,7 @@ const Home = (): ReactElement => {
               />
             </div>
             <div className="text-left grid grid-cols-12 gap-3 mx-2">
-              <div className="col-span-6 text-left">
+              <div className="col-span-4 text-left">
                 <p>
                   LVL
                   {context.playerAccount!.exp < 1000 ? (
@@ -154,7 +154,7 @@ const Home = (): ReactElement => {
                   />
                 </p>
               </div>
-              <div className="col-span-6 text-right">
+              <div className="col-span-8 text-right">
                 <p>{context.playerAccount?.lvl}</p>
                 <p>
                   {context.playerAccount?.exp}/{context.playerAccount!.lvl * 0 + 1000}
