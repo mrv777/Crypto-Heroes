@@ -80,7 +80,7 @@ const Home = (): ReactElement => {
     );
 
     if (broadcastTx && broadcastTx?.data.fullHash) {
-      context.updatePlayerStatus('Starting Training...');
+      context.updatePlayerStatus('Training...');
     } else {
       context.updatePlayerStatus('Error Training');
     }
@@ -123,7 +123,11 @@ const Home = (): ReactElement => {
                   {renderAction('⬆', '/')}
                 </p>
                 <p>EXP</p>
-                <p className="flex">
+                <p
+                  className="flex"
+                  onClick={() => setIsOpen(true)}
+                  onKeyDown={() => setIsOpen(true)}
+                  role="presentation">
                   GIL
                   <SpriteAnimator
                     sprite={coin}
@@ -141,7 +145,12 @@ const Home = (): ReactElement => {
                 <p>
                   {context.playerAccount?.exp}/{context.playerAccount!.lvl * 2 + 10}
                 </p>
-                <p>{context.playerAccount?.gil}</p>
+                <p
+                  onClick={() => setIsOpen(true)}
+                  onKeyDown={() => setIsOpen(true)}
+                  role="presentation">
+                  {context.playerAccount?.gil}
+                </p>
               </div>
             </div>
           </div>
@@ -216,9 +225,13 @@ const Home = (): ReactElement => {
         isOpen={modalIsOpen}
         style={customStyles}
         onRequestClose={closeModal}
-        contentLabel="Out of GIL">
-        <p>Not enough GIL to play. Please deposit some.</p>
-        <p>ARDOR-{context.playerAccount?.address}</p>
+        contentLabel="GIL Deposits">
+        <p>Deposit addresses for GIL:</p>
+        <p>IGNIS - ARDOR-{context.playerAccount?.address}</p>
+        <p>ARDOR - Coming Soon</p>
+        <p>BTC - Coming Soon</p>
+        <p>ETH - Coming Soon</p>
+        <p>LSK - Coming Soon</p>
         <button onClick={closeModal}>close</button>
       </Modal>
     </div>
