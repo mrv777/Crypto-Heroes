@@ -1,24 +1,10 @@
 import React from 'react';
 import { ReactElement, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import { getAccountProperties } from '../utils/ardorInterface';
 
 const Leaderboards = (): ReactElement => {
   const [leaders, setLeaders] = useState<any>(null);
-
-  // const handleSignIn = async () => {
-  //   const account = ardorjs.secretPhraseToAccountId(passphrase);
-  //   context.updatePlayerAccount({
-  //     address: account,
-  //     lvl: 0,
-  //     exp: 0,
-  //     gil: 0,
-  //     team: 'none',
-  //     score: 0,
-  //   });
-  //   navigate('/');
-  // };
 
   useEffect(() => {
     async function fetchLeaders() {
@@ -40,7 +26,7 @@ const Leaderboards = (): ReactElement => {
         ) : (
           leaders
             .sort((a, b) => (a.value < b.value ? 1 : -1))
-            .map((leader, index) => (
+            .map((leader) => (
               <div className="grid grid-cols-4 col-span-4" key={leader.recipient}>
                 <div className="col-start-1 col-end-4">{leader.recipientRS.slice(6)}</div>
                 <div className="col-start-4 col-end-4 text-right">{leader.value}</div>

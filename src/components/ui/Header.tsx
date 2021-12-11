@@ -39,7 +39,10 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
       const current_tx = await getBlockchainTransactions(
         'ARDOR-' + context.playerAccount?.address,
       );
-      if (current_tx?.data.transactions[0].fullHash != lastTx) {
+      if (
+        current_tx?.data.transactions[0] &&
+        current_tx?.data.transactions[0].fullHash != lastTx
+      ) {
         //If the account has a new transaction, update the hero information
         setLastTx(current_tx?.data.transactions[0].fullHash);
         console.log('New Account Tx');
@@ -48,8 +51,7 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
         const propertiesResponse = await getAccountProperties(account);
 
         let team = context.playerAccount!.team;
-        let score = context.playerAccount!.score;
-        let lvl = context.playerAccount!.lvl;
+        let [score, lvl, atk, def, blk, crit, spd] = [0, 0, 0, 0, 0, 0, 0];
         if (
           propertiesResponse?.data.properties &&
           propertiesResponse?.data.properties[0] &&
@@ -63,9 +65,20 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
               score = item.value;
             } else if (item.property.toLowerCase() == 'level') {
               lvl = item.value;
+            } else if (item.property.toLowerCase() == 'atk') {
+              atk = item.value;
+            } else if (item.property.toLowerCase() == 'def') {
+              def = item.value;
+            } else if (item.property.toLowerCase() == 'blk') {
+              blk = item.value;
+            } else if (item.property.toLowerCase() == 'crit') {
+              crit = item.value;
+            } else if (item.property.toLowerCase() == 'spd') {
+              spd = item.value;
             }
           });
         }
+        let hp = lvl * 10 + 10;
 
         context.updatePlayerAccount({
           address: account.slice(6),
@@ -75,6 +88,12 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
           gil: Math.floor(response?.data.balanceNQT / 1000000),
           team: team,
           score: score,
+          hp: hp,
+          atk: atk,
+          def: def,
+          blk: blk,
+          crit: crit,
+          spd: spd,
         });
 
         // If no unconfirmed tx for the account, make sure we are idle

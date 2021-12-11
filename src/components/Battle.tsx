@@ -55,7 +55,7 @@ const Battle = (): ReactElement => {
         ) : (
           opponents
             .filter((opponent) => opponent.value != context.playerAccount?.team)
-            .map((opponent, index) => (
+            .map((opponent) => (
               <button
                 className="grid grid-cols-4 col-span-4"
                 key={opponent.recipient}

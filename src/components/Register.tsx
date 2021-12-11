@@ -22,7 +22,13 @@ const Register = (): ReactElement => {
       exp: 0,
       gil: 0,
       team: 'none',
+      hp: 10,
       score: 0,
+      atk: 0,
+      def: 0,
+      blk: 0,
+      crit: 0,
+      spd: 0,
     });
     context.updatePlayerStatus('idle'); //Make sure the player is set to idle as they are brand new
     setToLocalStorage('Pass', passphrase);

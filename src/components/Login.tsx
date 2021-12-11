@@ -65,8 +65,7 @@ const Login = (): ReactElement => {
     }
 
     let team = 'none';
-    let score = 0;
-    let lvl = 0;
+    let [score, lvl, atk, def, blk, crit, spd] = [0, 0, 0, 0, 0, 0, 0];
     if (
       propertiesResponse?.data.properties &&
       propertiesResponse?.data.properties[0] &&
@@ -80,9 +79,20 @@ const Login = (): ReactElement => {
           score = item.value;
         } else if (item.property.toLowerCase() == 'level') {
           lvl = item.value;
+        } else if (item.property.toLowerCase() == 'atk') {
+          atk = item.value;
+        } else if (item.property.toLowerCase() == 'def') {
+          def = item.value;
+        } else if (item.property.toLowerCase() == 'blk') {
+          blk = item.value;
+        } else if (item.property.toLowerCase() == 'crit') {
+          crit = item.value;
+        } else if (item.property.toLowerCase() == 'spd') {
+          spd = item.value;
         }
       });
     }
+    let hp = lvl * 10 + 10;
 
     context.updatePlayerAccount({
       address: account.slice(6),
@@ -92,6 +102,12 @@ const Login = (): ReactElement => {
       gil: Math.floor(response?.data.balanceNQT / 1000000),
       team: team,
       score: score,
+      hp: hp,
+      atk: atk,
+      def: def,
+      blk: blk,
+      crit: crit,
+      spd: spd,
     });
 
     if (savePass) {

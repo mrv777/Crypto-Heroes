@@ -179,9 +179,9 @@ const Home = (): ReactElement => {
         <div className="text-left h-full grid grid-cols-12 gap-3 text-xs mr-1">
           <div className="col-span-4">
             <p>HP</p>
-            <p>BLK</p>
             <p>ATK</p>
             <p>DEF</p>
+            <p>BLK</p>
             <p>CRIT</p>
             <p>SPD</p>
             <p>&nbsp;</p>
@@ -189,15 +189,15 @@ const Home = (): ReactElement => {
             <p>SCORE</p>
           </div>
           <div className="col-span-8 text-right">
-            <p>10</p>
-            <p>3</p>
-            <p>5</p>
-            <p>2</p>
-            <p>2</p>
-            <p>10</p>
+            <p>{context.playerAccount!.hp}</p>
+            <p>{context.playerAccount!.atk}</p>
+            <p>{context.playerAccount!.def}</p>
+            <p>{context.playerAccount!.blk}</p>
+            <p>{context.playerAccount!.crit}</p>
+            <p>{context.playerAccount!.spd}</p>
             <p>&nbsp;</p>
-            <p className="capitalize">{context.playerAccount?.team}</p>
-            <p>{context.playerAccount?.score}</p>
+            <p className="capitalize">{context.playerAccount!.team}</p>
+            <p>{context.playerAccount!.score}</p>
           </div>
           <div className="text-center col-span-12 grid grid-cols-2 gap-0 text-xs">
             <div>

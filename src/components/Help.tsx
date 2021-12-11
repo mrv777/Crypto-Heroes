@@ -1,6 +1,5 @@
 import React from 'react';
 import { ReactElement } from 'react';
-import { Link } from 'react-router-dom';
 
 const Help = (): ReactElement => {
   return (
@@ -16,9 +15,9 @@ const Help = (): ReactElement => {
         points for you and your team. If you lose the battle you and your team will lose
         points if you were the attacker. Defenders lose no points.
       </p>
-      <button>
+      {/* <button>
         <Link to="/">Take me home</Link>
-      </button>
+      </button> */}
     </div>
   );
 };
