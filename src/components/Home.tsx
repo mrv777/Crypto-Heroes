@@ -1,17 +1,19 @@
 import ardorjs from 'ardorjs';
 import React, { ReactElement, useContext, useEffect } from 'react';
 import Modal from 'react-modal';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { SpriteAnimator } from 'react-sprite-animator';
 
 import coin from '../assets/Coin-Sheet.png';
 import sprite from '../assets/sprite.png';
 import { PlayerContext } from '../contexts/playerContext';
 import { broadcast, train } from '../utils/ardorInterface';
+import LevelUp from './LevelUp';
 import Tooltip from './ui/Tooltip';
 
 const Home = (): ReactElement => {
-  const [modalIsOpen, setIsOpen] = React.useState(false);
+  const [modalGilIsOpen, setGilIsOpen] = React.useState(false);
+  const [modalLvlIsOpen, setLvlIsOpen] = React.useState(false);
   const context = useContext(PlayerContext);
   console.log(context);
   let navigate = useNavigate();
@@ -46,14 +48,17 @@ const Home = (): ReactElement => {
     //Check that player has enough balance to play
     console.log('Check GIL balance');
     if (context.playerAccount!.gil < 100000) {
-      setIsOpen(true);
+      setGilIsOpen(true);
     } else {
-      setIsOpen(false);
+      setGilIsOpen(false);
     }
   }, []);
 
-  function closeModal() {
-    setIsOpen(false);
+  function closeGilModal() {
+    setGilIsOpen(false);
+  }
+  function closeLvlModal() {
+    setLvlIsOpen(false);
   }
 
   const PowerUp = (item: string) => {
@@ -90,11 +95,11 @@ const Home = (): ReactElement => {
   };
 
   //Use for level up text somewhere
-  const renderAction = (linkText: string, linkPath: string) => (
-    <div className="animate-pulse inline h-full">
-      <Link to={linkPath}>{linkText}</Link>
-    </div>
-  );
+  // const renderAction = (linkText: string, linkPath: string) => (
+  //   <div className="animate-pulse inline h-full">
+  //     <Link to={linkPath}>{linkText}</Link>
+  //   </div>
+  // );
 
   return (
     <div className="grid grid-cols-12 gap-1">
@@ -120,13 +125,22 @@ const Home = (): ReactElement => {
               <div className="col-span-6 text-left">
                 <p>
                   LVL
-                  {renderAction('⬆', '/')}
+                  {context.playerAccount!.exp < 1000 ? (
+                    <span
+                      onClick={() => setLvlIsOpen(true)}
+                      onKeyDown={() => setLvlIsOpen(true)}
+                      role="presentation">
+                      ⬆
+                    </span>
+                  ) : (
+                    ''
+                  )}
                 </p>
                 <p>EXP</p>
                 <p
                   className="flex"
-                  onClick={() => setIsOpen(true)}
-                  onKeyDown={() => setIsOpen(true)}
+                  onClick={() => setGilIsOpen(true)}
+                  onKeyDown={() => setGilIsOpen(true)}
                   role="presentation">
                   GIL
                   <SpriteAnimator
@@ -143,11 +157,11 @@ const Home = (): ReactElement => {
               <div className="col-span-6 text-right">
                 <p>{context.playerAccount?.lvl}</p>
                 <p>
-                  {context.playerAccount?.exp}/{context.playerAccount!.lvl * 2 + 10}
+                  {context.playerAccount?.exp}/{context.playerAccount!.lvl * 0 + 1000}
                 </p>
                 <p
-                  onClick={() => setIsOpen(true)}
-                  onKeyDown={() => setIsOpen(true)}
+                  onClick={() => setGilIsOpen(true)}
+                  onKeyDown={() => setGilIsOpen(true)}
                   role="presentation">
                   {context.playerAccount?.gil}
                 </p>
@@ -222,9 +236,9 @@ const Home = (): ReactElement => {
         </div>
       </div>
       <Modal
-        isOpen={modalIsOpen}
+        isOpen={modalGilIsOpen}
         style={customStyles}
-        onRequestClose={closeModal}
+        onRequestClose={closeGilModal}
         contentLabel="GIL Deposits">
         <p>Deposit addresses for GIL:</p>
         <p>IGNIS - ARDOR-{context.playerAccount?.address}</p>
@@ -232,7 +246,15 @@ const Home = (): ReactElement => {
         <p>BTC - Coming Soon</p>
         <p>ETH - Coming Soon</p>
         <p>LSK - Coming Soon</p>
-        <button onClick={closeModal}>close</button>
+        <button onClick={closeGilModal}>close</button>
+      </Modal>
+      <Modal
+        isOpen={modalLvlIsOpen}
+        style={customStyles}
+        onRequestClose={closeLvlModal}
+        contentLabel="Level up hero">
+        <LevelUp />
+        <button onClick={closeLvlModal}>close</button>
       </Modal>
     </div>
   );
