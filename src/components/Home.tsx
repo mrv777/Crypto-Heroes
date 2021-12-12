@@ -47,7 +47,7 @@ const Home = (): ReactElement => {
   useEffect(() => {
     //Check that player has enough balance to play
     console.log('Check GIL balance');
-    if (context.playerAccount!.gil < 100000) {
+    if (context.playerAccount!.gil < 10) {
       setGilIsOpen(true);
     } else {
       setGilIsOpen(false);
