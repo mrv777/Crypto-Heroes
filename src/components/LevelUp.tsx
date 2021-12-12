@@ -1,30 +1,45 @@
 import ardorjs from 'ardorjs';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { PlayerContext } from '../contexts/playerContext';
 import { broadcast, lvlUp } from '../utils/ardorInterface';
+import { isValidName } from '../utils/helpers';
+import Input from './ui/Input';
 
 const LevelUp = (props): React.ReactElement => {
+  const [name, setName] = useState('');
   const context = useContext(PlayerContext);
+  const teams = ['Ardor', 'Ethereum', 'Lisk'];
+  const skills = ['ATK', 'DEF', 'BLK'];
 
-  const handleLvlUp = async (opponent: string) => {
+  let choices = teams;
+  if (context.playerAccount!.lvl > 1) {
+    choices = skills;
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value.trim());
+  };
+
+  const handleLvlUp = async (lvlUpMsg: string) => {
     const playerPassphrase = context.playerAccount?.passphrase;
-    const battleUnsigned = await lvlUp(
+    const lvlUpUnsigned = await lvlUp(
       ardorjs.secretPhraseToPublicKey(playerPassphrase),
-      opponent,
+      lvlUpMsg,
     );
 
+    //Function from parent to close the modal
     const closeFunction = () => {
       props.closeFunction();
     };
 
-    const trainSigned = ardorjs.signTransactionBytes(
-      battleUnsigned!.unsignedTransactionBytes,
+    const lvlUpSigned = ardorjs.signTransactionBytes(
+      lvlUpUnsigned!.unsignedTransactionBytes,
       playerPassphrase,
     );
     const broadcastTx = await broadcast(
-      trainSigned,
-      JSON.stringify(battleUnsigned!.transactionJSON.attachment),
+      lvlUpSigned,
+      JSON.stringify(lvlUpUnsigned!.transactionJSON.attachment),
     );
 
     closeFunction();
@@ -37,35 +52,31 @@ const LevelUp = (props): React.ReactElement => {
 
   return (
     <div className="h-full w-full flex flex-col items-center justify-center">
-      {context.playerAccount!.lvl === 0 ? (
+      {context.playerAccount!.lvl == 3 ? (
         <div>
-          <p className="text-lg">Pick a team to join</p>
-          <ul>
-            <li className="text-left mt-2">
-              <button onClick={() => handleLvlUp('Ardor')}>Ardor</button>
-            </li>
-            <li className="text-left mt-2">
-              <button onClick={() => handleLvlUp('Ethereum')}>Ethereum</button>
-            </li>
-            <li className="text-left mt-2">
-              <button onClick={() => handleLvlUp('Lisk')}>Lisk</button>
-            </li>
-          </ul>
+          <p className="text-lg">What is your name?</p>
+          <Input
+            value={name}
+            type="text"
+            onChange={handleInputChange}
+            label="Enter name"
+            placeholder="Enter name"
+            isValid={isValidName(name)}
+          />
+          <button className="mb-3" onClick={() => handleLvlUp('{name}')}>
+            Continue
+          </button>
         </div>
       ) : (
         <div>
-          <p className="text-lg">Pick a skill to improve</p>
-          <ul>
-            <li className="text-left mt-2">
-              <button onClick={() => handleLvlUp('ATK')}>Attack</button>
-            </li>
-            <li className="text-left mt-2">
-              <button onClick={() => handleLvlUp('DEF')}>Defense</button>
-            </li>
-            <li className="text-left mt-2">
-              <button onClick={() => handleLvlUp('BLK')}>Block</button>
-            </li>
-          </ul>
+          <p className="text-lg">Please choose</p>
+          <div className="inline-grid grid-cols-3 gap-x-4 my-5">
+            {choices.map((choice, index) => (
+              <button key={index} onClick={() => handleLvlUp('{choice}')}>
+                {choice}
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </div>

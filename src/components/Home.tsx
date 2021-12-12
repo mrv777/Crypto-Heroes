@@ -226,7 +226,9 @@ const Home = (): ReactElement => {
             <div>
               <button
                 disabled={
-                  context.playerAccount!.gil < 100 || context.playerStatus != 'idle'
+                  context.playerAccount!.gil < 100 ||
+                  context.playerStatus != 'idle' ||
+                  context.playerAccount!.lvl < 2
                 }
                 onClick={handleBattle}>
                 Fight
