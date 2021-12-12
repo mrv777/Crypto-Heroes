@@ -52,7 +52,7 @@ const LevelUp = (props): React.ReactElement => {
 
   return (
     <div className="h-full w-full flex flex-col items-center justify-center">
-      {context.playerAccount!.lvl == 3 ? (
+      {context.playerAccount!.lvl == 0 ? (
         <div>
           <p className="text-lg">What is your name?</p>
           <Input
