@@ -145,7 +145,7 @@ export const train = async (publicKey: string) => {
       qs.stringify({
         chain: 'ignis',
         recipient: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
-        message: '{"contract": "EarnExp","params": {"expMsg": "abc"}}',
+        message: '{"contract": "Heroes","params": {"expMsg": "abc"}}',
         feeNQT: 3000000,
         amountNQT: 7000000,
         messageIsPrunable: true,
@@ -167,7 +167,7 @@ export const battle = async (publicKey: string, opponent: string) => {
         chain: 'ignis',
         recipient: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
         message:
-          '{"contract": "EarnExp","params": {"expMsg": "battle", "battleMsg": "' +
+          '{"contract": "Heroes","params": {"expMsg": "battle", "battleMsg": "' +
           opponent +
           '"}}',
         feeNQT: 3000000,
@@ -192,7 +192,7 @@ export const lvlUp = async (publicKey: string, statChoice: string) => {
         currency: '13943488548174745464',
         recipient: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
         message:
-          '{"contract": "EarnExp","params": {"expMsg": "levelUp","statUp":"' +
+          '{"contract": "Heroes","params": {"expMsg": "levelUp","statUp":"' +
           statChoice +
           '"}',
         feeNQT: 3000000,
