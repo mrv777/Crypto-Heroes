@@ -8,12 +8,14 @@ import coin from '../assets/Coin-Sheet.png';
 import sprite from '../assets/sprite.png';
 import { PlayerContext } from '../contexts/playerContext';
 import { broadcast, train } from '../utils/ardorInterface';
+import { timestampDiff } from '../utils/helpers';
 import LevelUp from './LevelUp';
 import Tooltip from './ui/Tooltip';
 
 const Home = (): ReactElement => {
   const [modalGilIsOpen, setGilIsOpen] = React.useState(false);
   const [modalLvlIsOpen, setLvlIsOpen] = React.useState(false);
+  const [lastTraining, setLastTraining] = React.useState(0);
   const context = useContext(PlayerContext);
   console.log(context);
   let navigate = useNavigate();
@@ -52,14 +54,32 @@ const Home = (): ReactElement => {
     } else {
       setGilIsOpen(false);
     }
-  }, []);
+    //Get time since last training tx when the screen loads
+    setLastTraining(timestampDiff(context.playerAccount!.lastTraining));
 
+    const interval = setInterval(() => {
+      // To prevent too many unnecessary rerenders, only update the state if the last training when the screen was loaded was less then 1 hour and now its at least an hour
+      // console.log(lastTraining);
+      // console.log(timestampDiff(context.playerAccount!.lastTraining));
+      if (
+        lastTraining < 3600 &&
+        timestampDiff(context.playerAccount!.lastTraining) >= 3600
+      ) {
+        setLastTraining(timestampDiff(context.playerAccount!.lastTraining));
+      }
+    }, 5000);
+
+    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+  }, [lastTraining]);
+
+  /** Functions to close modals */
   function closeGilModal() {
     setGilIsOpen(false);
   }
   function closeLvlModal() {
     setLvlIsOpen(false);
   }
+  /************ */
 
   const PowerUp = (item: string) => {
     return (
@@ -217,7 +237,9 @@ const Home = (): ReactElement => {
             <div>
               <button
                 disabled={
-                  context.playerAccount!.gil < 10 || context.playerStatus != 'idle'
+                  context.playerAccount!.gil < 10 ||
+                  context.playerStatus != 'idle' ||
+                  lastTraining < 3600
                 }
                 onClick={handleTraining}>
                 Train

@@ -59,6 +59,23 @@ export const getBlockchainTransactions = async (account: string) => {
   }
 };
 
+// We want to look for the last experience earned from training by look at the currency transfer
+export const getlastTrainingTx = async (account: string) => {
+  try {
+    const response = await axios.get(nodeUrl, {
+      params: {
+        currency: '13943488548174745464',
+        requestType: 'getCurrencyTransfers',
+        account: account,
+      },
+    });
+    return response;
+  } catch (error) {
+    // handle error
+    console.log(error);
+  }
+};
+
 export const getIgnisBalance = async (account: string) => {
   try {
     const response = await axios.get(nodeUrl, {

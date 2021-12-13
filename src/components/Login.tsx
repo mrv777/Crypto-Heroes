@@ -8,6 +8,7 @@ import {
   getAccountProperties,
   getExp,
   getIgnisBalance,
+  getlastTrainingTx,
   getUnconfirmedTxs,
 } from '../utils/ardorInterface';
 import { isValidPassphrase } from '../utils/helpers';
@@ -59,6 +60,7 @@ const Login = (): ReactElement => {
     const account = ardorjs.secretPhraseToAccountId(passphrase);
     const response = await getIgnisBalance(account);
     const propertiesResponse = await getAccountProperties(account);
+    const lastTrainingResponse = await getlastTrainingTx(account);
     const expResponse = await getExp(account);
     if (!response || !propertiesResponse) {
       setError('Error connecting');
@@ -67,7 +69,9 @@ const Login = (): ReactElement => {
     }
 
     let team = 'none';
-    let [exp, score, lvl, atk, def, blk, crit, spd] = [0, 0, 0, 0, 0, 0, 0, 0];
+    let [lastTraining, exp, score, lvl, atk, def, blk, crit, spd] = [
+      0, 0, 0, 0, 0, 0, 0, 0, 0,
+    ];
     if (
       propertiesResponse?.data.properties &&
       propertiesResponse?.data.properties[0] &&
@@ -94,8 +98,25 @@ const Login = (): ReactElement => {
         }
       });
     }
-    if (expResponse) {
+    if (expResponse && expResponse.data && expResponse.data.unitsQNT) {
       exp = expResponse.data.unitsQNT;
+    }
+    //Check for the last training tx and set the difference from now to see if hero can train again
+    //Break out of the loop once we find the first training tx
+    if (
+      lastTrainingResponse &&
+      lastTrainingResponse.data &&
+      lastTrainingResponse.data.transfers.length > 0
+    ) {
+      for (let transfer of lastTrainingResponse.data.transfers) {
+        if (
+          transfer.recipientRS == account &&
+          transfer.senderRS == 'ARDOR-64L4-C4H9-Z9PU-9YKDT'
+        ) {
+          lastTraining = transfer.timestamp;
+          break;
+        }
+      }
     }
 
     let hp = lvl * 10 + 10;
@@ -103,6 +124,7 @@ const Login = (): ReactElement => {
     context.updatePlayerAccount({
       address: account.slice(6),
       passphrase: passphrase,
+      lastTraining: lastTraining,
       lvl: lvl,
       exp: exp,
       gil: Math.floor(response?.data.balanceNQT / 1000000),

@@ -9,6 +9,7 @@ export type PlayerContextType = {
 export type AccountProps = {
   address: string;
   passphrase: string;
+  lastTraining: number;
   lvl: number;
   exp: number;
   gil: number;
