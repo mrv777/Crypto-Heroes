@@ -36,7 +36,7 @@ import static nxt.blockchain.TransactionTypeEnum.SEND_MESSAGE;
  * transaction and later not approve the trigger and response transactions in case they do not like the results.
  * For a better approach to gambling application see the AllForOnePayment sample contract.
  */
-public class EarnExp extends AbstractContract {
+public class Heroes extends AbstractContract {
 
     @ContractParametersProvider
     public interface Params {
@@ -69,6 +69,8 @@ public class EarnExp extends AbstractContract {
 
             int timeSinceTrain = 0;
             // Check for previous training
+//            context.logInfoMessage("TX sender: %s", transaction.getSender());
+//            context.logInfoMessage("TX recipient: %s", transaction.getRecipient());
             JO getExecutedTransactions = GetExecutedTransactionsCall.create(2).
                     type(5).
                     subtype(3).
@@ -112,6 +114,28 @@ public class EarnExp extends AbstractContract {
         //
         //
         else if (!transaction.isPhased() && !transaction.getAttachmentJson().isEmpty() && transaction.getAttachmentJson().isExist("currency") && transaction.getAttachmentJson().getString("currency").equals("13943488548174745464") && transaction.getAttachmentJson().getString("unitsQNT").equals("1000") && params.expMsg().equals("levelUp")) {
+            // Increase level of the hero
+            // Set level to 0, but check if it was already set.  If so, increment that by 1 and then convert to a string
+            int currentLvlInt = 0;
+            JO getAccountPropertyLvl = GetAccountPropertiesCall.
+                    create().
+                    property("level").
+                    recipient(transaction.getSender()).
+                    setter(transaction.getRecipient()).
+                    call();
+            if (getAccountPropertyLvl.isExist("properties")) {
+                JA propertiesArray = getAccountPropertyLvl.getArray("properties");
+                if (propertiesArray.size() > 0) {
+                    currentLvlInt = Integer.parseInt(propertiesArray.get(0).getString("value")) + 1;
+                }
+            }
+            String currentLvl = String.valueOf(currentLvlInt);
+            SetAccountPropertyCall setAccountPropertyLvlCall = SetAccountPropertyCall.create(2).
+                    recipient(transaction.getSender()).
+                    property("level").
+                    value(currentLvl);
+            context.createTransaction(setAccountPropertyLvlCall);
+
 
             // Set stat to 1, but check if it was already set.  If so, increment that by 1 and then convert to a string
             int currentStatInt = 1;
@@ -135,7 +159,7 @@ public class EarnExp extends AbstractContract {
                         property(statUp).
                         value(currentStat);
 
-                return context.createTransaction(setAccountPropertyCall);
+                context.createTransaction(setAccountPropertyCall);
             } else if (statUp.equals("Ardor") || statUp.equals("Ethereum") || statUp.equals("Lisk")) { //If second level up then we need to set a team instead
                 JO getAccountProperty = GetAccountPropertiesCall.
                         create().
@@ -146,20 +170,20 @@ public class EarnExp extends AbstractContract {
                 if (getAccountProperty.isExist("properties")) {
                     JA propertiesArray = getAccountProperty.getArray("properties");
                     if (propertiesArray.size() > 0) {
-                        return context.generateErrorResponse(10001, String.format("Already on team"));
+                        context.generateErrorResponse(10001, String.format("Already on team"));
                     }
                     SetAccountPropertyCall setAccountPropertyCall = SetAccountPropertyCall.create(2).
                             recipient(transaction.getSender()).
                             property("team").
                             value(statUp);
 
-                    return context.createTransaction(setAccountPropertyCall);
+                    context.createTransaction(setAccountPropertyCall);
                 } else {
-                    return context.generateErrorResponse(10001, String.format("Error getting current properties"));
+                    context.generateErrorResponse(10001, String.format("Error getting current properties"));
                 }
             } else {    //If first level up then we need to set the hero's name
                 if (statUp.length() > 16) {
-                    return context.generateErrorResponse(10001, String.format("Name is too long"));
+                    context.generateErrorResponse(10001, String.format("Name is too long"));
                 }
                 JO getAccountProperty = GetAccountPropertiesCall.
                         create().
@@ -170,19 +194,21 @@ public class EarnExp extends AbstractContract {
                 if (getAccountProperty.isExist("properties")) {
                     JA propertiesArray = getAccountProperty.getArray("properties");
                     if (propertiesArray.size() > 0) {
-                        return context.generateErrorResponse(10001, String.format("Already has a name"));
+                        context.generateErrorResponse(10001, String.format("Already has a name"));
                     }
                     SetAccountPropertyCall setAccountPropertyCall = SetAccountPropertyCall.create(2).
                             recipient(transaction.getSender()).
                             property("name").
                             value(statUp);
 
-                    return context.createTransaction(setAccountPropertyCall);
+                    context.createTransaction(setAccountPropertyCall);
                 } else {
-                    return context.generateErrorResponse(10001, String.format("Error getting current properties"));
+                    context.generateErrorResponse(10001, String.format("Error getting current properties"));
                 }
                 // return context.generateErrorResponse(10001, String.format("Not valid levelup. Amount sent: %d. Msg sent: %s. Stat sent: %s", transaction.getAmount(), params.expMsg(), params.statUp()));
             }
+            // Should perform lvl up tx and name/team/stat tx
+            return context.getResponse();
         }
         // Battle Code
         //
