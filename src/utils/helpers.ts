@@ -15,3 +15,9 @@ export const timestampDiff = (timestamp: number) => {
     timestamp;
   return diff;
 };
+
+export const getTxDate = (timestamp: number) => {
+  const unixTimestamp =
+    Math.floor(new Date('2017-12-26T14:00:00Z').getTime() / 1000) + timestamp;
+  return unixTimestamp;
+};
