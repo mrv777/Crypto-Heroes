@@ -63,7 +63,7 @@ const LevelUp = (props): React.ReactElement => {
             placeholder="Enter name"
             isValid={isValidName(name)}
           />
-          <button className="mb-3" onClick={() => handleLvlUp('{name}')}>
+          <button className="mb-3" onClick={() => handleLvlUp(name)}>
             Continue
           </button>
         </div>
@@ -72,7 +72,7 @@ const LevelUp = (props): React.ReactElement => {
           <p className="text-lg">Please choose</p>
           <div className="inline-grid grid-cols-3 gap-x-4 my-5">
             {choices.map((choice, index) => (
-              <button key={index} onClick={() => handleLvlUp('{choice}')}>
+              <button key={index} onClick={() => handleLvlUp(choice)}>
                 {choice}
               </button>
             ))}

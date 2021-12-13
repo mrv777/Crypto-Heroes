@@ -167,6 +167,7 @@ export const train = async (publicKey: string) => {
         amountNQT: 7000000,
         messageIsPrunable: true,
         publicKey: publicKey,
+        deadline: 60,
       }),
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
     );
@@ -191,6 +192,7 @@ export const battle = async (publicKey: string, opponent: string) => {
         amountNQT: 97000000,
         messageIsPrunable: true,
         publicKey: publicKey,
+        deadline: 60,
       }),
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
     );
@@ -211,11 +213,12 @@ export const lvlUp = async (publicKey: string, statChoice: string) => {
         message:
           '{"contract": "Heroes","params": {"expMsg": "levelUp","statUp":"' +
           statChoice +
-          '"}',
+          '"}}',
         feeNQT: 3000000,
         unitsQNT: 1000,
         messageIsPrunable: true,
         publicKey: publicKey,
+        deadline: 60,
       }),
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
     );
