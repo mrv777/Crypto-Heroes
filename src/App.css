@@ -25,7 +25,7 @@ button {
 }
 
 .header {
-  font-size: 3rem;
+  background-color: rgb(30, 30, 30);
 }
 
 .body {
@@ -100,6 +100,12 @@ button {
 }
 .scoreIcon {
   background-position: 29.4% 93.7%;
+  height: 32px;
+  width: 32px;
+  border: 0;
+}
+.logIcon {
+  background-position: 29.4% 43.8%;
   height: 32px;
   width: 32px;
   border: 0;

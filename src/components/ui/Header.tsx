@@ -154,7 +154,7 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
   };
 
   return (
-    <div className="h-12 lg:h-16 flex px-3 max-w-screen-xl m-auto">
+    <div className="h-12 lg:h-16 flex px-3 max-w-screen-xl m-auto fixed top-0 inset-x-0 header">
       <MenuButton
         disabled={disableNavBar}
         classNames="SpriteIcons homeIcon"
@@ -171,6 +171,10 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
       {/* <MenuButton disabled={disableNavBar} onClick={() => handleClick('/profile')}>
         Profile
       </MenuButton> */}
+      <MenuButton
+        disabled={disableNavBar}
+        classNames="SpriteIcons logIcon"
+        onClick={() => handleClick('/log')}></MenuButton>
       <MenuButton
         disabled={disableNavBar}
         classNames="SpriteIcons helpIcon"
