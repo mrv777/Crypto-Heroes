@@ -20,9 +20,9 @@ const Log = (): ReactElement => {
               try {
                 const msgAttachment = JSON.parse(tx.attachment.message);
                 if (msgAttachment.won == 'ARDOR-' + context.playerAccount!.address) {
-                  battleMsg = 'Won battle vs ' + msgAttachment.loss;
+                  battleMsg = 'Won battle vs ' + msgAttachment.loss.slice(6);
                 } else {
-                  battleMsg = 'Loss battle vs ' + msgAttachment.won;
+                  battleMsg = 'Loss battle vs ' + msgAttachment.won.slice(6);
                 }
               } catch {
                 battleMsg = 'Unknown Battle';
