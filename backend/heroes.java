@@ -67,7 +67,7 @@ public class Heroes extends AbstractContract {
         //
         if (!transaction.isPhased() && transaction.getAmount() > 96000000 && params.expMsg().equals("abc")) {
 
-            int timeSinceTrain = 0;
+            int timeSinceTrain = 43200; // Set to max if never trained before
             // Check for previous training
 //            context.logInfoMessage("TX sender: %s", transaction.getSender());
 //            context.logInfoMessage("TX recipient: %s", transaction.getRecipient());
