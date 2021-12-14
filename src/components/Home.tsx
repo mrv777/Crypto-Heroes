@@ -242,9 +242,9 @@ const Home = (): ReactElement => {
             <p>{context.playerAccount!.score}</p>
           </div>
           <div className="text-center col-span-12 grid grid-cols-2 gap-0">
-            <div>
+            <div className="m-1">
               <button
-                className="text-tiny"
+                className="text-tiny p-1 w-full"
                 disabled={
                   context.playerAccount!.gil < 100 ||
                   context.playerStatus != 'idle' ||
@@ -253,23 +253,12 @@ const Home = (): ReactElement => {
                 onClick={handleTraining}>
                 Train
                 <br />
-                <span className="flex text-center w-full">
-                  100
-                  <SpriteAnimator
-                    sprite={coin}
-                    width={8}
-                    height={8}
-                    scale={0.6}
-                    fps={4}
-                    frameCount={4}
-                    direction={'horizontal'}
-                  />
-                </span>
+                <span className="text-center">100 GIL</span>
               </button>
             </div>
-            <div>
+            <div className="m-1">
               <button
-                className="text-tiny"
+                className="text-tiny p-1 w-full"
                 disabled={
                   context.playerAccount!.gil < 1000 ||
                   context.playerStatus != 'idle' ||
@@ -278,23 +267,12 @@ const Home = (): ReactElement => {
                 onClick={handleBattle}>
                 Fight
                 <br />
-                <span className="flex text-center w-full">
-                  1000
-                  <SpriteAnimator
-                    sprite={coin}
-                    width={8}
-                    height={8}
-                    scale={0.6}
-                    fps={4}
-                    frameCount={4}
-                    direction={'horizontal'}
-                  />
-                </span>
+                <span className="text-center">1000 GIL</span>
               </button>
             </div>
-            <div>
+            <div className="m-1">
               <button
-                className="text-tiny"
+                className="text-tiny p-1 w-full"
                 disabled={
                   context.playerAccount!.gil < 10 ||
                   context.playerStatus != 'idle' ||
@@ -303,23 +281,12 @@ const Home = (): ReactElement => {
                 onClick={handleExplore}>
                 Explore
                 <br />
-                <span className="flex text-center w-full">
-                  10
-                  <SpriteAnimator
-                    sprite={coin}
-                    width={8}
-                    height={8}
-                    scale={0.6}
-                    fps={4}
-                    frameCount={4}
-                    direction={'horizontal'}
-                  />
-                </span>
+                <span className="text-center">10 GIL</span>
               </button>
             </div>
-            <div>
+            <div className="m-1">
               <button
-                className="text-tiny"
+                className="text-tiny p-1 w-full"
                 disabled={
                   context.playerAccount!.gil < 100 ||
                   context.playerStatus != 'idle' ||
@@ -328,18 +295,7 @@ const Home = (): ReactElement => {
                 onClick={handleStudy}>
                 Study
                 <br />
-                <span className="flex text-center w-full">
-                  100
-                  <SpriteAnimator
-                    sprite={coin}
-                    width={8}
-                    height={8}
-                    scale={0.6}
-                    fps={4}
-                    frameCount={4}
-                    direction={'horizontal'}
-                  />
-                </span>
+                <span className="text-center">100 GIL</span>
               </button>
             </div>
           </div>
