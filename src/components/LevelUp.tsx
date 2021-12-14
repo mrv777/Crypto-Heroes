@@ -10,7 +10,7 @@ const LevelUp = (props): React.ReactElement => {
   const [name, setName] = useState('');
   const context = useContext(PlayerContext);
   const teams = ['Ardor', 'Ethereum', 'Lisk'];
-  const skills = ['ATK', 'DEF', 'BLK'];
+  const skills = ['ATK', 'DEF', 'SPD'];
 
   let choices = teams;
   if (context.playerAccount!.lvl > 1) {

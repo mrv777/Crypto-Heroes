@@ -164,7 +164,7 @@ export const train = async (publicKey: string) => {
         recipient: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
         message: '{"contract": "Heroes","params": {"expMsg": "abc"}}',
         feeNQT: 3000000,
-        amountNQT: 7000000,
+        amountNQT: 97000000,
         messageIsPrunable: true,
         publicKey: publicKey,
         deadline: 60,
@@ -189,7 +189,7 @@ export const battle = async (publicKey: string, opponent: string) => {
           opponent +
           '"}}',
         feeNQT: 3000000,
-        amountNQT: 97000000,
+        amountNQT: 997000000,
         messageIsPrunable: true,
         publicKey: publicKey,
         deadline: 60,

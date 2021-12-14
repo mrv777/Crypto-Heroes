@@ -16,6 +16,8 @@ const Home = (): ReactElement => {
   const [modalGilIsOpen, setGilIsOpen] = React.useState(false);
   const [modalLvlIsOpen, setLvlIsOpen] = React.useState(false);
   const [lastTraining, setLastTraining] = React.useState(0);
+  const [lastExplore, setLastExplore] = React.useState(0);
+  const [lastStudy, setLastStudy] = React.useState(0);
   const context = useContext(PlayerContext);
   console.log(context);
   let navigate = useNavigate();
@@ -59,7 +61,7 @@ const Home = (): ReactElement => {
 
     const interval = setInterval(() => {
       // To prevent too many unnecessary rerenders, only update the state if the last training when the screen was loaded was less then 1 hour and now its at least an hour
-      // console.log(lastTraining);
+      console.log(lastTraining);
       // console.log(timestampDiff(context.playerAccount!.lastTraining));
       if (
         lastTraining < 3600 &&
@@ -111,6 +113,12 @@ const Home = (): ReactElement => {
     }
   };
   const handleBattle = async () => {
+    navigate('/battle');
+  };
+  const handleStudy = async () => {
+    navigate('/battle');
+  };
+  const handleExplore = async () => {
     navigate('/battle');
   };
 
@@ -218,7 +226,7 @@ const Home = (): ReactElement => {
             <p>BLK</p>
             <p>CRIT</p>
             <p>SPD</p>
-            <p>&nbsp;</p>
+            <p className="text-tiny">&nbsp;</p>
             <p>TEAM</p>
             <p>SCORE</p>
           </div>
@@ -233,16 +241,67 @@ const Home = (): ReactElement => {
             <p className="capitalize">{context.playerAccount!.team}</p>
             <p>{context.playerAccount!.score}</p>
           </div>
-          <div className="text-center col-span-12 grid grid-cols-2 gap-0 text-xs">
+          <div className="text-center col-span-12 grid grid-cols-2 gap-0">
             <div>
               <button
+                className="text-tiny"
                 disabled={
-                  context.playerAccount!.gil < 10 ||
+                  context.playerAccount!.gil < 100 ||
                   context.playerStatus != 'idle' ||
                   lastTraining < 3600
                 }
                 onClick={handleTraining}>
                 Train
+                <br />
+                <span className="flex text-center w-full">
+                  100
+                  <SpriteAnimator
+                    sprite={coin}
+                    width={8}
+                    height={8}
+                    scale={0.6}
+                    fps={4}
+                    frameCount={4}
+                    direction={'horizontal'}
+                  />
+                </span>
+              </button>
+            </div>
+            <div>
+              <button
+                className="text-tiny"
+                disabled={
+                  context.playerAccount!.gil < 1000 ||
+                  context.playerStatus != 'idle' ||
+                  context.playerAccount!.lvl < 2
+                }
+                onClick={handleBattle}>
+                Fight
+                <br />
+                <span className="flex text-center w-full">
+                  1000
+                  <SpriteAnimator
+                    sprite={coin}
+                    width={8}
+                    height={8}
+                    scale={0.6}
+                    fps={4}
+                    frameCount={4}
+                    direction={'horizontal'}
+                  />
+                </span>
+              </button>
+            </div>
+            <div>
+              <button
+                className="text-tiny"
+                disabled={
+                  context.playerAccount!.gil < 10 ||
+                  context.playerStatus != 'idle' ||
+                  lastExplore < 3600
+                }
+                onClick={handleExplore}>
+                Explore
                 <br />
                 <span className="flex text-center w-full">
                   10
@@ -260,13 +319,14 @@ const Home = (): ReactElement => {
             </div>
             <div>
               <button
+                className="text-tiny"
                 disabled={
                   context.playerAccount!.gil < 100 ||
                   context.playerStatus != 'idle' ||
-                  context.playerAccount!.lvl < 2
+                  lastStudy < 3600
                 }
-                onClick={handleBattle}>
-                Fight
+                onClick={handleStudy}>
+                Study
                 <br />
                 <span className="flex text-center w-full">
                   100
