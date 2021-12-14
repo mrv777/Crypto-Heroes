@@ -237,7 +237,7 @@ const Home = (): ReactElement => {
             <p>{context.playerAccount!.blk}</p>
             <p>{context.playerAccount!.crit}</p>
             <p>{context.playerAccount!.spd}</p>
-            <p>&nbsp;</p>
+            <p className="text-tiny">&nbsp;</p>
             <p className="capitalize">{context.playerAccount!.team}</p>
             <p>{context.playerAccount!.score}</p>
           </div>
