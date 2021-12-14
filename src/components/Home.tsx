@@ -4,6 +4,7 @@ import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import { SpriteAnimator } from 'react-sprite-animator';
 
+import staticCoin from '../assets/Coin.png';
 import coin from '../assets/Coin-Sheet.png';
 import sprite from '../assets/sprite.png';
 import { PlayerContext } from '../contexts/playerContext';
@@ -242,7 +243,7 @@ const Home = (): ReactElement => {
             <p>{context.playerAccount!.score}</p>
           </div>
           <div className="text-center col-span-12 grid grid-cols-2 gap-0">
-            <div className="m-1">
+            <div className="my-1">
               <button
                 className="text-tiny p-1 w-full"
                 disabled={
@@ -253,7 +254,10 @@ const Home = (): ReactElement => {
                 onClick={handleTraining}>
                 Train
                 <br />
-                <span className="text-center">100 GIL</span>
+                <span className="text-center">
+                  100
+                  <img className="inline-block h-3 w-3" src={staticCoin} alt="Coin" />
+                </span>
               </button>
             </div>
             <div className="m-1">
@@ -267,10 +271,13 @@ const Home = (): ReactElement => {
                 onClick={handleBattle}>
                 Fight
                 <br />
-                <span className="text-center">1000 GIL</span>
+                <span className="text-center">
+                  1000
+                  <img className="inline-block h-3 w-3" src={staticCoin} alt="Coin" />
+                </span>
               </button>
             </div>
-            <div className="m-1">
+            <div className="my-1">
               <button
                 className="text-tiny p-1 w-full"
                 disabled={
@@ -281,7 +288,10 @@ const Home = (): ReactElement => {
                 onClick={handleExplore}>
                 Explore
                 <br />
-                <span className="text-center">10 GIL</span>
+                <span className="text-center">
+                  10
+                  <img className="inline-block h-3 w-3" src={staticCoin} alt="Coin" />
+                </span>
               </button>
             </div>
             <div className="m-1">
@@ -295,7 +305,10 @@ const Home = (): ReactElement => {
                 onClick={handleStudy}>
                 Study
                 <br />
-                <span className="text-center">100 GIL</span>
+                <span className="text-center">
+                  100
+                  <img className="inline-block h-3 w-3" src={staticCoin} alt="Coin" />
+                </span>
               </button>
             </div>
           </div>
