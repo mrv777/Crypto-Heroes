@@ -13,16 +13,17 @@ const Log = (): ReactElement => {
       const logAPI = await getLog('ARDOR-' + context.playerAccount!.address);
       if (logAPI && logAPI.data && logAPI.data.transactions.length > 0) {
         let formattedEntries: object[] = [];
-        for (let tx of logAPI.data.transactions) {
+        for (var i = 0; i < logAPI.data.transactions.length; i++) {
+          let tx = logAPI.data.transactions[i];
           if (tx.attachment && tx.attachment.property) {
             if (tx.attachment.property == 'score') {
               let battleMsg;
               try {
                 const msgAttachment = JSON.parse(tx.attachment.message);
                 if (msgAttachment.won == 'ARDOR-' + context.playerAccount!.address) {
-                  battleMsg = 'Won battle vs ' + msgAttachment.loss.slice(6);
+                  battleMsg = 'WON vs ' + msgAttachment.loss.slice(6);
                 } else {
-                  battleMsg = 'Loss battle vs ' + msgAttachment.won.slice(6);
+                  battleMsg = 'LOSS vs ' + msgAttachment.won.slice(6);
                 }
               } catch {
                 battleMsg = 'Unknown Battle';
@@ -36,7 +37,13 @@ const Log = (): ReactElement => {
               formattedEntries.push({
                 id: tx.fullHash,
                 timestamp: new Date(getTxDate(tx.timestamp) * 1000).toLocaleString(),
-                type: 'Level Up to ' + tx.attachment.value,
+                type:
+                  'Level Up to ' +
+                  tx.attachment.value +
+                  ', ' +
+                  logAPI.data.transactions[i + 1].attachment.property +
+                  ' to ' +
+                  logAPI.data.transactions[i + 1].attachment.value,
               });
             }
           } else if (tx.attachment && tx.attachment.currency == '13943488548174745464') {
