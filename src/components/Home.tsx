@@ -219,26 +219,28 @@ const Home = (): ReactElement => {
         </div>
       </div>
       <div className="text-center col-span-4 p-3 xl:p-9 SpriteUI containerUI">
-        <div className="text-left h-full grid grid-cols-12 gap-3 text-xs mr-1">
+        <div className="text-left h-full grid grid-cols-12 gap-1 text-xs mr-1">
           <div className="col-span-4">
             <p>HP</p>
             <p>ATK</p>
             <p>DEF</p>
+            <p>SPD</p>
             <p>BLK</p>
             <p>CRIT</p>
-            <p>SPD</p>
-            <p className="text-tiny">&nbsp;</p>
-            <p>TEAM</p>
-            <p>SCORE</p>
           </div>
           <div className="col-span-8 text-right">
             <p>{context.playerAccount!.hp}</p>
             <p>{context.playerAccount!.atk}</p>
             <p>{context.playerAccount!.def}</p>
+            <p>{context.playerAccount!.spd}</p>
             <p>{context.playerAccount!.blk}</p>
             <p>{context.playerAccount!.crit}</p>
-            <p>{context.playerAccount!.spd}</p>
-            <p className="text-tiny">&nbsp;</p>
+          </div>
+          <div className="col-span-4">
+            <p>TEAM</p>
+            <p>SCORE</p>
+          </div>
+          <div className="col-span-8 text-right">
             <p className="capitalize">{context.playerAccount!.team}</p>
             <p>{context.playerAccount!.score}</p>
           </div>
