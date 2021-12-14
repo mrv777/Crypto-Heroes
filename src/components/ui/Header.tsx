@@ -103,6 +103,7 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
             }
           }
         }
+        console.log(lastTraining);
 
         let hp = lvl * 10 + 10;
 
@@ -123,13 +124,26 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
           spd: spd,
         });
 
-        // If no unconfirmed tx for the account, make sure we are idle
+        // If no unconfirmed tx from the account, make sure we are idle
         const responseUtx = await getUnconfirmedTxs(account);
         if (
           !responseUtx!.data.unconfirmedTransactions ||
           responseUtx!.data.unconfirmedTransactions.length == 0
         ) {
+          // If no unconfirmed tx at all for account, make sure we are idle
           context.updatePlayerStatus('idle');
+        } else {
+          // If no unconfirmed tx FROM the account, make sure we are idle
+          let utxFromAccount = false;
+          for (let unconfirmedTx of responseUtx!.data.unconfirmedTransactions) {
+            if (unconfirmedTx.senderRS == account) {
+              utxFromAccount = true;
+              break;
+            }
+          }
+          if (!utxFromAccount) {
+            context.updatePlayerStatus('idle');
+          }
         }
       }
     }
