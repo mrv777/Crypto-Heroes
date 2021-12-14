@@ -63,9 +63,9 @@ public class Heroes extends AbstractContract {
         Params params = context.getParams(Params.class);
 
         // Earn exp code
-        // We cannot allow phased transaction and make sure it's enough (fee is 10,000 + 5,000,000)transaction.getAttachmentJson().getString("message")
+        // We cannot allow phased transaction and make sure it's enough (fee is 300,000 + 9,700,000)transaction.getAttachmentJson().getString("message")
         //
-        if (!transaction.isPhased() && transaction.getAmount() > 6000000 && params.expMsg().equals("abc")) {
+        if (!transaction.isPhased() && transaction.getAmount() > 96000000 && params.expMsg().equals("abc")) {
 
             int timeSinceTrain = 0;
             // Check for previous training
@@ -140,7 +140,7 @@ public class Heroes extends AbstractContract {
             // Set stat to 1, but check if it was already set.  If so, increment that by 1 and then convert to a string
             int currentStatInt = 1;
             String statUp = params.statUp();
-            if (statUp.equals("ATK") || statUp.equals("DEF") || statUp.equals("BLK") || statUp.equals("CRIT") || statUp.equals("SPD")) {
+            if (statUp.equals("ATK") || statUp.equals("DEF") || statUp.equals("SPD")) {
                 JO getAccountProperty = GetAccountPropertiesCall.
                         create().
                         property(statUp).
@@ -213,7 +213,7 @@ public class Heroes extends AbstractContract {
         // Battle Code
         //
         //
-        else if (!transaction.isPhased() && transaction.getAmount() > 69000000 && params.expMsg().equals("battle")) {
+        else if (!transaction.isPhased() && transaction.getAmount() > 996000000 && params.expMsg().equals("battle")) {
             boolean battleError = false;
             String battleAccount = params.battleMsg();
 
@@ -324,22 +324,31 @@ public class Heroes extends AbstractContract {
                         break;
                     }
                 }
-                String message = "{ Won: '" + battleAccount + "', Loss: '" + transaction.getSender() + "' }";
+                context.logInfoMessage("CONTRACT: Battle status. AttackerWon: %s, DefenderWon: %s", attackerWon, defenderWon);
+                JO message = new JO();
                 if (attackerWon) {
-                    message = "{ Won: '" + transaction.getSender() + "', Loss: '" + battleAccount + "' }";
+                    message.put("won",transaction.getSenderRs());
+                    message.put("loss",battleAccount);
+                } else {
+                    message.put("won",battleAccount);
+                    message.put("loss",transaction.getSenderRs());
                 }
 
                 SetAccountPropertyCall setAccountPropertyCall = SetAccountPropertyCall.create(2).
                         recipient(transaction.getSender()).
                         property("score").
-                        message(message).
+                        message(message.toJSONString()).
+                        messageIsText(true).
+                        messageIsPrunable(true).
                         value(String.valueOf(attacker.getInt("score")));
                 context.createTransaction(setAccountPropertyCall);
 
                 SetAccountPropertyCall setDefenderAccountPropertyCall = SetAccountPropertyCall.create(2).
                         recipient(battleAccount).
                         property("score").
-                        message(message).
+                        message(message.toJSONString()).
+                        messageIsText(true).
+                        messageIsPrunable(true).
                         value(String.valueOf(defender.getInt("score")));
                 context.createTransaction(setDefenderAccountPropertyCall);
 
