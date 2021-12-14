@@ -9,17 +9,28 @@ const Log = (): ReactElement => {
   const context = useContext(PlayerContext);
 
   useEffect(() => {
-    async function fetchLeaders() {
+    async function fetchEntries() {
       const logAPI = await getLog('ARDOR-' + context.playerAccount!.address);
       if (logAPI && logAPI.data && logAPI.data.transactions.length > 0) {
         let formattedEntries: object[] = [];
         for (let tx of logAPI.data.transactions) {
           if (tx.attachment && tx.attachment.property) {
             if (tx.attachment.property == 'score') {
+              let battleMsg;
+              try {
+                const msgAttachment = JSON.parse(tx.attachment.message);
+                if (msgAttachment.won == 'ARDOR-' + context.playerAccount!.address) {
+                  battleMsg = 'Won battle vs ' + msgAttachment.loss;
+                } else {
+                  battleMsg = 'Loss battle vs ' + msgAttachment.won;
+                }
+              } catch {
+                battleMsg = 'Unknown Battle';
+              }
               formattedEntries.push({
                 id: tx.fullHash,
                 timestamp: new Date(getTxDate(tx.timestamp) * 1000).toLocaleString(),
-                type: 'Battle',
+                type: battleMsg,
               });
             } else if (tx.attachment.property == 'level') {
               formattedEntries.push({
@@ -42,8 +53,8 @@ const Log = (): ReactElement => {
       }
     }
 
-    fetchLeaders();
-  }, [entries]);
+    fetchEntries();
+  }, []);
 
   return (
     <div className="h-full w-full flex flex-col items-center justify-center">
