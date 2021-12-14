@@ -243,6 +243,19 @@ const Home = (): ReactElement => {
                 }
                 onClick={handleTraining}>
                 Train
+                <br />
+                <span className="flex text-center w-full">
+                  10
+                  <SpriteAnimator
+                    sprite={coin}
+                    width={8}
+                    height={8}
+                    scale={0.6}
+                    fps={4}
+                    frameCount={4}
+                    direction={'horizontal'}
+                  />
+                </span>
               </button>
             </div>
             <div>
@@ -254,6 +267,19 @@ const Home = (): ReactElement => {
                 }
                 onClick={handleBattle}>
                 Fight
+                <br />
+                <span className="flex text-center w-full">
+                  100
+                  <SpriteAnimator
+                    sprite={coin}
+                    width={8}
+                    height={8}
+                    scale={0.6}
+                    fps={4}
+                    frameCount={4}
+                    direction={'horizontal'}
+                  />
+                </span>
               </button>
             </div>
           </div>

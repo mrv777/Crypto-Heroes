@@ -115,8 +115,8 @@ public class Heroes extends AbstractContract {
         //
         else if (!transaction.isPhased() && !transaction.getAttachmentJson().isEmpty() && transaction.getAttachmentJson().isExist("currency") && transaction.getAttachmentJson().getString("currency").equals("13943488548174745464") && transaction.getAttachmentJson().getString("unitsQNT").equals("1000") && params.expMsg().equals("levelUp")) {
             // Increase level of the hero
-            // Set level to 0, but check if it was already set.  If so, increment that by 1 and then convert to a string
-            int currentLvlInt = 0;
+            // Set level to 1, but check if it was already set.  If so, increment that by 1 and then convert to a string
+            int currentLvlInt = 1;
             JO getAccountPropertyLvl = GetAccountPropertiesCall.
                     create().
                     property("level").
@@ -238,8 +238,8 @@ public class Heroes extends AbstractContract {
                     for (int i = 0; i < propertiesArray.size(); i++) {
                         String currentName = propertiesArray.get(i).getString("property");
                         String currentValue = propertiesArray.get(i).getString("value");
-                        if (currentName.equals("HP")) {
-                            attacker.put("health",Integer.parseInt(currentValue)*10);
+                        if (currentName.equals("level")) {
+                            attacker.put("health",Integer.parseInt(currentValue)*10+10);
                         } else if (currentName.equals("DEF")) {
                             attacker.put("defense",Integer.parseInt(currentValue));
                         } else if (currentName.equals("ATK")) {
@@ -267,8 +267,8 @@ public class Heroes extends AbstractContract {
                     for (int i = 0; i < propertiesArray.size(); i++) {
                         String currentName = propertiesArray.get(i).getString("property");
                         String currentValue = propertiesArray.get(i).getString("value");
-                        if (currentName.equals("HP")) {
-                            defender.put("health",Integer.parseInt(currentValue)*10);
+                        if (currentName.equals("level")) {
+                            defender.put("health",Integer.parseInt(currentValue)*10+10);
                         } else if (currentName.equals("DEF")) {
                             defender.put("defense",Integer.parseInt(currentValue));
                         } else if (currentName.equals("ATK")) {
@@ -324,16 +324,22 @@ public class Heroes extends AbstractContract {
                         break;
                     }
                 }
+                String message = "{ Won: '" + battleAccount + "', Loss: '" + transaction.getSender() + "' }";
+                if (attackerWon) {
+                    message = "{ Won: '" + transaction.getSender() + "', Loss: '" + battleAccount + "' }";
+                }
 
                 SetAccountPropertyCall setAccountPropertyCall = SetAccountPropertyCall.create(2).
                         recipient(transaction.getSender()).
                         property("score").
+                        message(message).
                         value(String.valueOf(attacker.getInt("score")));
                 context.createTransaction(setAccountPropertyCall);
 
                 SetAccountPropertyCall setDefenderAccountPropertyCall = SetAccountPropertyCall.create(2).
                         recipient(battleAccount).
                         property("score").
+                        message(message).
                         value(String.valueOf(defender.getInt("score")));
                 context.createTransaction(setDefenderAccountPropertyCall);
 

@@ -47,7 +47,7 @@ const Log = (): ReactElement => {
 
   return (
     <div className="h-full w-full flex flex-col items-center justify-center">
-      <p className="text-2xl">Log</p>
+      <p className="text-2xl">Hero Log</p>
       {/* <div className="w-full grid grid-cols-4 gap-4">
         {!entries ? (
           <p>Loading...</p>
