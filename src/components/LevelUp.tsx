@@ -26,6 +26,7 @@ const LevelUp = (props): React.ReactElement => {
     const lvlUpUnsigned = await lvlUp(
       ardorjs.secretPhraseToPublicKey(playerPassphrase),
       lvlUpMsg,
+      context.playerAccount!.lvl,
     );
 
     //Function from parent to close the modal

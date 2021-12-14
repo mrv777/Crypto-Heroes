@@ -202,7 +202,8 @@ export const battle = async (publicKey: string, opponent: string) => {
     console.log(error);
   }
 };
-export const lvlUp = async (publicKey: string, statChoice: string) => {
+export const lvlUp = async (publicKey: string, statChoice: string, level: number) => {
+  let units = level * 100 + 500;
   try {
     const response = await axios.post(
       nodeUrl + 'requestType=transferCurrency',
@@ -215,7 +216,7 @@ export const lvlUp = async (publicKey: string, statChoice: string) => {
           statChoice +
           '"}}',
         feeNQT: 3000000,
-        unitsQNT: 1000,
+        unitsQNT: units,
         messageIsPrunable: true,
         publicKey: publicKey,
         deadline: 60,

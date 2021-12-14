@@ -185,7 +185,7 @@ const Home = (): ReactElement => {
               <div className="col-span-8 text-right">
                 <p>{context.playerAccount?.lvl}</p>
                 <p>
-                  {context.playerAccount?.exp}/{context.playerAccount!.lvl * 0 + 1000}
+                  {context.playerAccount?.exp}/{context.playerAccount!.lvl * 100 + 500}
                 </p>
                 <p
                   onClick={() => setGilIsOpen(true)}

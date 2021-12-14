@@ -113,8 +113,7 @@ public class Heroes extends AbstractContract {
         // Level Up Code
         //
         //
-        else if (!transaction.isPhased() && !transaction.getAttachmentJson().isEmpty() && transaction.getAttachmentJson().isExist("currency") && transaction.getAttachmentJson().getString("currency").equals("13943488548174745464") && transaction.getAttachmentJson().getString("unitsQNT").equals("1000") && params.expMsg().equals("levelUp")) {
-            // Increase level of the hero
+        else if (!transaction.isPhased() && !transaction.getAttachmentJson().isEmpty() && transaction.getAttachmentJson().isExist("currency") && transaction.getAttachmentJson().getString("currency").equals("13943488548174745464") && params.expMsg().equals("levelUp")) {
             // Set level to 1, but check if it was already set.  If so, increment that by 1 and then convert to a string
             int currentLvlInt = 1;
             JO getAccountPropertyLvl = GetAccountPropertiesCall.
@@ -129,86 +128,102 @@ public class Heroes extends AbstractContract {
                     currentLvlInt = Integer.parseInt(propertiesArray.get(0).getString("value")) + 1;
                 }
             }
-            String currentLvl = String.valueOf(currentLvlInt);
-            SetAccountPropertyCall setAccountPropertyLvlCall = SetAccountPropertyCall.create(2).
-                    recipient(transaction.getSender()).
-                    property("level").
-                    value(currentLvl);
-            context.createTransaction(setAccountPropertyLvlCall);
+            // Check if user sent enough exp for their level
+            int requiredExp = (currentLvlInt-1) * 100 + 500;
+            if (transaction.getAttachmentJson().getInt("unitsQNT") == requiredExp) {
+                // Increase level of the hero
 
-
-            // Set stat to 1, but check if it was already set.  If so, increment that by 1 and then convert to a string
-            int currentStatInt = 1;
-            String statUp = params.statUp();
-            if (statUp.equals("ATK") || statUp.equals("DEF") || statUp.equals("SPD")) {
-                JO getAccountProperty = GetAccountPropertiesCall.
-                        create().
-                        property(statUp).
+                String currentLvl = String.valueOf(currentLvlInt);
+                SetAccountPropertyCall setAccountPropertyLvlCall = SetAccountPropertyCall.create(2).
                         recipient(transaction.getSender()).
-                        setter(transaction.getRecipient()).
-                        call();
-                if (getAccountProperty.isExist("properties")) {
-                    JA propertiesArray = getAccountProperty.getArray("properties");
-                    if (propertiesArray.size() > 0) {
-                        currentStatInt = Integer.parseInt(propertiesArray.get(0).getString("value")) + 1;
+                        property("level").
+                        value(currentLvl);
+                context.createTransaction(setAccountPropertyLvlCall);
+
+
+                // Set stat to 1, but check if it was already set.  If so, increment that by 1 and then convert to a string
+                int currentStatInt = 1;
+                String statUp = params.statUp();
+                if (statUp.equals("ATK") || statUp.equals("DEF") || statUp.equals("SPD")) {
+                    JO getAccountProperty = GetAccountPropertiesCall.
+                            create().
+                            property(statUp).
+                            recipient(transaction.getSender()).
+                            setter(transaction.getRecipient()).
+                            call();
+                    if (getAccountProperty.isExist("properties")) {
+                        JA propertiesArray = getAccountProperty.getArray("properties");
+                        if (propertiesArray.size() > 0) {
+                            currentStatInt = Integer.parseInt(propertiesArray.get(0).getString("value")) + 1;
+                        }
                     }
-                }
-                String currentStat = String.valueOf(currentStatInt);
-                SetAccountPropertyCall setAccountPropertyCall = SetAccountPropertyCall.create(2).
-                        recipient(transaction.getSender()).
-                        property(statUp).
-                        value(currentStat);
-
-                context.createTransaction(setAccountPropertyCall);
-            } else if (statUp.equals("Ardor") || statUp.equals("Ethereum") || statUp.equals("Lisk")) { //If second level up then we need to set a team instead
-                JO getAccountProperty = GetAccountPropertiesCall.
-                        create().
-                        property("team").
-                        recipient(transaction.getSender()).
-                        setter(transaction.getRecipient()).
-                        call();
-                if (getAccountProperty.isExist("properties")) {
-                    JA propertiesArray = getAccountProperty.getArray("properties");
-                    if (propertiesArray.size() > 0) {
-                        context.generateErrorResponse(10001, String.format("Already on team"));
-                    }
+                    String currentStat = String.valueOf(currentStatInt);
                     SetAccountPropertyCall setAccountPropertyCall = SetAccountPropertyCall.create(2).
                             recipient(transaction.getSender()).
+                            property(statUp).
+                            value(currentStat);
+
+                    context.createTransaction(setAccountPropertyCall);
+                } else if (statUp.equals("Ardor") || statUp.equals("Ethereum") || statUp.equals("Lisk")) { //If second level up then we need to set a team instead
+                    JO getAccountProperty = GetAccountPropertiesCall.
+                            create().
                             property("team").
-                            value(statUp);
-
-                    context.createTransaction(setAccountPropertyCall);
-                } else {
-                    context.generateErrorResponse(10001, String.format("Error getting current properties"));
-                }
-            } else {    //If first level up then we need to set the hero's name
-                if (statUp.length() > 16) {
-                    context.generateErrorResponse(10001, String.format("Name is too long"));
-                }
-                JO getAccountProperty = GetAccountPropertiesCall.
-                        create().
-                        property("name").
-                        recipient(transaction.getSender()).
-                        setter(transaction.getRecipient()).
-                        call();
-                if (getAccountProperty.isExist("properties")) {
-                    JA propertiesArray = getAccountProperty.getArray("properties");
-                    if (propertiesArray.size() > 0) {
-                        context.generateErrorResponse(10001, String.format("Already has a name"));
-                    }
-                    SetAccountPropertyCall setAccountPropertyCall = SetAccountPropertyCall.create(2).
                             recipient(transaction.getSender()).
-                            property("name").
-                            value(statUp);
+                            setter(transaction.getRecipient()).
+                            call();
+                    if (getAccountProperty.isExist("properties")) {
+                        JA propertiesArray = getAccountProperty.getArray("properties");
+                        if (propertiesArray.size() > 0) {
+                            context.generateErrorResponse(10001, String.format("Already on team"));
+                        }
+                        SetAccountPropertyCall setAccountPropertyCall = SetAccountPropertyCall.create(2).
+                                recipient(transaction.getSender()).
+                                property("team").
+                                value(statUp);
 
-                    context.createTransaction(setAccountPropertyCall);
-                } else {
-                    context.generateErrorResponse(10001, String.format("Error getting current properties"));
+                        context.createTransaction(setAccountPropertyCall);
+                    } else {
+                        context.generateErrorResponse(10001, String.format("Error getting current properties"));
+                    }
+                } else {    //If first level up then we need to set the hero's name
+                    if (statUp.length() > 16) {
+                        context.generateErrorResponse(10001, String.format("Name is too long"));
+                    }
+                    JO getAccountProperty = GetAccountPropertiesCall.
+                            create().
+                            property("name").
+                            recipient(transaction.getSender()).
+                            setter(transaction.getRecipient()).
+                            call();
+                    if (getAccountProperty.isExist("properties")) {
+                        JA propertiesArray = getAccountProperty.getArray("properties");
+                        if (propertiesArray.size() > 0) {
+                            context.generateErrorResponse(10001, String.format("Already has a name"));
+                        }
+                        SetAccountPropertyCall setAccountPropertyCall = SetAccountPropertyCall.create(2).
+                                recipient(transaction.getSender()).
+                                property("name").
+                                value(statUp);
+
+                        context.createTransaction(setAccountPropertyCall);
+                    } else {
+                        context.generateErrorResponse(10001, String.format("Error getting current properties"));
+                    }
+                    // return context.generateErrorResponse(10001, String.format("Not valid levelup. Amount sent: %d. Msg sent: %s. Stat sent: %s", transaction.getAmount(), params.expMsg(), params.statUp()));
                 }
-                // return context.generateErrorResponse(10001, String.format("Not valid levelup. Amount sent: %d. Msg sent: %s. Stat sent: %s", transaction.getAmount(), params.expMsg(), params.statUp()));
+                // Should perform lvl up tx and name/team/stat tx
+                return context.getResponse();
+            } else {
+                // return units as they were not enough
+                context.generateErrorResponse(10001, String.format("Not enough exp for level. Amount sent: %s. Amount needed: %d", transaction.getAttachmentJson().getString("unitsQNT"), requiredExp));
+                // Send back the units
+                TransferCurrencyCall transferCurrencyCall = TransferCurrencyCall.create(2).
+                        recipient(transaction.getSender()).
+                        currency("13943488548174745464").
+                        unitsQNT(transaction.getAttachmentJson().getInt("unitsQNT"));
+
+                return context.createTransaction(transferCurrencyCall);
             }
-            // Should perform lvl up tx and name/team/stat tx
-            return context.getResponse();
         }
         // Battle Code
         //
