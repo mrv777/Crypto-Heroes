@@ -283,7 +283,7 @@ const Home = (): ReactElement => {
               <button
                 className="text-tiny p-1 w-full"
                 disabled={
-                  context.playerAccount!.gil < 1 ||
+                  context.playerAccount!.gil < 10 ||
                   context.playerStatus != 'idle' ||
                   lastExplore < 3600
                 }
@@ -291,7 +291,7 @@ const Home = (): ReactElement => {
                 Explore
                 <br />
                 <span className="text-center">
-                  1
+                  10
                   <img className="inline-block h-3 w-3" src={staticCoin} alt="Coin" />
                 </span>
               </button>
