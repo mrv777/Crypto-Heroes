@@ -127,7 +127,7 @@ const Login = (): ReactElement => {
       lastTraining: lastTraining,
       lvl: lvl,
       exp: exp,
-      gil: Math.floor(response?.data.balanceNQT / 1000000),
+      gil: Math.floor(response?.data.balanceNQT / 10000000),
       team: team,
       score: score,
       hp: hp,

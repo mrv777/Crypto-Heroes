@@ -249,46 +249,12 @@ const Home = (): ReactElement => {
               <button
                 className="text-tiny p-1 w-full"
                 disabled={
-                  context.playerAccount!.gil < 100 ||
+                  context.playerAccount!.gil < 10 ||
                   context.playerStatus != 'idle' ||
                   lastTraining < 3600
                 }
                 onClick={handleTraining}>
                 Train
-                <br />
-                <span className="text-center">
-                  100
-                  <img className="inline-block h-3 w-3" src={staticCoin} alt="Coin" />
-                </span>
-              </button>
-            </div>
-            <div className="m-1">
-              <button
-                className="text-tiny p-1 w-full"
-                disabled={
-                  context.playerAccount!.gil < 1000 ||
-                  context.playerStatus != 'idle' ||
-                  context.playerAccount!.lvl < 2
-                }
-                onClick={handleBattle}>
-                Fight
-                <br />
-                <span className="text-center">
-                  1000
-                  <img className="inline-block h-3 w-3" src={staticCoin} alt="Coin" />
-                </span>
-              </button>
-            </div>
-            <div className="my-1">
-              <button
-                className="text-tiny p-1 w-full"
-                disabled={
-                  context.playerAccount!.gil < 10 ||
-                  context.playerStatus != 'idle' ||
-                  lastExplore < 3600
-                }
-                onClick={handleExplore}>
-                Explore
                 <br />
                 <span className="text-center">
                   10
@@ -302,13 +268,47 @@ const Home = (): ReactElement => {
                 disabled={
                   context.playerAccount!.gil < 100 ||
                   context.playerStatus != 'idle' ||
+                  context.playerAccount!.lvl < 2
+                }
+                onClick={handleBattle}>
+                Fight
+                <br />
+                <span className="text-center">
+                  100
+                  <img className="inline-block h-3 w-3" src={staticCoin} alt="Coin" />
+                </span>
+              </button>
+            </div>
+            <div className="my-1">
+              <button
+                className="text-tiny p-1 w-full"
+                disabled={
+                  context.playerAccount!.gil < 1 ||
+                  context.playerStatus != 'idle' ||
+                  lastExplore < 3600
+                }
+                onClick={handleExplore}>
+                Explore
+                <br />
+                <span className="text-center">
+                  1
+                  <img className="inline-block h-3 w-3" src={staticCoin} alt="Coin" />
+                </span>
+              </button>
+            </div>
+            <div className="m-1">
+              <button
+                className="text-tiny p-1 w-full"
+                disabled={
+                  context.playerAccount!.gil < 10 ||
+                  context.playerStatus != 'idle' ||
                   lastStudy < 3600
                 }
                 onClick={handleStudy}>
                 Study
                 <br />
                 <span className="text-center">
-                  100
+                  10
                   <img className="inline-block h-3 w-3" src={staticCoin} alt="Coin" />
                 </span>
               </button>
