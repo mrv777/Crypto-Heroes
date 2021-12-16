@@ -114,101 +114,105 @@ public class Heroes extends AbstractContract {
         //
         //
         else if (!transaction.isPhased() && !transaction.getAttachmentJson().isEmpty() && transaction.getAttachmentJson().isExist("currency") && transaction.getAttachmentJson().getString("currency").equals("13943488548174745464") && params.expMsg().equals("levelUp")) {
-            // Set level to 1, but check if it was already set.  If so, increment that by 1 and then convert to a string
-            int currentLvlInt = 1;
-            JO getAccountPropertyLvl = GetAccountPropertiesCall.
-                    create().
-                    property("level").
-                    recipient(transaction.getSender()).
-                    setter(transaction.getRecipient()).
-                    call();
-            if (getAccountPropertyLvl.isExist("properties")) {
-                JA propertiesArray = getAccountPropertyLvl.getArray("properties");
-                if (propertiesArray.size() > 0) {
-                    currentLvlInt = Integer.parseInt(propertiesArray.get(0).getString("value")) + 1;
-                }
+            // Initialize an object for the player
+            JO accountStats = new JO();
+            // Set level to 0, but check if it was already set.  If so, increment that by 1 and then convert to a string
+            int currentLvlInt = 0;
+
+            // Get last message from contract account to player account to get most recent stats
+            JO getAccountStats = GetExecutedTransactionsCall
+                    .create()
+                    .recipient(transaction.getSender())
+                    .sender(transaction.getRecipient())
+                    .chain(2)
+                    .type(1)
+                    .lastIndex(0)
+                    .call();
+            if (getAccountStats.isExist("transactions") && !getAccountStats.getArray("transactions").isEmpty()) {
+                String accountStatsMsg = getAccountStats.getArray("transactions").get(0).getJo("attachment").getString("message");
+                accountStats = JO.parse(accountStatsMsg);
+                currentLvlInt = accountStats.getInt("LVL");
+            } else {
+                //If there was never a message then the player is going to level 1 and all stats will initialize and stay at 0 for now
+                accountStats.put("ATK", 0);
+                accountStats.put("DEF", 0);
+                accountStats.put("SPD", 0);
             }
+
             // Check if user sent enough exp for their level
-            int requiredExp = (currentLvlInt-1) * 100 + 500;
-            if (transaction.getAttachmentJson().getInt("unitsQNT") == requiredExp) {
+            int requiredExp = (currentLvlInt) * 100 + 500;
+            if (transaction.getAttachmentJson().getInt("unitsQNT") >= requiredExp) {
                 // Increase level of the hero
+                accountStats.put("LVL", currentLvlInt + 1);
 
-                String currentLvl = String.valueOf(currentLvlInt);
-                SetAccountPropertyCall setAccountPropertyLvlCall = SetAccountPropertyCall.create(2).
-                        recipient(transaction.getSender()).
-                        property("level").
-                        value(currentLvl);
-                context.createTransaction(setAccountPropertyLvlCall);
-
-
-                // Set stat to 1, but check if it was already set.  If so, increment that by 1 and then convert to a string
-                int currentStatInt = 1;
                 String statUp = params.statUp();
+                // If one of the stats was sent we know the player must be at least going to level 3 and already have stats initialized
                 if (statUp.equals("ATK") || statUp.equals("DEF") || statUp.equals("SPD")) {
-                    JO getAccountProperty = GetAccountPropertiesCall.
-                            create().
-                            property(statUp).
-                            recipient(transaction.getSender()).
-                            setter(transaction.getRecipient()).
-                            call();
-                    if (getAccountProperty.isExist("properties")) {
-                        JA propertiesArray = getAccountProperty.getArray("properties");
-                        if (propertiesArray.size() > 0) {
-                            currentStatInt = Integer.parseInt(propertiesArray.get(0).getString("value")) + 1;
-                        }
-                    }
-                    String currentStat = String.valueOf(currentStatInt);
-                    SetAccountPropertyCall setAccountPropertyCall = SetAccountPropertyCall.create(2).
-                            recipient(transaction.getSender()).
-                            property(statUp).
-                            value(currentStat);
-
-                    context.createTransaction(setAccountPropertyCall);
+                    int currentStatInt = accountStats.getInt(statUp);
+                    accountStats.put(statUp, currentStatInt + 1); // Increase the stat by 1 and put it back in the JO
+                    SendMessageCall setAccountStatsCall = SendMessageCall
+                            .create(2)
+                            .recipient(transaction.getSender())
+                            .message(accountStats.toJSONString())
+                            .messageIsText(true)
+                            .messageIsPrunable(true);
+                    context.createTransaction(setAccountStatsCall);
                 } else if (statUp.equals("Ardor") || statUp.equals("Ethereum") || statUp.equals("Lisk")) { //If second level up then we need to set a team instead
+
+                    // Still need to update stats too for level upgrade
+                    SendMessageCall setAccountStatsCall = SendMessageCall
+                            .create(2)
+                            .recipient(transaction.getSender())
+                            .message(accountStats.toJSONString())
+                            .messageIsText(true)
+                            .messageIsPrunable(true);
+                    context.createTransaction(setAccountStatsCall);
+
                     JO getAccountProperty = GetAccountPropertiesCall.
                             create().
-                            property("team").
                             recipient(transaction.getSender()).
                             setter(transaction.getRecipient()).
+                            property("cHeroesInfo").
                             call();
                     if (getAccountProperty.isExist("properties")) {
                         JA propertiesArray = getAccountProperty.getArray("properties");
-                        if (propertiesArray.size() > 0) {
-                            context.generateErrorResponse(10001, String.format("Already on team"));
-                        }
-                        SetAccountPropertyCall setAccountPropertyCall = SetAccountPropertyCall.create(2).
-                                recipient(transaction.getSender()).
-                                property("team").
-                                value(statUp);
+                        JO currentAccountInfo = JO.parse(propertiesArray.get(0).getString("value"));
+                        currentAccountInfo.put("team",statUp);
 
-                        context.createTransaction(setAccountPropertyCall);
+                        SetAccountPropertyCall setTeamPropertyCall = SetAccountPropertyCall.create(2).
+                                recipient(transaction.getSender()).
+                                property("cHeroesInfo").
+                                value(currentAccountInfo.toJSONString());
+                        context.createTransaction(setTeamPropertyCall);
                     } else {
-                        context.generateErrorResponse(10001, String.format("Error getting current properties"));
+                        context.generateErrorResponse(10001, String.format("Error getting current account info"));
                     }
+
                 } else {    //If first level up then we need to set the hero's name
                     if (statUp.length() > 16) {
                         context.generateErrorResponse(10001, String.format("Name is too long"));
                     }
-                    JO getAccountProperty = GetAccountPropertiesCall.
-                            create().
-                            property("name").
-                            recipient(transaction.getSender()).
-                            setter(transaction.getRecipient()).
-                            call();
-                    if (getAccountProperty.isExist("properties")) {
-                        JA propertiesArray = getAccountProperty.getArray("properties");
-                        if (propertiesArray.size() > 0) {
-                            context.generateErrorResponse(10001, String.format("Already has a name"));
-                        }
-                        SetAccountPropertyCall setAccountPropertyCall = SetAccountPropertyCall.create(2).
-                                recipient(transaction.getSender()).
-                                property("name").
-                                value(statUp);
 
-                        context.createTransaction(setAccountPropertyCall);
-                    } else {
-                        context.generateErrorResponse(10001, String.format("Error getting current properties"));
-                    }
+                    // Still need to update stats too for level upgrade
+                    SendMessageCall setAccountStatsCall = SendMessageCall
+                            .create(2)
+                            .recipient(transaction.getSender())
+                            .message(accountStats.toJSONString())
+                            .messageIsText(true)
+                            .messageIsPrunable(true);
+                    context.createTransaction(setAccountStatsCall);
+
+                    JO accountInfo = new JO();
+                    accountInfo.put("name", statUp);
+                    accountInfo.put("team", "none");
+                    accountInfo.put("score", 0);
+
+                    SetAccountPropertyCall setNamePropertyCall = SetAccountPropertyCall.create(2).
+                            recipient(transaction.getSender()).
+                            property("cHeroesInfo").
+                            value(accountInfo.toJSONString());
+                    context.createTransaction(setNamePropertyCall);
+
                     // return context.generateErrorResponse(10001, String.format("Not valid levelup. Amount sent: %d. Msg sent: %s. Stat sent: %s", transaction.getAmount(), params.expMsg(), params.statUp()));
                 }
                 // Should perform lvl up tx and name/team/stat tx
