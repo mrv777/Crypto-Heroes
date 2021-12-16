@@ -41,6 +41,25 @@ export const getAccountProperties = async (account?: string, property?: string) 
   }
 };
 
+export const getAccountMsgStats = async (account: string) => {
+  try {
+    const response = await axios.get(nodeUrl, {
+      params: {
+        requestType: 'getExecutedTransactions',
+        chain: 'ignis',
+        sender: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
+        recipient: account,
+        type: 1,
+        lastIndex: 0,
+      },
+    });
+    return response;
+  } catch (error) {
+    // handle error
+    console.log(error);
+  }
+};
+
 export const getBlockchainTransactions = async (account: string) => {
   try {
     const response = await axios.get(nodeUrl, {

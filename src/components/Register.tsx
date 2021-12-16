@@ -23,6 +23,7 @@ const Register = (): ReactElement => {
       exp: 0,
       gil: 0,
       team: 'none',
+      name: null,
       hp: 10,
       score: 0,
       atk: 0,

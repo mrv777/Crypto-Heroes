@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { PlayerContext } from '../contexts/playerContext';
 import {
+  getAccountMsgStats,
   getAccountProperties,
   getExp,
   getIgnisBalance,
@@ -59,7 +60,8 @@ const Login = (): ReactElement => {
     // }
     const account = ardorjs.secretPhraseToAccountId(passphrase);
     const response = await getIgnisBalance(account);
-    const propertiesResponse = await getAccountProperties(account);
+    const propertiesResponse = await getAccountProperties(account, 'cHeroesInfo');
+    const statsResponse = await getAccountMsgStats(account);
     const lastTrainingResponse = await getlastTrainingTx(account);
     const expResponse = await getExp(account);
     if (!response || !propertiesResponse) {
@@ -69,34 +71,50 @@ const Login = (): ReactElement => {
     }
 
     let team = 'none';
+    let name = null;
     let [lastTraining, exp, score, lvl, atk, def, blk, crit, spd] = [
       0, 0, 0, 0, 0, 0, 0, 0, 0,
     ];
+    // Get Player info
     if (
-      propertiesResponse?.data.properties &&
-      propertiesResponse?.data.properties[0] &&
-      propertiesResponse?.data.properties[0].value
+      propertiesResponse &&
+      propertiesResponse.data &&
+      propertiesResponse.data.properties &&
+      propertiesResponse.data.properties[0] &&
+      propertiesResponse.data.properties[0].value
     ) {
-      let prop_array = propertiesResponse?.data.properties;
-      prop_array.forEach(function (item) {
-        if (item.property.toLowerCase() == 'team') {
-          team = item.value;
-        } else if (item.property.toLowerCase() == 'score') {
-          score = item.value;
-        } else if (item.property.toLowerCase() == 'level') {
-          lvl = item.value;
-        } else if (item.property.toLowerCase() == 'atk') {
-          atk = item.value;
-        } else if (item.property.toLowerCase() == 'def') {
-          def = item.value;
-        } else if (item.property.toLowerCase() == 'blk') {
-          blk = item.value;
-        } else if (item.property.toLowerCase() == 'crit') {
-          crit = item.value;
-        } else if (item.property.toLowerCase() == 'spd') {
-          spd = item.value;
+      let info = JSON.parse(propertiesResponse.data.properties[0].value);
+      for (const property in info) {
+        if (property.toLowerCase() == 'team') {
+          team = info[property];
+        } else if (property.toLowerCase() == 'score') {
+          score = info[property];
+        } else if (property.toLowerCase() == 'name') {
+          name = info[property];
         }
-      });
+      }
+    }
+    // Get Player stats
+    if (
+      statsResponse &&
+      statsResponse.data &&
+      statsResponse.data.transactions &&
+      statsResponse.data.transactions[0] &&
+      statsResponse.data.transactions[0].attachment &&
+      statsResponse.data.transactions[0].attachment.message
+    ) {
+      let info = JSON.parse(statsResponse.data.transactions[0].attachment.message);
+      for (const property in info) {
+        if (property.toLowerCase() == 'atk') {
+          atk = info[property];
+        } else if (property.toLowerCase() == 'def') {
+          def = info[property];
+        } else if (property.toLowerCase() == 'spd') {
+          spd = info[property];
+        } else if (property.toLowerCase() == 'lvl') {
+          lvl = info[property];
+        }
+      }
     }
     if (expResponse && expResponse.data && expResponse.data.unitsQNT) {
       exp = expResponse.data.unitsQNT;
@@ -128,6 +146,7 @@ const Login = (): ReactElement => {
       lvl: lvl,
       exp: exp,
       gil: Math.floor(response?.data.balanceNQT / 10000000),
+      name: name,
       team: team,
       score: score,
       hp: hp,
