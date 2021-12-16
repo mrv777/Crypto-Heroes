@@ -128,7 +128,7 @@ public class Heroes extends AbstractContract {
                     .type(1)
                     .lastIndex(0)
                     .call();
-            if (getAccountStats.isExist("transactions") && !getAccountStats.getArray("transactions").isEmpty()) {
+            if (getAccountStats.isExist("transactions") && getAccountStats.getArray("transactions").size() > 0) {
                 String accountStatsMsg = getAccountStats.getArray("transactions").get(0).getJo("attachment").getString("message");
                 accountStats = JO.parse(accountStatsMsg);
                 currentLvlInt = accountStats.getInt("LVL");
@@ -147,7 +147,7 @@ public class Heroes extends AbstractContract {
 
                 String statUp = params.statUp();
                 // If one of the stats was sent we know the player must be at least going to level 3 and already have stats initialized
-                if (statUp.equals("ATK") || statUp.equals("DEF") || statUp.equals("SPD")) {
+                if (currentLvlInt > 1) {
                     int currentStatInt = accountStats.getInt(statUp);
                     accountStats.put(statUp, currentStatInt + 1); // Increase the stat by 1 and put it back in the JO
                     SendMessageCall setAccountStatsCall = SendMessageCall
@@ -157,7 +157,7 @@ public class Heroes extends AbstractContract {
                             .messageIsText(true)
                             .messageIsPrunable(true);
                     context.createTransaction(setAccountStatsCall);
-                } else if (statUp.equals("Ardor") || statUp.equals("Ethereum") || statUp.equals("Lisk")) { //If second level up then we need to set a team instead
+                } else if (currentLvlInt == 1) { //If second level up then we need to set a team instead
 
                     // Still need to update stats too for level upgrade
                     SendMessageCall setAccountStatsCall = SendMessageCall

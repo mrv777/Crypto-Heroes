@@ -101,7 +101,7 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
             }
           }
         }
-        if (expResponse) {
+        if (expResponse && expResponse.data && expResponse.data.unitsQNT) {
           exp = expResponse.data.unitsQNT;
         }
         //Check for the last training tx and set the difference from now to see if hero can train again
