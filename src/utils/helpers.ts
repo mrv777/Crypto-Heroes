@@ -4,7 +4,7 @@ export const isValidPassphrase = (passphrase: string) => {
 };
 
 export const isValidName = (name: string) => {
-  const regex = /^[A-Za-z]{3,16}$/;
+  const regex = /^[A-Za-z0-9]{3,16}$/;
   return !!regex.exec(name);
 };
 
