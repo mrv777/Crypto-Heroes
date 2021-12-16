@@ -10,7 +10,7 @@ const Log = (): ReactElement => {
 
   useEffect(() => {
     async function fetchEntries() {
-      // Get executed transations
+      // Get executed transactions
       const logAPI = await getLog('ARDOR-' + context.playerAccount!.address);
       if (logAPI && logAPI.data && logAPI.data.transactions.length > 0) {
         let formattedEntries: any[] = [];

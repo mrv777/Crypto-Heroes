@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import sprite from '../assets/sprite_single.png';
 import { PlayerContext } from '../contexts/playerContext';
 import { battle, broadcast, getAccountProperties } from '../utils/ardorInterface';
 
@@ -19,7 +20,12 @@ const Battle = (): ReactElement => {
         if (opponent.value) {
           let opponentInfo = JSON.parse(opponent.value);
           opponentInfo['recipientRS'] = opponent.recipientRS;
-          opponents.push(opponentInfo);
+          if (
+            opponentInfo['team'].toLowerCase() !=
+            context.playerAccount!.team.toLowerCase()
+          ) {
+            opponents.push(opponentInfo);
+          }
         }
       });
 
@@ -60,19 +66,19 @@ const Battle = (): ReactElement => {
         {!opponents ? (
           <p>Loading...</p>
         ) : (
-          opponents
-            .filter((opponent) => opponent.value != context.playerAccount?.team)
-            .map((opponent) => (
-              <button
-                key={opponent.recipient}
-                onClick={() => handleBattle(opponent.recipientRS)}>
-                {opponent.name}
-                <br />
-                {opponent.team}
-                <br />
-                Score: {opponent.score}
-              </button>
-            ))
+          opponents.map((opponent) => (
+            <button
+              key={opponent.recipient}
+              onClick={() => handleBattle(opponent.recipientRS)}>
+              {opponent.name}
+              <br />
+              <img className="inline-block h-32" src={sprite} alt={opponent.name} />
+              <br />
+              {opponent.team}
+              <br />
+              Score: {opponent.score}
+            </button>
+          ))
         )}
       </div>
 
