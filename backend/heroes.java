@@ -236,68 +236,141 @@ public class Heroes extends AbstractContract {
 
             //Initialize player objects and set them to 0
             JO attacker = new JO();
-            attacker.put("health",0);attacker.put("defense",0);attacker.put("attack",0);attacker.put("score",0);
+            attacker.put("health",0);attacker.put("defense",0);attacker.put("attack",0);attacker.put("speed",0);attacker.put("score",0);
             JO defender = new JO();
-            defender.put("health",0);defender.put("defense",0);defender.put("attack",0);defender.put("score",0);
+            defender.put("health",0);defender.put("defense",0);defender.put("attack",0);defender.put("speed",0);defender.put("score",0);
 
-            // Get account properties set by contract account on sender
+            // Get last message from contract account to player account to get most recent stats
+            JO getAccountStats = GetExecutedTransactionsCall
+                    .create()
+                    .recipient(transaction.getSender())
+                    .sender(transaction.getRecipient())
+                    .chain(2)
+                    .type(1)
+                    .lastIndex(0)
+                    .call();
+            if (getAccountStats.isExist("transactions")) {
+                String accountStatsMsg = getAccountStats.getArray("transactions").get(0).getJo("attachment").getString("message");
+                JO accountStats = JO.parse(accountStatsMsg);
+                attacker.put("health",accountStats.getInt("LVL")*10+10);
+                attacker.put("defense",accountStats.getInt("DEF"));
+                attacker.put("attack",accountStats.getInt("ATK"));
+                attacker.put("speed",accountStats.getInt("SPD"));
+            } else {
+                battleError = true;
+            }
+
+            // Get player's score from account property's JSON
             JO getAccountProperty = GetAccountPropertiesCall.
                     create().
                     recipient(transaction.getSender()).
                     setter(transaction.getRecipient()).
+                    property("cHeroesInfo").
                     call();
             if (getAccountProperty.isExist("properties")) {
                 JA propertiesArray = getAccountProperty.getArray("properties");
-                // Get Attacker stats
-                if (propertiesArray.size() > 0) {
-                    for (int i = 0; i < propertiesArray.size(); i++) {
-                        String currentName = propertiesArray.get(i).getString("property");
-                        String currentValue = propertiesArray.get(i).getString("value");
-                        if (currentName.equals("level")) {
-                            attacker.put("health",Integer.parseInt(currentValue)*10+10);
-                        } else if (currentName.equals("DEF")) {
-                            attacker.put("defense",Integer.parseInt(currentValue));
-                        } else if (currentName.equals("ATK")) {
-                            attacker.put("attack",Integer.parseInt(currentValue));
-                        } else if (currentName.equals("score")) {
-                            attacker.put("score",Integer.parseInt(currentValue));
-                        }
-                    }
-                } else {
-                    battleError = true;
-                }
+                String propertiesString = propertiesArray.get(0).getString("value");
+                Integer score = JO.parse(propertiesString).getInt("score");
+                attacker.put("score",score);
             } else {
                 battleError = true;
             }
-            // Get account properties set by contract account on battle account
+
+            // Get account properties set by contract account on sender
+//            JO getAccountProperty = GetAccountPropertiesCall.
+//                    create().
+//                    recipient(transaction.getSender()).
+//                    setter(transaction.getRecipient()).
+//                    call();
+//            if (getAccountProperty.isExist("properties")) {
+//                JA propertiesArray = getAccountProperty.getArray("properties");
+//                // Get Attacker stats
+//                if (propertiesArray.size() > 0) {
+//                    for (int i = 0; i < propertiesArray.size(); i++) {
+//                        String currentName = propertiesArray.get(i).getString("property");
+//                        String currentValue = propertiesArray.get(i).getString("value");
+//                        if (currentName.equals("level")) {
+//                            attacker.put("health",Integer.parseInt(currentValue)*10+10);
+//                        } else if (currentName.equals("DEF")) {
+//                            attacker.put("defense",Integer.parseInt(currentValue));
+//                        } else if (currentName.equals("ATK")) {
+//                            attacker.put("attack",Integer.parseInt(currentValue));
+//                        } else if (currentName.equals("score")) {
+//                            attacker.put("score",Integer.parseInt(currentValue));
+//                        }
+//                    }
+//                } else {
+//                    battleError = true;
+//                }
+//            } else {
+//                battleError = true;
+//            }
+
+            // Get last message from contract account to battle account to get most recent stats
+            JO getBattleAccountStats = GetExecutedTransactionsCall
+                    .create()
+                    .recipient(transaction.getSender())
+                    .sender(transaction.getRecipient())
+                    .chain(2)
+                    .type(1)
+                    .lastIndex(0)
+                    .call();
+            if (getBattleAccountStats.isExist("transactions")) {
+                String accountStatsMsg = getBattleAccountStats.getArray("transactions").get(0).getJo("attachment").getString("message");
+                JO accountStats = JO.parse(accountStatsMsg);
+                defender.put("health",accountStats.getInt("LVL")*10+10);
+                defender.put("defense",accountStats.getInt("DEF"));
+                defender.put("attack",accountStats.getInt("ATK"));
+                defender.put("speed",accountStats.getInt("SPD"));
+            } else {
+                battleError = true;
+            }
+
+            // Get defender's score from battle property's JSON
             JO getBattleAccountProperty = GetAccountPropertiesCall.
                     create().
                     recipient(battleAccount).
                     setter(transaction.getRecipient()).
+                    property("cHeroesInfo").
                     call();
             if (getBattleAccountProperty.isExist("properties")) {
                 JA propertiesArray = getBattleAccountProperty.getArray("properties");
-                // Get Defender stats
-                if (propertiesArray.size() > 0) {
-                    for (int i = 0; i < propertiesArray.size(); i++) {
-                        String currentName = propertiesArray.get(i).getString("property");
-                        String currentValue = propertiesArray.get(i).getString("value");
-                        if (currentName.equals("level")) {
-                            defender.put("health",Integer.parseInt(currentValue)*10+10);
-                        } else if (currentName.equals("DEF")) {
-                            defender.put("defense",Integer.parseInt(currentValue));
-                        } else if (currentName.equals("ATK")) {
-                            defender.put("attack",Integer.parseInt(currentValue));
-                        } else if (currentName.equals("score")) {
-                            defender.put("score",Integer.parseInt(currentValue));
-                        }
-                    }
-                } else {
-                    battleError = true;
-                }
+                String propertiesString = propertiesArray.get(0).getString("value");
+                Integer score = JO.parse(propertiesString).getInt("score");
+                defender.put("score",score);
             } else {
                 battleError = true;
             }
+
+            // Get account properties set by contract account on battle account
+//            JO getBattleAccountProperty = GetAccountPropertiesCall.
+//                    create().
+//                    recipient(battleAccount).
+//                    setter(transaction.getRecipient()).
+//                    call();
+//            if (getBattleAccountProperty.isExist("properties")) {
+//                JA propertiesArray = getBattleAccountProperty.getArray("properties");
+//                // Get Defender stats
+//                if (propertiesArray.size() > 0) {
+//                    for (int i = 0; i < propertiesArray.size(); i++) {
+//                        String currentName = propertiesArray.get(i).getString("property");
+//                        String currentValue = propertiesArray.get(i).getString("value");
+//                        if (currentName.equals("level")) {
+//                            defender.put("health",Integer.parseInt(currentValue)*10+10);
+//                        } else if (currentName.equals("DEF")) {
+//                            defender.put("defense",Integer.parseInt(currentValue));
+//                        } else if (currentName.equals("ATK")) {
+//                            defender.put("attack",Integer.parseInt(currentValue));
+//                        } else if (currentName.equals("score")) {
+//                            defender.put("score",Integer.parseInt(currentValue));
+//                        }
+//                    }
+//                } else {
+//                    battleError = true;
+//                }
+//            } else {
+//                battleError = true;
+//            }
 
             if (battleError) {
                 return context.generateErrorResponse(10001, String.format("Not valid battle. Amount sent: %d. Msg sent: %s. Battle sent: %s", transaction.getAmount(), params.expMsg(), params.battleMsg()));
@@ -349,23 +422,52 @@ public class Heroes extends AbstractContract {
                     message.put("loss",transaction.getSenderRs());
                 }
 
+                //Update Attacker Account Property JSON
+                JA propertiesArray = getAccountProperty.getArray("properties");
+                String propertiesString = propertiesArray.get(0).getString("value");
+                JO attackerProperties = JO.parse(propertiesString);
+                attackerProperties.put("score", attacker.getInt("score"));
                 SetAccountPropertyCall setAccountPropertyCall = SetAccountPropertyCall.create(2).
                         recipient(transaction.getSender()).
-                        property("score").
+                        property("cHeroesInfo").
                         message(message.toJSONString()).
                         messageIsText(true).
                         messageIsPrunable(true).
-                        value(String.valueOf(attacker.getInt("score")));
+                        value(attackerProperties.toJSONString());
                 context.createTransaction(setAccountPropertyCall);
 
+
+//                SetAccountPropertyCall setAccountPropertyCall = SetAccountPropertyCall.create(2).
+//                        recipient(transaction.getSender()).
+//                        property("score").
+//                        message(message.toJSONString()).
+//                        messageIsText(true).
+//                        messageIsPrunable(true).
+//                        value(String.valueOf(attacker.getInt("score")));
+//                context.createTransaction(setAccountPropertyCall);
+
+                //Update Defender Account Property JSON
+                JA defenderPropertiesArray = getBattleAccountProperty.getArray("properties");
+                String defenderPropertiesString = defenderPropertiesArray.get(0).getString("value");
+                JO defenderProperties = JO.parse(defenderPropertiesString);
+                defenderProperties.put("score", defender.getInt("score"));
                 SetAccountPropertyCall setDefenderAccountPropertyCall = SetAccountPropertyCall.create(2).
                         recipient(battleAccount).
-                        property("score").
+                        property("cHeroesInfo").
                         message(message.toJSONString()).
                         messageIsText(true).
                         messageIsPrunable(true).
-                        value(String.valueOf(defender.getInt("score")));
+                        value(defenderProperties.toJSONString());
                 context.createTransaction(setDefenderAccountPropertyCall);
+
+//                SetAccountPropertyCall setDefenderAccountPropertyCall = SetAccountPropertyCall.create(2).
+//                        recipient(battleAccount).
+//                        property("score").
+//                        message(message.toJSONString()).
+//                        messageIsText(true).
+//                        messageIsPrunable(true).
+//                        value(String.valueOf(defender.getInt("score")));
+//                context.createTransaction(setDefenderAccountPropertyCall);
 
                 return context.getResponse();
             }
