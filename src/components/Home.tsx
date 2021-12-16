@@ -154,7 +154,7 @@ const Home = (): ReactElement => {
               <div className="col-span-4 text-left">
                 <p>
                   LVL
-                  {context.playerAccount!.exp > 1000 ? (
+                  {context.playerAccount!.exp > context.playerAccount!.lvl * 100 + 500 ? (
                     <span
                       onClick={() => setLvlIsOpen(true)}
                       onKeyDown={() => setLvlIsOpen(true)}
