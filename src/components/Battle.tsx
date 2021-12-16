@@ -13,8 +13,17 @@ const Battle = (): ReactElement => {
 
   useEffect(() => {
     async function fetchLeaders() {
-      const OpponentsAPI = await getAccountProperties(undefined, 'team');
-      setOpponents(OpponentsAPI!.data.properties);
+      const opponents: object[] = [];
+      const OpponentsAPI = await getAccountProperties(undefined, 'cHeroesInfo');
+      OpponentsAPI!.data.properties.forEach(function (opponent) {
+        if (opponent.value) {
+          let opponentInfo = JSON.parse(opponent.value);
+          opponentInfo['recipientRS'] = opponent.recipientRS;
+          opponents.push(opponentInfo);
+        }
+      });
+
+      setOpponents(opponents);
     }
 
     fetchLeaders();
@@ -47,7 +56,27 @@ const Battle = (): ReactElement => {
   return (
     <div className="h-full w-full flex flex-col items-center justify-center">
       <p className="text-2xl">Enemy Heroes</p>
-      <div className="w-full grid grid-cols-4 gap-4">
+      <div className="w-full grid grid-cols-3 gap-3">
+        {!opponents ? (
+          <p>Loading...</p>
+        ) : (
+          opponents
+            .filter((opponent) => opponent.value != context.playerAccount?.team)
+            .map((opponent) => (
+              <button
+                key={opponent.recipient}
+                onClick={() => handleBattle(opponent.recipientRS)}>
+                {opponent.name}
+                <br />
+                {opponent.team}
+                <br />
+                Score: {opponent.score}
+              </button>
+            ))
+        )}
+      </div>
+
+      {/* <div className="w-full grid grid-cols-4 gap-4">
         <div className="underline col-span-3">Name</div>
         <div className="underline text-right">Team</div>
         {!opponents ? (
@@ -67,7 +96,7 @@ const Battle = (): ReactElement => {
               </button>
             ))
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

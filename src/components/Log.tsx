@@ -15,11 +15,16 @@ const Log = (): ReactElement => {
         let formattedEntries: object[] = [];
         for (var i = 0; i < logAPI.data.transactions.length; i++) {
           let tx = logAPI.data.transactions[i];
-          if (tx.attachment && tx.attachment.property) {
-            if (tx.attachment.property == 'score') {
+          if (
+            tx.attachment &&
+            tx.attachment.property &&
+            tx.attachment.property == 'cHeroesInfo' &&
+            tx.attachment.message
+          ) {
+            let msgAttachment = JSON.parse(tx.attachment.message);
+            if (msgAttachment.won) {
               let battleMsg;
               try {
-                const msgAttachment = JSON.parse(tx.attachment.message);
                 if (msgAttachment.won == 'ARDOR-' + context.playerAccount!.address) {
                   battleMsg = 'WON vs ' + msgAttachment.loss.slice(6);
                 } else {
@@ -33,19 +38,20 @@ const Log = (): ReactElement => {
                 timestamp: new Date(getTxDate(tx.timestamp) * 1000).toLocaleString(),
                 type: battleMsg,
               });
-            } else if (tx.attachment.property == 'level') {
-              formattedEntries.push({
-                id: tx.fullHash,
-                timestamp: new Date(getTxDate(tx.timestamp) * 1000).toLocaleString(),
-                type:
-                  'Level Up to ' +
-                  tx.attachment.value +
-                  ', ' +
-                  logAPI.data.transactions[i + 1].attachment.property +
-                  ' to ' +
-                  logAPI.data.transactions[i + 1].attachment.value,
-              });
             }
+            // } else if (tx.attachment.property == 'level') {
+            //   formattedEntries.push({
+            //     id: tx.fullHash,
+            //     timestamp: new Date(getTxDate(tx.timestamp) * 1000).toLocaleString(),
+            //     type:
+            //       'Level Up to ' +
+            //       tx.attachment.value +
+            //       ', ' +
+            //       logAPI.data.transactions[i + 1].attachment.property +
+            //       ' to ' +
+            //       logAPI.data.transactions[i + 1].attachment.value,
+            //   });
+            // }
           } else if (tx.attachment && tx.attachment.currency == '13943488548174745464') {
             formattedEntries.push({
               id: tx.fullHash,

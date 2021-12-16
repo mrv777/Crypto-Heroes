@@ -8,8 +8,17 @@ const Leaderboards = (): ReactElement => {
 
   useEffect(() => {
     async function fetchLeaders() {
-      const leaderAPI = await getAccountProperties(undefined, 'score');
-      setLeaders(leaderAPI!.data.properties);
+      const leaders: object[] = [];
+      const leaderAPI = await getAccountProperties(undefined, 'cHeroesInfo');
+      leaderAPI!.data.properties.forEach(function (leader) {
+        if (leader.value) {
+          let leadertInfo = JSON.parse(leader.value);
+          leadertInfo['key'] = leader.recipient;
+          leaders.push(leadertInfo);
+        }
+      });
+
+      setLeaders(leaders);
     }
 
     fetchLeaders();
@@ -25,11 +34,11 @@ const Leaderboards = (): ReactElement => {
           <p>Loading...</p>
         ) : (
           leaders
-            .sort((a, b) => (a.value < b.value ? 1 : -1))
+            .sort((a, b) => (a.score < b.score ? 1 : -1))
             .map((leader) => (
               <div className="grid grid-cols-4 col-span-4" key={leader.recipient}>
-                <div className="col-start-1 col-end-4">{leader.recipientRS.slice(6)}</div>
-                <div className="col-start-4 col-end-4 text-right">{leader.value}</div>
+                <div className="col-start-1 col-end-4">{leader.name}</div>
+                <div className="col-start-4 col-end-4 text-right">{leader.score}</div>
               </div>
             ))
         )}
