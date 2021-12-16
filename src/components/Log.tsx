@@ -10,9 +10,10 @@ const Log = (): ReactElement => {
 
   useEffect(() => {
     async function fetchEntries() {
+      // Get executed transations
       const logAPI = await getLog('ARDOR-' + context.playerAccount!.address);
       if (logAPI && logAPI.data && logAPI.data.transactions.length > 0) {
-        let formattedEntries: object[] = [];
+        let formattedEntries: any[] = [];
         for (var i = 0; i < logAPI.data.transactions.length; i++) {
           let tx = logAPI.data.transactions[i];
           if (
@@ -52,6 +53,15 @@ const Log = (): ReactElement => {
             //       logAPI.data.transactions[i + 1].attachment.value,
             //   });
             // }
+          } else if (tx.attachment && !tx.attachment.property && tx.attachment.message) {
+            let msgAttachment = JSON.parse(tx.attachment.message);
+            if (msgAttachment.LVL) {
+              formattedEntries.push({
+                id: tx.fullHash,
+                timestamp: new Date(getTxDate(tx.timestamp) * 1000).toLocaleString(),
+                type: 'Level Up to ' + msgAttachment.LVL,
+              });
+            }
           } else if (tx.attachment && tx.attachment.currency == '13943488548174745464') {
             formattedEntries.push({
               id: tx.fullHash,

@@ -41,7 +41,7 @@ export const getAccountProperties = async (account?: string, property?: string) 
   }
 };
 
-export const getAccountMsgStats = async (account: string) => {
+export const getAccountMsgStats = async (account: string, lastIndex: number = 0) => {
   try {
     const response = await axios.get(nodeUrl, {
       params: {
@@ -50,7 +50,7 @@ export const getAccountMsgStats = async (account: string) => {
         sender: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
         recipient: account,
         type: 1,
-        lastIndex: 0,
+        lastIndex: lastIndex,
       },
     });
     return response;
