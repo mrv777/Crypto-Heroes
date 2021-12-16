@@ -135,7 +135,9 @@ const Home = (): ReactElement => {
       <div className="col-span-8 p-4 xl:p-10 SpriteUI containerUI">
         <div className="text-left h-full grid grid-cols-12 gap-1 mr-2">
           <p className="tracking-tighter col-span-12 text-center">
-            {context.playerAccount?.address}
+            {context.playerAccount!.name && context.playerAccount!.name != 'none'
+              ? context.playerAccount!.name
+              : context.playerAccount!.address}
           </p>
           <div className="col-span-6 flex flex-col">
             <div className="w-full flex flex-col items-center justify-center m-auto">
@@ -184,9 +186,9 @@ const Home = (): ReactElement => {
                 </p>
               </div>
               <div className="col-span-8 text-right">
-                <p>{context.playerAccount?.lvl}</p>
+                <p>{context.playerAccount!.lvl}</p>
                 <p>
-                  {context.playerAccount?.exp}/{context.playerAccount!.lvl * 100 + 500}
+                  {context.playerAccount!.exp}/{context.playerAccount!.lvl * 100 + 500}
                 </p>
                 <p
                   onClick={() => setGilIsOpen(true)}
