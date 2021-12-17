@@ -73,6 +73,12 @@ const Log = (): ReactElement => {
               timestamp: new Date(getTxDate(tx.timestamp) * 1000).toLocaleString(),
               type: 'Trained for ' + tx.attachment.unitsQNT + ' exp',
             });
+          } else if (tx.attachment && tx.attachment.asset) {
+            formattedEntries.push({
+              id: tx.fullHash,
+              timestamp: new Date(getTxDate(tx.timestamp) * 1000).toLocaleString(),
+              type: 'Explored and found ' + tx.attachment.asset,
+            });
           }
         }
         setEntries(formattedEntries);
