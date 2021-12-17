@@ -172,9 +172,9 @@ const Login = (): ReactElement => {
         if (tx.recipientRS == 'ARDOR-64L4-C4H9-Z9PU-9YKDT') {
           //Tx is to contract account so check why
           if (tx.attachment.message.includes('abc')) {
-            context.updatePlayerStatus('Training...');
+            context.updatePlayerStatus('Training');
           } else if (tx.attachment.message.includes('battle')) {
-            context.updatePlayerStatus('Battling...');
+            context.updatePlayerStatus('Battling');
           }
         }
       });

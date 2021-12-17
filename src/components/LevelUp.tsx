@@ -45,7 +45,7 @@ const LevelUp = (props): React.ReactElement => {
 
     closeFunction();
     if (broadcastTx && broadcastTx?.data.fullHash) {
-      context.updatePlayerStatus('Leveling up...');
+      context.updatePlayerStatus('Leveling up');
     } else {
       context.updatePlayerStatus('Error Leveling up');
     }

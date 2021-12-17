@@ -36,6 +36,7 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
   let navigate = useNavigate();
   const context = useContext(PlayerContext);
   let [lastTx, setLastTx] = useState<string>('0');
+  let [progress, setProgress] = useState<number>(0);
 
   useEffect(() => {
     async function getCurrentAccountTx() {
@@ -172,10 +173,19 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
       console.log('Logs every 5s');
       //If there is a new transaction on the account, then update all hero information
       getCurrentAccountTx();
-    }, 5000);
+      if (context.playerStatus != 'idle') {
+        if (progress < 96) {
+          setProgress(progress + 4);
+        } else {
+          setProgress(0);
+        }
+      } else if (progress != 0) {
+        setProgress(0);
+      }
+    }, 4000);
 
     return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
-  }, [lastTx]);
+  }, [lastTx, progress]);
 
   const handleClick = (path: string) => {
     navigate(path);
@@ -200,7 +210,12 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
         disabled={disableNavBar}
         classNames="SpriteIcons scoreIcon"
         onClick={() => handleClick('/leaderboards')}></MenuButton>
-      <div className="flex-1 self-center">{context.playerStatus}</div>
+      <div className="flex-1 self-center">
+        {context.playerStatus}
+        {context.playerStatus != 'idle' && (
+          <progress id="playerProgress" max="100" value={progress}></progress>
+        )}
+      </div>
       {/* <MenuButton disabled={disableNavBar} onClick={() => handleClick('/profile')}>
         Profile
       </MenuButton> */}

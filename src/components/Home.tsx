@@ -108,7 +108,7 @@ const Home = (): ReactElement => {
     );
 
     if (broadcastTx && broadcastTx?.data.fullHash) {
-      context.updatePlayerStatus('Training...');
+      context.updatePlayerStatus('Training');
     } else {
       context.updatePlayerStatus('Error Training');
     }
