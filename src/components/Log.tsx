@@ -53,7 +53,12 @@ const Log = (): ReactElement => {
             //       logAPI.data.transactions[i + 1].attachment.value,
             //   });
             // }
-          } else if (tx.attachment && !tx.attachment.property && tx.attachment.message) {
+          } else if (
+            tx.attachment &&
+            !tx.attachment.property &&
+            tx.attachment.message &&
+            tx.attachment.currency != '13943488548174745464'
+          ) {
             let msgAttachment = JSON.parse(tx.attachment.message);
             if (msgAttachment.LVL) {
               formattedEntries.push({
