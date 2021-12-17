@@ -8,6 +8,7 @@ import {
   getBlockchainTransactions,
   getExp,
   getIgnisBalance,
+  getlastExploringTx,
   getlastTrainingTx,
   getUnconfirmedTxs,
 } from '../../utils/ardorInterface';
@@ -51,15 +52,21 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
         setLastTx(current_tx?.data.transactions[0].fullHash);
         console.log('New Account Tx');
         const account = 'ARDOR-' + context.playerAccount!.address;
+
+        //Should optimize this by checking what TX's are new and only checking for those type of tx's instead of all that pertain to a player
+        //if ()
+
         const response = await getIgnisBalance(account);
         const propertiesResponse = await getAccountProperties(account, 'cHeroesInfo');
         const statsResponse = await getAccountMsgStats(account);
         const lastTrainingResponse = await getlastTrainingTx(account);
+        const lastExploringResponse = await getlastExploringTx(account);
         const expResponse = await getExp(account);
 
         let team = context.playerAccount!.team;
         let name = null;
         let lastTraining = context.playerAccount!.lastTraining;
+        let lastExploring = context.playerAccount!.lastExploring;
         let [exp, score, lvl, atk, def, blk, crit, spd] = [0, 0, 0, 0, 0, 0, 0, 0];
         // Get Player info
         if (
@@ -122,7 +129,23 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
             }
           }
         }
-        console.log(lastTraining);
+        //Check for the last exploring tx and set the difference from now to see if hero can explore again
+        //Break out of the loop once we find the first exploring tx
+        if (
+          lastExploringResponse &&
+          lastExploringResponse.data &&
+          lastExploringResponse.data.transfers.length > 0
+        ) {
+          for (let transfer of lastExploringResponse.data.transfers) {
+            if (
+              transfer.recipientRS == account &&
+              transfer.senderRS == 'ARDOR-64L4-C4H9-Z9PU-9YKDT'
+            ) {
+              lastExploring = transfer.timestamp;
+              break;
+            }
+          }
+        }
 
         let hp = lvl * 10 + 10;
 
@@ -130,6 +153,7 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
           address: account.slice(6),
           passphrase: context.playerAccount!.passphrase,
           lastTraining: lastTraining,
+          lastExploring: lastExploring,
           lvl: lvl,
           exp: exp,
           gil: Math.floor(response?.data.balanceNQT / 1000000),

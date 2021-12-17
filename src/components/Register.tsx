@@ -19,6 +19,7 @@ const Register = (): ReactElement => {
       address: account.slice(6),
       passphrase: passphrase,
       lastTraining: 0,
+      lastExploring: 0,
       lvl: 0,
       exp: 0,
       gil: 0,

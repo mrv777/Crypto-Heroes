@@ -8,7 +8,7 @@ import staticCoin from '../assets/Coin.png';
 import coin from '../assets/Coin-Sheet.png';
 import sprite from '../assets/sprite.png';
 import { PlayerContext } from '../contexts/playerContext';
-import { broadcast, train } from '../utils/ardorInterface';
+import { broadcast, explore, train } from '../utils/ardorInterface';
 import { timestampDiff } from '../utils/helpers';
 import LevelUp from './LevelUp';
 import Tooltip from './ui/Tooltip';
@@ -17,7 +17,7 @@ const Home = (): ReactElement => {
   const [modalGilIsOpen, setGilIsOpen] = React.useState(false);
   const [modalLvlIsOpen, setLvlIsOpen] = React.useState(false);
   const [lastTraining, setLastTraining] = React.useState(0);
-  const [lastExplore, setLastExplore] = React.useState(0);
+  const [lastExploring, setLastExplore] = React.useState(0);
   const [lastStudy, setLastStudy] = React.useState(0);
   const context = useContext(PlayerContext);
   console.log(context);
@@ -59,16 +59,36 @@ const Home = (): ReactElement => {
     }
     //Get time since last training tx when the screen loads
     setLastTraining(timestampDiff(context.playerAccount!.lastTraining));
+    setLastExplore(timestampDiff(context.playerAccount!.lastExploring));
 
     const interval = setInterval(() => {
       // To prevent too many unnecessary rerenders, only update the state if the last training when the screen was loaded was less then 1 hour and now its at least an hour
-      console.log(lastTraining);
+      console.log('Last Training: ' + lastTraining);
+      console.log('Last Exploring: ' + lastExploring);
       // console.log(timestampDiff(context.playerAccount!.lastTraining));
       if (
         lastTraining < 3600 &&
         timestampDiff(context.playerAccount!.lastTraining) >= 3600
       ) {
         setLastTraining(timestampDiff(context.playerAccount!.lastTraining));
+        context.updatePlayerAccount({
+          address: context.playerAccount!.passphrase,
+          passphrase: context.playerAccount!.passphrase,
+          lastTraining: timestampDiff(context.playerAccount!.lastTraining),
+          lastExploring: context.playerAccount!.lastExploring,
+          lvl: context.playerAccount!.lvl,
+          exp: context.playerAccount!.exp,
+          gil: context.playerAccount!.gil,
+          name: context.playerAccount!.name,
+          team: context.playerAccount!.team,
+          score: context.playerAccount!.score,
+          hp: context.playerAccount!.hp,
+          atk: context.playerAccount!.atk,
+          def: context.playerAccount!.def,
+          blk: context.playerAccount!.blk,
+          crit: context.playerAccount!.crit,
+          spd: context.playerAccount!.spd,
+        });
       }
     }, 5000);
 
@@ -120,7 +140,25 @@ const Home = (): ReactElement => {
     navigate('/battle');
   };
   const handleExplore = async () => {
-    navigate('/battle');
+    const playerPassphrase = context.playerAccount?.passphrase;
+    const trainUnsigned = await explore(
+      ardorjs.secretPhraseToPublicKey(playerPassphrase),
+    );
+
+    const trainSigned = ardorjs.signTransactionBytes(
+      trainUnsigned!.unsignedTransactionBytes,
+      playerPassphrase,
+    );
+    const broadcastTx = await broadcast(
+      trainSigned,
+      JSON.stringify(trainUnsigned!.transactionJSON.attachment),
+    );
+
+    if (broadcastTx && broadcastTx?.data.fullHash) {
+      context.updatePlayerStatus('Exploring');
+    } else {
+      context.updatePlayerStatus('Error Exploring');
+    }
   };
 
   //Use for level up text somewhere
@@ -287,7 +325,7 @@ const Home = (): ReactElement => {
                 disabled={
                   context.playerAccount!.gil < 10 ||
                   context.playerStatus != 'idle' ||
-                  lastExplore < 3600
+                  lastExploring < 86400
                 }
                 onClick={handleExplore}>
                 Explore

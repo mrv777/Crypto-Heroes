@@ -94,6 +94,20 @@ export const getlastTrainingTx = async (account: string) => {
     console.log(error);
   }
 };
+export const getlastExploringTx = async (account: string) => {
+  try {
+    const response = await axios.get(nodeUrl, {
+      params: {
+        requestType: 'getAssetTransfers',
+        account: account,
+      },
+    });
+    return response;
+  } catch (error) {
+    // handle error
+    console.log(error);
+  }
+};
 
 export const getIgnisBalance = async (account: string) => {
   try {
@@ -182,6 +196,28 @@ export const train = async (publicKey: string) => {
         chain: 'ignis',
         recipient: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
         message: '{"contract": "Heroes","params": {"expMsg": "abc"}}',
+        feeNQT: 3000000,
+        amountNQT: 97000000,
+        messageIsPrunable: true,
+        publicKey: publicKey,
+        deadline: 60,
+      }),
+      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+    );
+    return response.data;
+  } catch (error) {
+    // handle error
+    console.log(error);
+  }
+};
+export const explore = async (publicKey: string) => {
+  try {
+    const response = await axios.post(
+      nodeUrl + 'requestType=sendMoney',
+      qs.stringify({
+        chain: 'ignis',
+        recipient: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
+        message: '{"contract": "Heroes","params": {"expMsg": "defg"}}',
         feeNQT: 3000000,
         amountNQT: 97000000,
         messageIsPrunable: true,

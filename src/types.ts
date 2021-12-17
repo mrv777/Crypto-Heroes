@@ -10,6 +10,7 @@ export type AccountProps = {
   address: string;
   passphrase: string;
   lastTraining: number;
+  lastExploring: number;
   lvl: number;
   exp: number;
   gil: number;
