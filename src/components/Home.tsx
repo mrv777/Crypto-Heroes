@@ -63,9 +63,9 @@ const Home = (): ReactElement => {
 
     const interval = setInterval(() => {
       // To prevent too many unnecessary rerenders, only update the state if the last training when the screen was loaded was less then 1 hour and now its at least an hour
-      console.log('Last Training: ' + lastTraining);
-      console.log('Last Exploring: ' + lastExploring);
-      console.log(timestampDiff(context.playerAccount!.lastExploring));
+      // console.log('Last Training: ' + lastTraining);
+      // console.log('Last Exploring: ' + lastExploring);
+      // console.log(timestampDiff(context.playerAccount!.lastExploring));
       if (
         lastTraining < 3600 &&
         timestampDiff(context.playerAccount!.lastTraining) >= 3600
@@ -130,10 +130,14 @@ const Home = (): ReactElement => {
   /************ */
 
   const PowerUp = (item: string) => {
+    let opacity = 'opacity-20';
+    if (context.playerAssets![item]) {
+      opacity = '';
+    }
     return (
       <div className="w-full h-0 pt-full relative">
-        <div className="absolute top-0 left-0 h-full w-full justify-center align-middle border-2 border-white bg-gray-500 opacity-20 rounded">
-          <div className={`opacity-30 ArmoryIcons h-full w-full ${item}Icon`}></div>
+        <div className="absolute top-0 left-0 h-full w-full justify-center align-middle border-2 border-white bg-gray-500 opacity-30 rounded">
+          <div className={`${opacity} ArmoryIcons h-full w-full ${item}Icon`}></div>
         </div>
       </div>
     );
@@ -311,21 +315,28 @@ const Home = (): ReactElement => {
           </div>
           <div className="text-center col-span-12 grid grid-cols-2 gap-0">
             <div className="my-1">
-              <button
-                className="text-tiny p-1 w-full"
-                disabled={
-                  context.playerAccount!.gil < 10 ||
-                  context.playerStatus != 'idle' ||
-                  lastTraining < 3600
-                }
-                onClick={handleTraining}>
-                Train
-                <br />
-                <span className="text-center">
-                  10
-                  <img className="inline-block h-3 w-3" src={staticCoin} alt="Coin" />
-                </span>
-              </button>
+              <Tooltip
+                tooltip={
+                  <div className="text-left">
+                    <p>Train once every 1-12hrs to earn experience</p>
+                  </div>
+                }>
+                <button
+                  className="text-tiny p-1 w-full"
+                  disabled={
+                    context.playerAccount!.gil < 10 ||
+                    context.playerStatus != 'idle' ||
+                    lastTraining < 3600
+                  }
+                  onClick={handleTraining}>
+                  Train
+                  <br />
+                  <span className="text-center">
+                    10
+                    <img className="inline-block h-3 w-3" src={staticCoin} alt="Coin" />
+                  </span>
+                </button>
+              </Tooltip>
             </div>
             <div className="m-1">
               <button
@@ -345,21 +356,28 @@ const Home = (): ReactElement => {
               </button>
             </div>
             <div className="my-1">
-              <button
-                className="text-tiny p-1 w-full"
-                disabled={
-                  context.playerAccount!.gil < 10 ||
-                  context.playerStatus != 'idle' ||
-                  lastExploring < 86400
-                }
-                onClick={handleExplore}>
-                Explore
-                <br />
-                <span className="text-center">
-                  10
-                  <img className="inline-block h-3 w-3" src={staticCoin} alt="Coin" />
-                </span>
-              </button>
+              <Tooltip
+                tooltip={
+                  <div className="text-left">
+                    <p>Explore once every 24hrs to find equipment</p>
+                  </div>
+                }>
+                <button
+                  className="text-tiny p-1 w-full"
+                  disabled={
+                    context.playerAccount!.gil < 10 ||
+                    context.playerStatus != 'idle' ||
+                    lastExploring < 86400
+                  }
+                  onClick={handleExplore}>
+                  Explore
+                  <br />
+                  <span className="text-center">
+                    10
+                    <img className="inline-block h-3 w-3" src={staticCoin} alt="Coin" />
+                  </span>
+                </button>
+              </Tooltip>
             </div>
             <div className="m-1">
               <button

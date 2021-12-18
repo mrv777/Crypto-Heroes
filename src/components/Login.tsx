@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { PlayerContext } from '../contexts/playerContext';
 import {
+  getAccountAssets,
   getAccountMsgStats,
   getAccountProperties,
   getExp,
@@ -62,6 +63,7 @@ const Login = (): ReactElement => {
     const account = ardorjs.secretPhraseToAccountId(passphrase);
     const response = await getIgnisBalance(account);
     const propertiesResponse = await getAccountProperties(account, 'cHeroesInfo');
+    const accountAssets = await getAccountAssets(account);
     const statsResponse = await getAccountMsgStats(account);
     const lastTrainingResponse = await getlastTrainingTx(account);
     const lastExploringResponse = await getlastExploringTx(account);
@@ -73,6 +75,7 @@ const Login = (): ReactElement => {
     }
 
     let team = 'none';
+    let [helmet, shield] = [null, null];
     let name = null;
     let [lastTraining, lastExploring, exp, score, lvl, atk, def, blk, crit, spd] = [
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -155,6 +158,21 @@ const Login = (): ReactElement => {
         }
       }
     }
+    //Get player assets
+    if (
+      accountAssets &&
+      accountAssets.data &&
+      accountAssets.data.accountAssets.length > 0
+    ) {
+      for (let asset of accountAssets.data.accountAssets) {
+        const assetType = asset.name.slice(0, -1);
+        if (assetType == 'Helmet') {
+          helmet = asset.name.slice(asset.name.length - 1);
+        } else if (assetType == 'Shield') {
+          shield = asset.name.slice(asset.name.length - 1);
+        }
+      }
+    }
 
     let hp = lvl * 10 + 10;
 
@@ -175,6 +193,11 @@ const Login = (): ReactElement => {
       blk: blk,
       crit: crit,
       spd: spd,
+    });
+
+    context.updatePlayerAssets({
+      helmet: helmet,
+      shield: shield,
     });
 
     if (savePass) {

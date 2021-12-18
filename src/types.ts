@@ -1,6 +1,8 @@
 export type PlayerContextType = {
   updatePlayerAccount: (accountProps: AccountProps | null) => void;
   playerAccount: AccountProps | null;
+  updatePlayerAssets: (assetsProps: AssetsProps | null) => void;
+  playerAssets: AssetsProps | null;
   updatePlayerStatus: (status: string | null) => void;
   playerStatus: string | null;
   signOut: () => void;
@@ -23,4 +25,9 @@ export type AccountProps = {
   blk: number;
   crit: number;
   spd: number;
+};
+
+export type AssetsProps = {
+  helmet: string | null;
+  shield: string | null;
 };

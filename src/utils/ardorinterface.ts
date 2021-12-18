@@ -179,6 +179,7 @@ export const getAccountAssets = async (account: string) => {
       params: {
         requestType: 'getAccountAssets',
         account: account,
+        includeAssetInfo: true,
       },
     });
     return response;

@@ -6,12 +6,13 @@ import React, { useEffect, useState } from 'react';
 import Header from './components/ui/Header';
 import { PlayerContext } from './contexts/playerContext';
 import GameRoutes from './GameRoutes';
-import { AccountProps } from './types';
+import { AccountProps, AssetsProps } from './types';
 import { removeItemFromStorage } from './utils/storage';
 import WelcomeRoutes from './WelcomeRoutes';
 
 function App() {
   const [playerAccount, setPlayerAccount] = useState<AccountProps | null>(null);
+  const [playerAssets, setPlayerAssets] = useState<AssetsProps | null>(null);
   const [playerStatus, setPlayerStatus] = useState<string | null>('idle');
   const [orientation, setOrientation] = useState<String>(
     (window.innerWidth ||
@@ -64,6 +65,10 @@ function App() {
     setPlayerAccount(accountProps);
   };
 
+  const updatePlayerAssets = (assetsProps: AssetsProps | null) => {
+    setPlayerAssets(assetsProps);
+  };
+
   const updatePlayerStatus = (status: string | null) => {
     setPlayerStatus(status);
   };
@@ -71,6 +76,7 @@ function App() {
   const signOut = () => {
     removeItemFromStorage('Pass');
     setPlayerAccount(null);
+    setPlayerAssets(null);
   };
 
   return (
@@ -80,6 +86,8 @@ function App() {
           value={{
             updatePlayerAccount,
             playerAccount,
+            updatePlayerAssets,
+            playerAssets,
             updatePlayerStatus,
             playerStatus,
             signOut,
