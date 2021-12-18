@@ -65,7 +65,7 @@ const Home = (): ReactElement => {
       // To prevent too many unnecessary rerenders, only update the state if the last training when the screen was loaded was less then 1 hour and now its at least an hour
       console.log('Last Training: ' + lastTraining);
       console.log('Last Exploring: ' + lastExploring);
-      // console.log(timestampDiff(context.playerAccount!.lastTraining));
+      console.log(timestampDiff(context.playerAccount!.lastExploring));
       if (
         lastTraining < 3600 &&
         timestampDiff(context.playerAccount!.lastTraining) >= 3600
