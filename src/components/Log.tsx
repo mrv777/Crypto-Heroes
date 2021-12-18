@@ -7,6 +7,10 @@ import { getTxDate } from '../utils/helpers';
 const Log = (): ReactElement => {
   const [entries, setEntries] = useState<any>(null);
   const context = useContext(PlayerContext);
+  const equipment = [
+    { name: 'Basic Helmet', asset: '1745859205102112069' },
+    { name: 'Basic Shield', asset: '14946868744803041742' },
+  ];
 
   useEffect(() => {
     async function fetchEntries() {
@@ -14,6 +18,7 @@ const Log = (): ReactElement => {
       const logAPI = await getLog('ARDOR-' + context.playerAccount!.address);
       if (logAPI && logAPI.data && logAPI.data.transactions.length > 0) {
         let formattedEntries: any[] = [];
+        console.log(logAPI.data.transactions[0]);
         for (var i = 0; i < logAPI.data.transactions.length; i++) {
           let tx = logAPI.data.transactions[i];
           if (
@@ -57,7 +62,8 @@ const Log = (): ReactElement => {
             tx.attachment &&
             !tx.attachment.property &&
             tx.attachment.message &&
-            tx.attachment.currency != '13943488548174745464'
+            tx.attachment.currency != '13943488548174745464' &&
+            !tx.attachment.asset
           ) {
             let msgAttachment = JSON.parse(tx.attachment.message);
             if (msgAttachment.LVL) {
@@ -74,10 +80,14 @@ const Log = (): ReactElement => {
               type: 'Trained for ' + tx.attachment.unitsQNT + ' exp',
             });
           } else if (tx.attachment && tx.attachment.asset) {
+            let foundEquipment = equipment.find((obj) => {
+              return obj.asset == tx.attachment.asset;
+            });
+
             formattedEntries.push({
               id: tx.fullHash,
               timestamp: new Date(getTxDate(tx.timestamp) * 1000).toLocaleString(),
-              type: 'Explored and found ' + tx.attachment.asset,
+              type: 'Explored and found ' + foundEquipment?.name,
             });
           }
         }
