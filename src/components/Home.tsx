@@ -90,10 +90,35 @@ const Home = (): ReactElement => {
           spd: context.playerAccount!.spd,
         });
       }
+      // Only update the explore state if the last exploring when the screen was loaded was less then 24 hour and now its at least 24 hours
+      if (
+        lastExploring < 86400 &&
+        timestampDiff(context.playerAccount!.lastExploring) >= 86400
+      ) {
+        setLastExplore(timestampDiff(context.playerAccount!.lastExploring));
+        context.updatePlayerAccount({
+          address: context.playerAccount!.passphrase,
+          passphrase: context.playerAccount!.passphrase,
+          lastTraining: context.playerAccount!.lastTraining,
+          lastExploring: timestampDiff(context.playerAccount!.lastExploring),
+          lvl: context.playerAccount!.lvl,
+          exp: context.playerAccount!.exp,
+          gil: context.playerAccount!.gil,
+          name: context.playerAccount!.name,
+          team: context.playerAccount!.team,
+          score: context.playerAccount!.score,
+          hp: context.playerAccount!.hp,
+          atk: context.playerAccount!.atk,
+          def: context.playerAccount!.def,
+          blk: context.playerAccount!.blk,
+          crit: context.playerAccount!.crit,
+          spd: context.playerAccount!.spd,
+        });
+      }
     }, 5000);
 
     return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
-  }, [lastTraining]);
+  }, [lastTraining, lastExploring]);
 
   /** Functions to close modals */
   function closeGilModal() {
