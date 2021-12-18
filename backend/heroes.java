@@ -17,6 +17,7 @@ package com.jelurida.ardor.contracts;
 
 import nxt.addons.*;
 import nxt.blockchain.TransactionTypeEnum;
+import nxt.http.GetAssetTransfers;
 import nxt.http.callers.*;
 import nxt.http.responses.TransactionResponse;
 import nxt.util.Time;
@@ -110,6 +111,41 @@ public class Heroes extends AbstractContract {
 
             return context.createTransaction(transferCurrencyCall);
         }
+        // Explore code
+        // We cannot allow phased transaction and make sure it's enough (fee is 300,000 + 9,700,000)transaction.getAttachmentJson().getString("message")
+        //
+        else if (!transaction.isPhased() && transaction.getAmount() > 96000000 && params.expMsg().equals("defg")) {
+            String[] assets = {"1745859205102112069", "14946868744803041742"};
+            JO getExploreItems = GetAssetTransfersCall
+                    .create()
+                    .account(transaction.getSender())
+                    .lastIndex(0)
+                    .call();
+            if (getExploreItems.isExist("transactions") && getExploreItems.getArray("transactions").size() > 0) {
+                JA transfersArray = getExploreItems.getArray("transfers");
+                int trainingTime = Integer.parseInt(transfersArray.get(0).getString("timestamp"));
+                Time.EpochTime EPOCH_TIME = new Time.EpochTime();
+                int TIME_SINCE_EPOCH = EPOCH_TIME.getTime();
+                int timeSinceExplore = TIME_SINCE_EPOCH - trainingTime;
+                if (timeSinceExplore < 86400){ //Has to be at least 24 hours to explore again
+                    return context.generateErrorResponse(10001, String.format("Exploring too soon. Amount sent: %d. Msg sent: %s", transaction.getAmount(), params.expMsg()));
+                }
+            }
+
+            // Pick random asset from array of assets
+            RandomnessSource r = context.initRandom(context.getRandomSeed());
+            int returnAssetIndex = BigInteger.valueOf(Math.abs(r.nextLong())).
+                    multiply(BigInteger.valueOf(assets.length)).
+                    divide(BigInteger.valueOf(Long.MAX_VALUE)).
+                    intValue();
+
+            TransferAssetCall transferItem = TransferAssetCall
+                    .create(2)
+                    .recipient(transaction.getSender())
+                    .asset(assets[returnAssetIndex-1])
+                    .quantityQNT(1);
+            return context.createTransaction(transferItem);
+        }
         // Level Up Code
         //
         //
@@ -147,7 +183,7 @@ public class Heroes extends AbstractContract {
 
                 String statUp = params.statUp();
                 // If one of the stats was sent we know the player must be at least going to level 3 and already have stats initialized
-                if (currentLvlInt > 1) {
+                if (currentLvlInt > 1 && (statUp.equals("ATK") || statUp.equals("DEF") || statUp.equals("SPD"))) {
                     int currentStatInt = accountStats.getInt(statUp);
                     accountStats.put(statUp, currentStatInt + 1); // Increase the stat by 1 and put it back in the JO
                     SendMessageCall setAccountStatsCall = SendMessageCall
@@ -157,7 +193,7 @@ public class Heroes extends AbstractContract {
                             .messageIsText(true)
                             .messageIsPrunable(true);
                     context.createTransaction(setAccountStatsCall);
-                } else if (currentLvlInt == 1) { //If second level up then we need to set a team instead
+                } else if (currentLvlInt == 1 && (statUp.equals("Ardor") || statUp.equals("Ethereum") || statUp.equals("Lisk"))) { //If second level up then we need to set a team instead
 
                     // Still need to update stats too for level upgrade
                     SendMessageCall setAccountStatsCall = SendMessageCall
