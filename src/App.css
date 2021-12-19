@@ -136,6 +136,12 @@ button {
   background-size: 1000%;
   image-rendering: pixelated;
 }
+.ArmoryBlankIcons {
+  background-image: url(./assets/armoryBlank.png);
+  background-repeat: no-repeat;
+  background-size: 1000%;
+  image-rendering: pixelated;
+}
 .helmetIcon {
   background-position: 11.5% 100%;
   border: 0;

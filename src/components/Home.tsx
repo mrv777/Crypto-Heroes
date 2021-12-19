@@ -138,13 +138,15 @@ const Home = (): ReactElement => {
 
   const PowerUp = (item: string) => {
     let opacity = 'opacity-20';
+    let iconSheet = 'ArmoryBlankIcons';
     if (context.playerAssets![item]) {
       opacity = '';
+      iconSheet = 'ArmoryIcons';
     }
     return (
       <div className="w-full h-0 pt-full relative">
-        <div className="absolute top-0 left-0 h-full w-full justify-center align-middle border-2 border-white bg-gray-500 opacity-30 rounded">
-          <div className={`${opacity} ArmoryIcons h-full w-full ${item}Icon`}></div>
+        <div className="absolute top-0 left-0 h-full w-full justify-center align-middle border-2 border-white bg-gray-500 opacity-40 rounded">
+          <div className={`${opacity} ${iconSheet} h-full w-full ${item}Icon`}></div>
         </div>
       </div>
     );
