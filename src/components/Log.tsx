@@ -93,7 +93,13 @@ const Log = (): ReactElement => {
         }
         setEntries(formattedEntries);
       } else {
-        setEntries([]);
+        setEntries([
+          {
+            id: 1,
+            timestamp: new Date().toLocaleString(),
+            type: 'You have not done anything yet',
+          },
+        ]);
       }
     }
 
