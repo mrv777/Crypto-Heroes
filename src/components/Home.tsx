@@ -10,12 +10,16 @@ import sprite from '../assets/sprite.png';
 import { PlayerContext } from '../contexts/playerContext';
 import { broadcast, explore, train } from '../utils/ardorInterface';
 import { timestampDiff } from '../utils/helpers';
+import { ExploringStory, TrainingStory } from '../utils/stories';
 import LevelUp from './LevelUp';
+import TypeWriter from './TypeWriter';
 import Tooltip from './ui/Tooltip';
 
 const Home = (): ReactElement => {
   const [modalGilIsOpen, setGilIsOpen] = React.useState(false);
   const [modalLvlIsOpen, setLvlIsOpen] = React.useState(false);
+  const [modalStoryIsOpen, setStoryIsOpen] = React.useState(false);
+  const [story, setStory] = React.useState();
   const [lastTraining, setLastTraining] = React.useState(0);
   const [lastExploring, setLastExplore] = React.useState(0);
   const [lastStudy, setLastStudy] = React.useState(0);
@@ -127,6 +131,9 @@ const Home = (): ReactElement => {
   function closeLvlModal() {
     setLvlIsOpen(false);
   }
+  function closeStoryModal() {
+    setStoryIsOpen(false);
+  }
   /************ */
 
   const PowerUp = (item: string) => {
@@ -158,6 +165,8 @@ const Home = (): ReactElement => {
 
     if (broadcastTx && broadcastTx?.data.fullHash) {
       context.updatePlayerStatus('Training');
+      setStory(TrainingStory);
+      setStoryIsOpen(true);
     } else {
       context.updatePlayerStatus('Error Training');
     }
@@ -185,6 +194,8 @@ const Home = (): ReactElement => {
 
     if (broadcastTx && broadcastTx?.data.fullHash) {
       context.updatePlayerStatus('Exploring');
+      setStory(ExploringStory);
+      setStoryIsOpen(true);
     } else {
       context.updatePlayerStatus('Error Exploring');
     }
@@ -419,6 +430,18 @@ const Home = (): ReactElement => {
         contentLabel="Level up hero">
         <LevelUp closeFunction={() => closeLvlModal()} />
         <button onClick={closeLvlModal}>close</button>
+      </Modal>
+      <Modal
+        isOpen={modalStoryIsOpen}
+        style={customStyles}
+        onRequestClose={closeStoryModal}
+        contentLabel="Action">
+        <p>
+          <TypeWriter text={story} />
+        </p>
+        <button className="mt-5" onClick={closeStoryModal}>
+          close
+        </button>
       </Modal>
     </div>
   );
