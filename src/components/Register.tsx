@@ -33,6 +33,10 @@ const Register = (): ReactElement => {
       crit: 0,
       spd: 0,
     });
+    context.updatePlayerAssets({
+      helmet: null,
+      shield: null,
+    });
     context.updatePlayerStatus('idle'); //Make sure the player is set to idle as they are brand new
     setToLocalStorage('Pass', passphrase);
     navigate('/');
