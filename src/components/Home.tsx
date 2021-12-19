@@ -19,7 +19,7 @@ const Home = (): ReactElement => {
   const [modalGilIsOpen, setGilIsOpen] = React.useState(false);
   const [modalLvlIsOpen, setLvlIsOpen] = React.useState(false);
   const [modalStoryIsOpen, setStoryIsOpen] = React.useState(false);
-  const [story, setStory] = React.useState();
+  const [story, setStory] = React.useState('');
   const [lastTraining, setLastTraining] = React.useState(0);
   const [lastExploring, setLastExplore] = React.useState(0);
   const [lastStudy, setLastStudy] = React.useState(0);
@@ -94,10 +94,10 @@ const Home = (): ReactElement => {
           spd: context.playerAccount!.spd,
         });
       }
-      // Only update the explore state if the last exploring when the screen was loaded was less then 24 hour and now its at least 24 hours
+      // Only update the explore state if the last exploring when the screen was loaded was less then 20 hour and now its at least 24 hours
       if (
-        lastExploring < 86400 &&
-        timestampDiff(context.playerAccount!.lastExploring) >= 86400
+        lastExploring < 72000 &&
+        timestampDiff(context.playerAccount!.lastExploring) >= 72000
       ) {
         setLastExplore(timestampDiff(context.playerAccount!.lastExploring));
         context.updatePlayerAccount({
@@ -380,7 +380,7 @@ const Home = (): ReactElement => {
                   disabled={
                     context.playerAccount!.gil < 10 ||
                     context.playerStatus != 'idle' ||
-                    lastExploring < 86400
+                    lastExploring < 72000
                   }
                   onClick={handleExplore}>
                   Explore

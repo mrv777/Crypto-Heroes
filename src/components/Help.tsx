@@ -16,7 +16,8 @@ const Help = (): ReactElement => {
         points if you were the attacker. Defenders lose no points.
       </p>
       <p className="mb-4">
-        <b>Exploring</b> - Your hero can explore the world looking for items/equipment.
+        <b>Exploring</b> - Your hero can explore the world looking for items/equipment
+        once every 20 hours.
       </p>
       <p className="mb-4">
         <b>Studying</b> - Your hero can study other blockchains to become more powerful

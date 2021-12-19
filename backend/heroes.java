@@ -64,7 +64,7 @@ public class Heroes extends AbstractContract {
         Params params = context.getParams(Params.class);
 
         // Earn exp code
-        // We cannot allow phased transaction and make sure it's enough (fee is 300,000 + 9,700,000)transaction.getAttachmentJson().getString("message")
+        // We cannot allow phased transaction and make sure it's enough (fee is 300,000 + 9,700,000)
         //
         if (!transaction.isPhased() && transaction.getAmount() > 96000000 && params.expMsg().equals("abc")) {
 
@@ -112,7 +112,7 @@ public class Heroes extends AbstractContract {
             return context.createTransaction(transferCurrencyCall);
         }
         // Explore code
-        // We cannot allow phased transaction and make sure it's enough (fee is 300,000 + 9,700,000)transaction.getAttachmentJson().getString("message")
+        // We cannot allow phased transaction and make sure it's enough (fee is 300,000 + 9,700,000)
         //
         else if (!transaction.isPhased() && transaction.getAmount() > 96000000 && params.expMsg().equals("defg")) {
             String[] assets = {"1745859205102112069", "14946868744803041742"};
@@ -127,7 +127,7 @@ public class Heroes extends AbstractContract {
                 Time.EpochTime EPOCH_TIME = new Time.EpochTime();
                 int TIME_SINCE_EPOCH = EPOCH_TIME.getTime();
                 int timeSinceExplore = TIME_SINCE_EPOCH - trainingTime;
-                if (timeSinceExplore < 86400){ //Has to be at least 24 hours to explore again
+                if (timeSinceExplore < 72000){ //Has to be at least 20 hours to explore again
                     return context.generateErrorResponse(10001, String.format("Exploring too soon. Amount sent: %d. Msg sent: %s", transaction.getAmount(), params.expMsg()));
                 }
             }
