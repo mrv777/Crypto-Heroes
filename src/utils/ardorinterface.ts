@@ -189,6 +189,21 @@ export const getAccountAssets = async (account: string) => {
   }
 };
 
+export const getStoreAssets = async () => {
+  try {
+    const response = await axios.get(nodeUrl, {
+      params: {
+        requestType: 'getAssetsByIssuer',
+        account: 'ARDOR-NXK4-YSP8-X5RR-5JSAB',
+      },
+    });
+    return response;
+  } catch (error) {
+    // handle error
+    console.log(error);
+  }
+};
+
 export const train = async (publicKey: string) => {
   try {
     const response = await axios.post(
