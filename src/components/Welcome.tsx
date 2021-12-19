@@ -13,6 +13,9 @@ const Welcome = (): ReactElement => {
         <li className="hover:list-square">
           <Link to="/login">Returning Player</Link>
         </li>
+        <li className="hover:list-square">
+          <Link to="/disclaimer">Disclaimer</Link>
+        </li>
         {/* <li className="hover:list-square">
           <Link to="/help">Help</Link>
         </li> */}

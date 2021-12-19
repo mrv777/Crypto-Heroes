@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 
 // import Battle from './components/battle/Battle';
 // import Leaderboards from './components/leaderboards/Leaderboards';
+import Disclaimer from './components/Disclaimer';
 import Help from './components/Help';
 import Login from './components/Login';
 import Register from './components/Register';
@@ -18,6 +19,7 @@ const GameRoutes: React.FC = () => {
       <Route path="/" element={<Welcome />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/disclaimer" element={<Disclaimer />} />
       <Route path="/help" element={<Help />} />
     </Routes>
   );
