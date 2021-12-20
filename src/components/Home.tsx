@@ -236,11 +236,13 @@ const Home = (): ReactElement => {
               <div className="col-span-4 text-left">
                 <p>
                   {context.playerAccount!.exp > context.playerAccount!.lvl * 100 + 500 ? (
-                    <button
-                      className="text-white ml-0"
-                      onClick={() => setLvlIsOpen(true)}>
-                      LVL ⬆
-                    </button>
+                    <span
+                      className="animate-pulse"
+                      onClick={() => setLvlIsOpen(true)}
+                      onKeyDown={() => setLvlIsOpen(true)}
+                      role="presentation">
+                      LVL⬆
+                    </span>
                   ) : (
                     'LVL'
                   )}
