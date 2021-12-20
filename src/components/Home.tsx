@@ -235,16 +235,14 @@ const Home = (): ReactElement => {
             <div className="text-left grid grid-cols-12 gap-3 mx-2">
               <div className="col-span-4 text-left">
                 <p>
-                  LVL
                   {context.playerAccount!.exp > context.playerAccount!.lvl * 100 + 500 ? (
-                    <span
-                      onClick={() => setLvlIsOpen(true)}
-                      onKeyDown={() => setLvlIsOpen(true)}
-                      role="presentation">
-                      ⬆
-                    </span>
+                    <button
+                      className="text-white ml-0"
+                      onClick={() => setLvlIsOpen(true)}>
+                      LVL ⬆
+                    </button>
                   ) : (
-                    ''
+                    'LVL'
                   )}
                 </p>
                 <p>EXP</p>
