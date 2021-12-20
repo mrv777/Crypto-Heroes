@@ -1,9 +1,38 @@
 import React, { ReactElement, useEffect, useState } from 'react';
+import Modal from 'react-modal';
 
 import { getStoreAssets } from '../utils/ardorInterface';
 
 const Shop = (): ReactElement => {
   const [items, setItems] = useState<any>(null);
+  const [item, setItem] = useState<any>(null);
+  const [modalItemIsOpen, setItemIsOpen] = React.useState(false);
+
+  const customStyles = {
+    overlay: {
+      backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    },
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      background: 'black',
+      border: '3px solid white',
+      textAlign: 'center',
+    },
+  };
+
+  function closeItemModal() {
+    setItemIsOpen(false);
+  }
+
+  const handleBuy = (item: object) => {
+    setItem(item);
+    setItemIsOpen(true);
+  };
 
   useEffect(() => {
     async function fetchLeaders() {
@@ -35,7 +64,7 @@ const Shop = (): ReactElement => {
           <p>Loading...</p>
         ) : (
           items.map((entry) => (
-            <button key={entry.asset}>
+            <button key={entry.asset} onClick={() => handleBuy(entry)}>
               {entry.description}
               <br />
               {entry.price} GIL
@@ -43,6 +72,18 @@ const Shop = (): ReactElement => {
           ))
         )}
       </div>
+      <Modal
+        isOpen={modalItemIsOpen}
+        style={customStyles}
+        onRequestClose={closeItemModal}
+        contentLabel="Item modal">
+        <p className="text-xl">{item?.description}</p>
+        <p>Sold Out</p>
+        <div className="w-full grid grid-cols-2 gap-3">
+          <button disabled>buy</button>
+          <button onClick={closeItemModal}>close</button>
+        </div>
+      </Modal>
     </div>
   );
 };
