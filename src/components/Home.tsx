@@ -372,7 +372,7 @@ const Home = (): ReactElement => {
               <Tooltip
                 tooltip={
                   <div className="text-left">
-                    <p>Explore once every 24hrs to find equipment</p>
+                    <p>Explore once every 20hrs to find equipment</p>
                   </div>
                 }>
                 <button
