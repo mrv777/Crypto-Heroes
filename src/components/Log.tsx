@@ -45,19 +45,6 @@ const Log = (): ReactElement => {
                 type: battleMsg,
               });
             }
-            // } else if (tx.attachment.property == 'level') {
-            //   formattedEntries.push({
-            //     id: tx.fullHash,
-            //     timestamp: new Date(getTxDate(tx.timestamp) * 1000).toLocaleString(),
-            //     type:
-            //       'Level Up to ' +
-            //       tx.attachment.value +
-            //       ', ' +
-            //       logAPI.data.transactions[i + 1].attachment.property +
-            //       ' to ' +
-            //       logAPI.data.transactions[i + 1].attachment.value,
-            //   });
-            // }
           } else if (
             tx.attachment &&
             !tx.attachment.property &&
