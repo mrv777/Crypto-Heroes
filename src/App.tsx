@@ -2,6 +2,7 @@ import './App.css';
 
 // import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
+import { AddToHomeScreen } from 'react-pwa-add-to-homescreen';
 
 import Header from './components/ui/Header';
 import { PlayerContext } from './contexts/playerContext';
@@ -104,10 +105,12 @@ function App() {
           ) : (
             <WelcomeRoutes />
           )}
+          <AddToHomeScreen />
         </PlayerContext.Provider>
       ) : (
         <div className="fixed h-full w-full flex flex-col items-center text-center justify-center">
           <p className="text-xl">Please View in Landscape</p>
+          <AddToHomeScreen />
         </div>
       )}
     </div>
