@@ -417,39 +417,49 @@ public class Heroes extends AbstractContract {
             } else { // Get battle results and update scores on both accounts
                 boolean attackerWon = false;
                 boolean defenderWon = false;
+                boolean firstTurn = true;
 
                 //Run battle loop
                 while(!attackerWon && !defenderWon){
-                    //First player's turn
-                    int defenderHit = defender.getInt("attack") - attacker.getInt("defense");
-                    if (defenderHit < 1) {
-                        defenderHit = 1;
-                    }
-                    //context.logInfoMessage("Attacker health: %d", attacker.getInt("health"));
-                    attacker.put("health",(attacker.getInt("health")-defenderHit));
-                    if(attacker.getInt("health")<=0){
-                        defenderWon=true;
-                        if (attacker.getInt("score") > 0){
-                            attacker.put("score",attacker.getInt("score")-1);
+                    // Defender's turn
+                    // Let the defender go first if their speed is the same or faster then attacker
+                    if (firstTurn && attacker.getInt("speed") <= defender.getInt("speed")) {
+                        int defenderHit = defender.getInt("attack") - attacker.getInt("defense");
+                        if (defenderHit < 1) {
+                            defenderHit = 1;
                         }
-                        defender.put("score",defender.getInt("score")+1);
-                        break;
+                        attacker.put("health", (attacker.getInt("health") - defenderHit));
+                        if (attacker.getInt("health") <= 0) {
+                            defenderWon = true;
+                            if (attacker.getInt("score") > 1) {
+                                attacker.put("score", attacker.getInt("score") - 2);
+                            } else {
+                                attacker.put("score", 0);
+                            }
+                            defender.put("score", defender.getInt("score") + 2);
+                            break;
+                        }
                     }
+                    firstTurn = false;
 
-                    //Second player's turn
-                    int attackerHit = attacker.getInt("attack") - defender.getInt("defense");
-                    if (attackerHit < 1) {
-                        attackerHit = 1;
-                    }
-                    //context.logInfoMessage("Defender health: %d", defender.getInt("health"));
-                    defender.put("health",(defender.getInt("health")-attackerHit));
-                    if(defender.getInt("health")<=0){
-                        attackerWon=true;
-                        if (defender.getInt("score") > 0){
-                            defender.put("score",defender.getInt("score")-1);
+                    //Attacker's turn
+                    if (!defenderWon) {
+                        int attackerHit = attacker.getInt("attack") - defender.getInt("defense");
+                        if (attackerHit < 1) {
+                            attackerHit = 1;
                         }
-                        attacker.put("score",attacker.getInt("score")+1);
-                        break;
+                        //context.logInfoMessage("Defender health: %d", defender.getInt("health"));
+                        defender.put("health", (defender.getInt("health") - attackerHit));
+                        if (defender.getInt("health") <= 0) {
+                            attackerWon = true;
+                            if (defender.getInt("score") > 0) {
+                                defender.put("score", defender.getInt("score") - 1);
+                            } else {
+                                defender.put("score", 0);
+                            }
+                            attacker.put("score", attacker.getInt("score") + 2);
+                            break;
+                        }
                     }
                 }
                 context.logInfoMessage("CONTRACT: Battle status. AttackerWon: %s, DefenderWon: %s", attackerWon, defenderWon);
