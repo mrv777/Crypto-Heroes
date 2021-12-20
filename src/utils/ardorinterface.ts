@@ -8,6 +8,7 @@ import axios from 'axios';
 import qs from 'qs';
 
 const nodeUrl = 'https://testnode7.ardor.tools/nxt?';
+const contractAccount = 'ARDOR-64L4-C4H9-Z9PU-9YKDT';
 
 export const getAccount = async (account: string) => {
   try {
@@ -31,7 +32,7 @@ export const getAccountProperties = async (account?: string, property?: string) 
         requestType: 'getAccountProperties',
         recipient: account,
         property: property,
-        setter: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
+        setter: contractAccount,
       },
     });
     return response;
@@ -47,7 +48,7 @@ export const getAccountMsgStats = async (account: string, lastIndex: number = 0)
       params: {
         requestType: 'getExecutedTransactions',
         chain: 'ignis',
-        sender: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
+        sender: contractAccount,
         recipient: account,
         type: 1,
         lastIndex: lastIndex,
@@ -210,7 +211,7 @@ export const train = async (publicKey: string) => {
       nodeUrl + 'requestType=sendMoney',
       qs.stringify({
         chain: 'ignis',
-        recipient: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
+        recipient: contractAccount,
         message: '{"contract": "Heroes","params": {"expMsg": "abc"}}',
         feeNQT: 3000000,
         amountNQT: 97000000,
@@ -232,7 +233,7 @@ export const explore = async (publicKey: string) => {
       nodeUrl + 'requestType=sendMoney',
       qs.stringify({
         chain: 'ignis',
-        recipient: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
+        recipient: contractAccount,
         message: '{"contract": "Heroes","params": {"expMsg": "defg"}}',
         feeNQT: 3000000,
         amountNQT: 97000000,
@@ -254,7 +255,7 @@ export const battle = async (publicKey: string, opponent: string) => {
       nodeUrl + 'requestType=sendMoney',
       qs.stringify({
         chain: 'ignis',
-        recipient: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
+        recipient: contractAccount,
         message:
           '{"contract": "Heroes","params": {"expMsg": "battle", "battleMsg": "' +
           opponent +
@@ -281,7 +282,7 @@ export const lvlUp = async (publicKey: string, statChoice: string, level: number
       qs.stringify({
         chain: 'ignis',
         currency: '13943488548174745464',
-        recipient: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
+        recipient: contractAccount,
         message:
           '{"contract": "Heroes","params": {"expMsg": "levelUp","statUp":"' +
           statChoice +
@@ -341,7 +342,7 @@ export const getLog = async (account?: string) => {
       params: {
         requestType: 'getExecutedTransactions',
         chain: 'ignis',
-        sender: 'ARDOR-64L4-C4H9-Z9PU-9YKDT',
+        sender: contractAccount,
         recipient: account,
       },
     });

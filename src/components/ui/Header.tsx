@@ -177,10 +177,13 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
           // If no unconfirmed tx at all for account, make sure we are idle
           context.updatePlayerStatus('idle');
         } else {
-          // If no unconfirmed tx FROM the account, make sure we are idle
+          // If no unconfirmed tx FROM the account or FROM the contract, make sure we are idle
           let utxFromAccount = false;
           for (let unconfirmedTx of responseUtx!.data.unconfirmedTransactions) {
-            if (unconfirmedTx.senderRS == account) {
+            if (
+              unconfirmedTx.senderRS == account ||
+              unconfirmedTx.senderRS == 'ARDOR-64L4-C4H9-Z9PU-9YKDT'
+            ) {
               utxFromAccount = true;
               break;
             }
