@@ -184,6 +184,9 @@ const Header = ({ disableNavBar }: Props): ReactElement => {
               unconfirmedTx.senderRS == account ||
               unconfirmedTx.senderRS == 'ARDOR-64L4-C4H9-Z9PU-9YKDT'
             ) {
+              if (unconfirmedTx.senderRS == 'ARDOR-64L4-C4H9-Z9PU-9YKDT') {
+                context.updatePlayerStatus('Getting results');
+              }
               utxFromAccount = true;
               break;
             }

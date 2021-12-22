@@ -6,6 +6,7 @@ import { SpriteAnimator } from 'react-sprite-animator';
 
 import staticCoin from '../assets/Coin.png';
 import coin from '../assets/Coin-Sheet.png';
+import lisk from '../assets/Max.gif';
 import sprite from '../assets/sprite.png';
 import { PlayerContext } from '../contexts/playerContext';
 import { broadcast, explore, train } from '../utils/ardorInterface';
@@ -20,6 +21,7 @@ const Home = (): ReactElement => {
   const [modalLvlIsOpen, setLvlIsOpen] = React.useState(false);
   const [modalStoryIsOpen, setStoryIsOpen] = React.useState(false);
   const [story, setStory] = React.useState('');
+  const [showStoryAction, setShowStoryAction] = React.useState(false);
   const [lastTraining, setLastTraining] = React.useState(0);
   const [lastExploring, setLastExplore] = React.useState(0);
   const [lastStudy, setLastStudy] = React.useState(0);
@@ -124,18 +126,6 @@ const Home = (): ReactElement => {
     return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
   }, [lastTraining, lastExploring]);
 
-  /** Functions to close modals */
-  function closeGilModal() {
-    setGilIsOpen(false);
-  }
-  function closeLvlModal() {
-    setLvlIsOpen(false);
-  }
-  function closeStoryModal() {
-    setStoryIsOpen(false);
-  }
-  /************ */
-
   const PowerUp = (item: string) => {
     let opacity = 'opacity-20';
     let iconSheet = 'ArmoryBlankIcons';
@@ -221,6 +211,7 @@ const Home = (): ReactElement => {
           </p>
           <div className="col-span-6 flex flex-col">
             <div className="w-full flex flex-col items-center justify-center m-auto">
+              {/* <img className="inline-block h-35 w-32" src={lisk} alt="Lisk" /> */}
               <SpriteAnimator
                 sprite={sprite}
                 width={48}
@@ -415,7 +406,7 @@ const Home = (): ReactElement => {
       <Modal
         isOpen={modalGilIsOpen}
         style={customStyles}
-        onRequestClose={closeGilModal}
+        onRequestClose={() => setGilIsOpen(false)}
         contentLabel="GIL Deposits">
         <p>Deposit addresses for GIL:</p>
         <p>IGNIS - ARDOR-{context.playerAccount?.address}</p>
@@ -423,27 +414,29 @@ const Home = (): ReactElement => {
         <p>BTC - Coming Soon</p>
         <p>ETH - Coming Soon</p>
         <p>LSK - Coming Soon</p>
-        <button onClick={closeGilModal}>close</button>
+        <button onClick={() => setGilIsOpen(false)}>close</button>
       </Modal>
       <Modal
         isOpen={modalLvlIsOpen}
         style={customStyles}
-        onRequestClose={closeLvlModal}
+        onRequestClose={() => setLvlIsOpen(false)}
         contentLabel="Level up hero">
-        <LevelUp closeFunction={() => closeLvlModal()} />
-        <button onClick={closeLvlModal}>close</button>
+        <LevelUp closeFunction={() => setLvlIsOpen(false)} />
+        <button onClick={() => setLvlIsOpen(false)}>close</button>
       </Modal>
       <Modal
         isOpen={modalStoryIsOpen}
         style={customStyles}
-        onRequestClose={closeStoryModal}
+        onRequestClose={() => setStoryIsOpen(false)}
         contentLabel="Action">
         <p>
-          <TypeWriter text={story} />
+          <TypeWriter text={story} cb={() => setShowStoryAction(true)} />
         </p>
-        <button className="mt-5" onClick={closeStoryModal}>
-          close
-        </button>
+        {showStoryAction && (
+          <button className="mt-5" onClick={() => setStoryIsOpen(false)}>
+            close
+          </button>
+        )}
       </Modal>
     </div>
   );
